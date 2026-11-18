@@ -1,0 +1,942 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CleanCity - Solid Waste Management</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f2f6f3;
+    color: #26332b;
+}
+
+header {
+    background: #176b45;
+    color: white;
+    padding: 18px 6%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+header h1 {
+    font-size: 25px;
+}
+
+nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 13px;
+    margin: 3px;
+}
+
+nav button {
+    background: white;
+    color: #176b45;
+    font-weight: bold;
+}
+
+nav button:hover {
+    background: #d9f1e2;
+}
+
+.hero {
+    background: linear-gradient(120deg, #176b45, #46a36b);
+    color: white;
+    text-align: center;
+    padding: 45px 15px;
+}
+
+.hero h2 {
+    font-size: 30px;
+    margin-bottom: 12px;
+}
+
+.hero p {
+    margin-bottom: 18px;
+    line-height: 1.6;
+}
+
+.container {
+    width: 92%;
+    max-width: 1150px;
+    margin: 25px auto;
+}
+
+.section {
+    display: none;
+    background: white;
+    padding: 24px;
+    margin-bottom: 24px;
+    border-radius: 10px;
+    box-shadow: 0 3px 12px #00000012;
+}
+
+.section.active {
+    display: block;
+}
+
+h2, h3 {
+    color: #176b45;
+    margin-bottom: 15px;
+}
+
+p {
+    line-height: 1.6;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 11px;
+    margin: 7px 0 14px;
+    border: 1px solid #ccd8cf;
+    border-radius: 5px;
+}
+
+textarea {
+    min-height: 85px;
+    resize: vertical;
+}
+
+.primary {
+    background: #208653;
+    color: white;
+}
+
+.primary:hover {
+    background: #14683d;
+}
+
+.secondary {
+    background: #e5f2e9;
+    color: #176b45;
+}
+
+.danger {
+    background: #c0392b;
+    color: white;
+}
+
+.info {
+    background: #eaf5ed;
+    padding: 13px;
+    margin: 12px 0;
+    border-radius: 6px;
+    border-left: 4px solid #208653;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.stat {
+    padding: 20px;
+    background: #eaf5ed;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.stat strong {
+    display: block;
+    font-size: 26px;
+    color: #176b45;
+    margin-top: 10px;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 16px;
+    margin-top: 15px;
+}
+
+.card {
+    padding: 18px;
+    border: 1px solid #dce5dd;
+    border-radius: 8px;
+    background: white;
+}
+
+.card h3 {
+    margin-bottom: 10px;
+}
+
+.card p {
+    margin: 6px 0;
+    overflow-wrap: anywhere;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+}
+
+th, td {
+    border: 1px solid #d9e0db;
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background: #eaf5ed;
+}
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+footer {
+    background: #124d32;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: 30px;
+}
+
+.small {
+    font-size: 13px;
+    color: #56675c;
+}
+
+@media(max-width: 650px) {
+    header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .hero h2 {
+        font-size: 24px;
+    }
+
+    .section {
+        padding: 15px;
+        overflow-wrap: anywhere;
+    }
+
+    .container {
+        width: 95%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🌿 CleanCity</h1>
+    <nav>
+        <button onclick="showSection('home')">Home</button>
+        <button onclick="showSection('binsSection')">Garbage Bins</button>
+        <button onclick="showSection('registerSection')">Register</button>
+        <button onclick="showSection('loginSection')">Login</button>
+        <button onclick="showSection('dashboardSection')">Dashboard</button>
+    </nav>
+</header>
+
+<section class="hero" id="home">
+    <h2>Smart Solid Waste Management System</h2>
+    <p>Clean surroundings, smart collection, and efficient waste transportation.</p>
+    <button class="primary" onclick="showSection('binsSection')">View Garbage Bins</button>
+    <button class="primary" onclick="showSection('complaintSection')">Register Complaint</button>
+</section>
+
+<main class="container">
+
+    <!-- PUBLIC GARBAGE BIN INFORMATION -->
+    <section id="binsSection" class="section active">
+        <h2>Garbage Bin Information</h2>
+        <p>View the available garbage bins and their current collection status.</p>
+        <div id="publicBins" class="cards"></div>
+    </section>
+
+    <!-- REGISTRATION -->
+    <section id="registerSection" class="section">
+        <h2>Create Account</h2>
+
+        <form id="registerForm">
+            <label>Full Name</label>
+            <input id="regName" required placeholder="Enter your name">
+
+            <label>Email</label>
+            <input id="regEmail" type="email" required placeholder="Enter email">
+
+            <label>Password</label>
+            <input id="regPassword" type="password" minlength="4" required
+                   placeholder="Create password">
+
+            <label>Register As</label>
+            <select id="regRole" required>
+                <option value="public">General Public</option>
+                <option value="driver">Driver</option>
+            </select>
+
+            <button type="submit" class="primary">Register</button>
+        </form>
+    </section>
+
+    <!-- LOGIN -->
+    <section id="loginSection" class="section">
+        <h2>Login</h2>
+
+        <form id="loginForm">
+            <label>Email</label>
+            <input id="loginEmail" type="email" required>
+
+            <label>Password</label>
+            <input id="loginPassword" type="password" required>
+
+            <button type="submit" class="primary">Login</button>
+        </form>
+
+        <div class="info">
+            <strong>Demo Administrator Login</strong>
+            <p>Email: admin@cleancity.com</p>
+            <p>Password: admin123</p>
+        </div>
+        <p class="small">Drivers and public users must register before logging in.</p>
+    </section>
+
+    <!-- PUBLIC COMPLAINT FORM -->
+    <section id="complaintSection" class="section">
+        <h2>Register a Complaint</h2>
+
+        <form id="complaintForm">
+            <label>Complaint Category</label>
+            <select id="complaintCategory" required>
+                <option value="">Select Category</option>
+                <option>Garbage Not Collected</option>
+                <option>Overflowing Garbage Bin</option>
+                <option>Illegal Dumping</option>
+                <option>Damaged Garbage Bin</option>
+                <option>Other</option>
+            </select>
+
+            <label>Location</label>
+            <input id="complaintLocation" required placeholder="Enter area or street">
+
+            <label>Complaint Description</label>
+            <textarea id="complaintDescription" required
+                      placeholder="Explain the problem"></textarea>
+
+            <button type="submit" class="primary">Submit Complaint</button>
+        </form>
+    </section>
+
+    <!-- DASHBOARDS -->
+    <section id="dashboardSection" class="section">
+        <h2>Dashboard</h2>
+        <div id="dashboardContent">
+            <p>Please login to access your dashboard.</p>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <p>© 2026 CleanCity | Solid Waste Management System</p>
+    <p>Reduce Waste • Improve Collection • Keep Our City Clean</p>
+</footer>
+
+<script>
+// Load demonstration data from browser storage
+let users = JSON.parse(localStorage.getItem("cc_users") || "[]");
+let bins = JSON.parse(localStorage.getItem("cc_bins") || "null");
+
+if (!bins) {
+    bins = [
+        {
+            id: 1,
+            location: "Main Street",
+            type: "General Waste",
+            capacity: 100,
+            load: 85,
+            status: "Needs Collection",
+            assignedDriver: ""
+        },
+        {
+            id: 2,
+            location: "City Park",
+            type: "Recyclable Waste",
+            capacity: 100,
+            load: 35,
+            status: "Normal",
+            assignedDriver: ""
+        },
+        {
+            id: 3,
+            location: "Market Road",
+            type: "Organic Waste",
+            capacity: 100,
+            load: 95,
+            status: "Needs Collection",
+            assignedDriver: ""
+        }
+    ];
+}
+
+let complaints = JSON.parse(localStorage.getItem("cc_complaints") || "[]");
+let currentUser = null;
+
+let workUpdates = JSON.parse(localStorage.getItem("cc_work") || "[]");
+
+function saveData() {
+    localStorage.setItem("cc_users", JSON.stringify(users));
+    localStorage.setItem("cc_bins", JSON.stringify(bins));
+    localStorage.setItem("cc_complaints", JSON.stringify(complaints));
+    localStorage.setItem("cc_work", JSON.stringify(workUpdates));
+}
+
+function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, ch => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[ch]);
+}
+
+function showSection(id) {
+    document.querySelectorAll(".section").forEach(s => {
+        s.classList.remove("active");
+    });
+
+    if (id !== "home") {
+        document.getElementById(id).classList.add("active");
+    }
+
+    if (id === "binsSection") renderPublicBins();
+    if (id === "dashboardSection") renderDashboard();
+
+    window.scrollTo({ top: id === "home" ? 0 : 150, behavior: "smooth" });
+}
+
+// REGISTRATION
+document.getElementById("registerForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const name = document.getElementById("regName").value.trim();
+    const email = document.getElementById("regEmail").value.trim().toLowerCase();
+    const password = document.getElementById("regPassword").value;
+    const role = document.getElementById("regRole").value;
+
+    if (email === "admin@cleancity.com" ||
+        users.some(u => u.email === email)) {
+        alert("This email is already registered.");
+        return;
+    }
+
+    users.push({
+        id: Date.now(),
+        name,
+        email,
+        password,
+        role
+    });
+
+    saveData();
+    alert("Registration successful. Please login.");
+    this.reset();
+    showSection("loginSection");
+});
+
+// LOGIN
+document.getElementById("loginForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const email = document.getElementById("loginEmail").value.trim().toLowerCase();
+    const password = document.getElementById("loginPassword").value;
+
+    if (email === "admin@cleancity.com" && password === "admin123") {
+        currentUser = {
+            id: 0,
+            name: "Administrator",
+            email,
+            role: "admin"
+        };
+    } else {
+        currentUser = users.find(u =>
+            u.email === email && u.password === password
+        );
+
+        if (!currentUser) {
+            alert("Invalid email or password.");
+            return;
+        }
+    }
+
+    alert("Welcome " + currentUser.name + "!");
+    this.reset();
+    showSection("dashboardSection");
+});
+
+// PUBLIC GARBAGE BIN DISPLAY
+function renderPublicBins() {
+    const area = document.getElementById("publicBins");
+
+    area.innerHTML = bins.map(bin => `
+        <div class="card">
+            <h3>🗑️ Bin #${bin.id}</h3>
+            <p><strong>Location:</strong> ${escapeHTML(bin.location)}</p>
+            <p><strong>Type:</strong> ${escapeHTML(bin.type)}</p>
+            <p><strong>Load:</strong> ${bin.load}%</p>
+            <p><strong>Status:</strong> ${escapeHTML(bin.status)}</p>
+        </div>
+    `).join("");
+}
+
+// PUBLIC COMPLAINT SUBMISSION
+document.getElementById("complaintForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    if (!currentUser || currentUser.role !== "public") {
+        alert("Please login as a general public user to submit a complaint.");
+        showSection("loginSection");
+        return;
+    }
+
+    complaints.push({
+        id: Date.now(),
+        email: currentUser.email,
+        name: currentUser.name,
+        category: document.getElementById("complaintCategory").value,
+        location: document.getElementById("complaintLocation").value.trim(),
+        description: document.getElementById("complaintDescription").value.trim(),
+        status: "Pending",
+        date: new Date().toLocaleDateString()
+    });
+
+    saveData();
+    alert("Complaint submitted successfully!");
+    this.reset();
+    showSection("dashboardSection");
+});
+
+// DASHBOARD ROUTER
+function renderDashboard() {
+    const area = document.getElementById("dashboardContent");
+
+    if (!currentUser) {
+        area.innerHTML = "<p>Please login to access your dashboard.</p>";
+        return;
+    }
+
+    if (currentUser.role === "admin") {
+        renderAdminDashboard(area);
+    } else if (currentUser.role === "driver") {
+        renderDriverDashboard(area);
+    } else {
+        renderPublicDashboard(area);
+    }
+}
+
+function logoutButton() {
+    return `<button class="danger" onclick="logout()">Logout</button>`;
+}
+
+// ADMIN DASHBOARD
+function renderAdminDashboard(area) {
+    const totalLoad = bins.reduce((sum, b) => sum + Number(b.load), 0);
+    const pending = complaints.filter(c => c.status === "Pending").length;
+
+    area.innerHTML = `
+        <h3>Administrator Dashboard</h3>
+        <p>Manage garbage bins, drivers, collection routes and complaints.</p>
+
+        <div class="dashboard-grid">
+            <div class="stat">Total Bins<strong>${bins.length}</strong></div>
+            <div class="stat">Drivers<strong>${users.filter(u => u.role === "driver").length}</strong></div>
+            <div class="stat">Complaints<strong>${complaints.length}</strong></div>
+            <div class="stat">Pending Complaints<strong>${pending}</strong></div>
+        </div>
+
+        <h3>Create Garbage Bin</h3>
+        <form id="binForm">
+            <label>Bin Location</label>
+            <input id="binLocation" required placeholder="Enter location">
+
+            <label>Waste Type</label>
+            <select id="binType">
+                <option>General Waste</option>
+                <option>Recyclable Waste</option>
+                <option>Organic Waste</option>
+                <option>Hazardous Waste</option>
+            </select>
+
+            <label>Current Load (%)</label>
+            <input id="binLoad" type="number" min="0" max="100" value="0" required>
+
+            <button class="primary" type="submit">Create Bin</button>
+        </form>
+
+        <h3>Manage Garbage Bins</h3>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th><th>Location</th><th>Type</th>
+                        <th>Load</th><th>Status</th><th>Driver</th><th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${bins.map(b => `
+                        <tr>
+                            <td>${b.id}</td>
+                            <td>${escapeHTML(b.location)}</td>
+                            <td>${escapeHTML(b.type)}</td>
+                            <td>${b.load}%</td>
+                            <td>${escapeHTML(b.status)}</td>
+                            <td>${escapeHTML(b.assignedDriver || "Unassigned")}</td>
+                            <td>
+                                <button class="secondary" onclick="editBin(${b.id})">Edit</button>
+                                <button class="danger" onclick="deleteBin(${b.id})">Delete</button>
+                            </td>
+                        </tr>
+                    `).join("")}
+                </tbody>
+            </table>
+        </div>
+
+        <h3>Manage Drivers and Routes</h3>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr><th>Driver</th><th>Email</th><th>Assign Route</th></tr>
+                </thead>
+                <tbody>
+                    ${users.filter(u => u.role === "driver").map(d => `
+                        <tr>
+                            <td>${escapeHTML(d.name)}</td>
+                            <td>${escapeHTML(d.email)}</td>
+                            <td>
+                                <select id="route-${d.id}">
+                                    <option value="">Select Bin</option>
+                                    ${bins.map(b => `
+                                        <option value="${b.id}">
+                                            Bin #${b.id} - ${escapeHTML(b.location)}
+                                        </option>
+                                    `).join("")}
+                                </select>
+                                <button class="primary" onclick="assignRoute(${d.id})">Assign</button>
+                            </td>
+                        </tr>
+                    `).join("")}
+                </tbody>
+            </table>
+        </div>
+
+        <h3>Public Complaints</h3>
+        ${renderComplaintList(complaints, true)}
+
+        <h3>Collection Report</h3>
+        <div class="info">Total bins: ${bins.length}</div>
+        <div class="info">Bins requiring collection: ${bins.filter(b => b.load >= 80).length}</div>
+        <div class="info">Total recorded garbage load: ${totalLoad}% (sum of bin percentages)</div>
+        <div class="info">Total driver work updates: ${workUpdates.length}</div>
+
+        ${logoutButton()}
+    `;
+
+    document.getElementById("binForm").addEventListener("submit", createBin);
+}
+
+// CREATE BIN
+function createBin(e) {
+    e.preventDefault();
+
+    const load = Number(document.getElementById("binLoad").value);
+
+    bins.push({
+        id: Date.now(),
+        location: document.getElementById("binLocation").value.trim(),
+        type: document.getElementById("binType").value,
+        capacity: 100,
+        load,
+        status: load >= 80 ? "Needs Collection" : "Normal",
+        assignedDriver: ""
+    });
+
+    saveData();
+    renderDashboard();
+    renderPublicBins();
+    alert("Garbage bin created successfully.");
+}
+
+// EDIT BIN
+function editBin(id) {
+    const bin = bins.find(b => b.id === id);
+    if (!bin) return;
+
+    const location = prompt("Enter new bin location:", bin.location);
+    if (location === null || !location.trim()) return;
+
+    const loadInput = prompt("Enter current load percentage (0-100):", bin.load);
+    if (loadInput === null) return;
+
+    const load = Number(loadInput);
+    if (!Number.isFinite(load) || load < 0 || load > 100) {
+        alert("Enter a valid load between 0 and 100.");
+        return;
+    }
+
+    bin.location = location.trim();
+    bin.load = load;
+    bin.status = load >= 80 ? "Needs Collection" : "Normal";
+
+    saveData();
+    renderDashboard();
+    renderPublicBins();
+}
+
+// DELETE BIN
+function deleteBin(id) {
+    if (!confirm("Are you sure you want to delete this garbage bin?")) return;
+
+    bins = bins.filter(b => b.id !== id);
+    saveData();
+    renderDashboard();
+    renderPublicBins();
+}
+
+// ASSIGN ROUTE
+function assignRoute(driverId) {
+    const select = document.getElementById("route-" + driverId);
+    const binId = Number(select.value);
+
+    if (!binId) {
+        alert("Please select a bin to assign.");
+        return;
+    }
+
+    const bin = bins.find(b => b.id === binId);
+    const driver = users.find(u => u.id === driverId);
+
+    if (!bin || !driver) return;
+
+    bin.assignedDriver = driver.email;
+    bin.status = "Assigned for Collection";
+
+    saveData();
+    renderDashboard();
+    alert("Collection stop assigned to " + driver.name + ".");
+}
+
+// PUBLIC DASHBOARD
+function renderPublicDashboard(area) {
+    const mine = complaints.filter(c => c.email === currentUser.email);
+
+    area.innerHTML = `
+        <h3>General Public Dashboard</h3>
+        <p>Welcome, ${escapeHTML(currentUser.name)}.</p>
+        <button class="primary" onclick="showSection('complaintSection')">Register Complaint</button>
+
+        <h3>My Complaints and Status</h3>
+        ${mine.length ? renderComplaintList(mine, false) :
+            "<p>You have not registered any complaints.</p>"}
+
+        ${logoutButton()}
+    `;
+}
+
+// COMPLAINT DISPLAY
+function renderComplaintList(items, isAdmin) {
+    if (!items.length) return "<p>No complaints found.</p>";
+
+    return `
+        <div class="cards">
+            ${items.map(c => `
+                <div class="card">
+                    <h3>Complaint #${c.id}</h3>
+                    <p><strong>Category:</strong> ${escapeHTML(c.category)}</p>
+                    <p><strong>Location:</strong> ${escapeHTML(c.location)}</p>
+                    <p><strong>Description:</strong> ${escapeHTML(c.description)}</p>
+                    <p><strong>Date:</strong> ${escapeHTML(c.date)}</p>
+                    ${isAdmin ? `<p><strong>Reported by:</strong> ${escapeHTML(c.name)}</p>` : ""}
+                    <p><strong>Status:</strong> ${escapeHTML(c.status)}</p>
+                    ${isAdmin ? `
+                        <select id="complaintStatus-${c.id}">
+                            <option ${c.status === "Pending" ? "selected" : ""}>Pending</option>
+                            <option ${c.status === "In Progress" ? "selected" : ""}>In Progress</option>
+                            <option ${c.status === "Resolved" ? "selected" : ""}>Resolved</option>
+                        </select>
+                        <button class="primary" onclick="updateComplaint(${c.id})">Update Status</button>
+                    ` : ""}
+                </div>
+            `).join("")}
+        </div>
+    `;
+}
+
+function updateComplaint(id) {
+    const complaint = complaints.find(c => c.id === id);
+    const select = document.getElementById("complaintStatus-" + id);
+
+    if (!complaint || !select) return;
+
+    complaint.status = select.value;
+    saveData();
+    renderDashboard();
+    alert("Complaint status updated.");
+}
+
+// DRIVER DASHBOARD
+function renderDriverDashboard(area) {
+    const myBins = bins.filter(b => b.assignedDriver === currentUser.email);
+    const myUpdates = workUpdates.filter(w => w.email === currentUser.email);
+
+    area.innerHTML = `
+        <h3>Driver Dashboard</h3>
+        <p>Welcome, ${escapeHTML(currentUser.name)}.</p>
+
+        <div class="info">Assigned collection stops: ${myBins.length}</div>
+
+        <h3>Daily Work Updates and Routes</h3>
+        ${myBins.length ? myBins.map(b => `
+            <div class="card">
+                <h3>Bin #${b.id}: ${escapeHTML(b.location)}</h3>
+                <p>Waste type: ${escapeHTML(b.type)}</p>
+                <p>Current load: ${b.load}%</p>
+                <p>Status: ${escapeHTML(b.status)}</p>
+
+                <button class="primary" onclick="openMap('${encodeURIComponent(b.location)}')">
+                    View Map
+                </button>
+
+                <button class="secondary" onclick="updateLoad(${b.id})">
+                    Update Garbage Load
+                </button>
+
+                <button class="primary" onclick="completeCollection(${b.id})">
+                    Mark Collected
+                </button>
+            </div>
+        `).join("") : "<p>No collection stops assigned. Contact the administrator.</p>"}
+
+        <h3>Record Daily Work</h3>
+        <form id="workForm">
+            <label>Work Description</label>
+            <textarea id="workDescription" required placeholder="Enter work completed today"></textarea>
+            <label>Collected Waste (kg)</label>
+            <input id="workKg" type="number" min="0" required>
+            <button class="primary" type="submit">Submit Work Update</button>
+        </form>
+
+        <h3>My Work History</h3>
+        ${myUpdates.length ? myUpdates.map(w => `
+            <div class="info">
+                <p>${escapeHTML(w.date)} — ${escapeHTML(w.description)}</p>
+                <p>Collected: ${w.kg} kg</p>
+            </div>
+        `).join("") : "<p>No work updates submitted yet.</p>"}
+
+        ${logoutButton()}
+    `;
+
+    document.getElementById("workForm").addEventListener("submit", submitWorkUpdate);
+}
+
+// OPEN MAP FOR A LOCATION
+function openMap(location) {
+    const url = "https://www.google.com/maps/search/?api=1&query=" + location;
+    window.open(url, "_blank", "noopener");
+}
+
+// UPDATE LOAD
+function updateLoad(id) {
+    const bin = bins.find(b => b.id === id);
+    if (!bin) return;
+
+    const value = prompt("Enter updated garbage load percentage (0-100):", bin.load);
+    if (value === null) return;
+
+    const load = Number(value);
+
+    if (!Number.isFinite(load) || load < 0 || load > 100) {
+        alert("Enter a valid percentage between 0 and 100.");
+        return;
+    }
+
+    bin.load = load;
+    bin.status = load >= 80 ? "Needs Collection" : "Normal";
+
+    saveData();
+    renderDashboard();
+    renderPublicBins();
+    alert("Garbage load updated.");
+}
+
+// MARK COLLECTION COMPLETE
+function completeCollection(id) {
+    const bin = bins.find(b => b.id === id);
+    if (!bin) return;
+
+    if (!confirm("Mark this bin as collected and emptied?")) return;
+
+    bin.load = 0;
+    bin.status = "Collected";
+    saveData();
+    renderDashboard();
+    renderPublicBins();
+    alert("Collection completed successfully.");
+}
+
+// SUBMIT DRIVER WORK UPDATE
+function submitWorkUpdate(e) {
+    e.preventDefault();
+
+    const kg = Number(document.getElementById("workKg").value);
+
+    if (!Number.isFinite(kg) || kg < 0) {
+        alert("Enter a valid collected waste weight.");
+        return;
+    }
+
+    workUpdates.push({
+        id: Date.now(),
+        email: currentUser.email,
+        description: document.getElementById("workDescription").value.trim(),
+        kg,
+        date: new Date().toLocaleDateString()
+    });
+
+    saveData();
+    renderDashboard();
+    alert("Daily work update submitted successfully.");
+}
+
+// LOGOUT
+function logout() {
+    currentUser = null;
+    alert("Logged out successfully.");
+    showSection("home");
+    showSection("binsSection");
+}
+
+// INITIALIZE
+renderPublicBins();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,618 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VoteOnline - E-Voting System</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f2f5fa;
+    color: #222;
+}
+
+header {
+    background: #173b75;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+nav {
+    background: #102b55;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+nav button {
+    background: transparent;
+    color: white;
+    border: none;
+    padding: 15px 22px;
+    cursor: pointer;
+}
+
+nav button:hover {
+    background: #3266ad;
+}
+
+.container {
+    width: 92%;
+    max-width: 950px;
+    margin: 25px auto;
+}
+
+.card {
+    background: white;
+    padding: 22px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0 3px 12px #00000012;
+}
+
+h2 {
+    color: #173b75;
+}
+
+input, select {
+    width: 100%;
+    padding: 11px;
+    margin: 8px 0 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.action {
+    background: #2457a7;
+    color: white;
+    padding: 11px 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 5px 0;
+}
+
+.action:hover {
+    background: #173b75;
+}
+
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+}
+
+.candidate {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin: 10px 0;
+}
+
+.candidate input {
+    width: auto;
+    margin: 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    background: white;
+}
+
+th, td {
+    padding: 11px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+th {
+    background: #e2eafa;
+}
+
+.notice {
+    background: #fff4d5;
+    padding: 12px;
+    border-radius: 6px;
+    line-height: 1.5;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background: #173b75;
+    color: white;
+}
+
+@media(max-width:600px) {
+    nav button {
+        padding: 12px;
+    }
+
+    th, td {
+        padding: 7px;
+        font-size: 13px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🗳️ VoteOnline</h1>
+    <p>Online Voting Management System</p>
+</header>
+
+<nav>
+    <button onclick="showPage('home')">Home</button>
+    <button onclick="showPage('user')">Voter Login</button>
+    <button onclick="showPage('admin')">Admin Panel</button>
+    <button onclick="showPage('results')">Election Results</button>
+</nav>
+
+<div class="container">
+
+<p class="notice">
+    <b>Project Demo:</b> This website demonstrates voting features in your browser.
+    OTP is simulated, and data is not securely stored on a server.
+    Do not use it for real elections.
+</p>
+
+<!-- HOME PAGE -->
+<section id="home" class="page active">
+    <div class="card">
+        <h2>Welcome to VoteOnline</h2>
+        <p>
+            VoteOnline provides a simple interface for voter verification,
+            candidate selection, vote submission, and election result viewing.
+        </p>
+        <button class="action" onclick="showPage('user')">
+            Start Voting
+        </button>
+        <button class="action" onclick="showPage('admin')">
+            Admin Dashboard
+        </button>
+    </div>
+
+    <div class="card">
+        <h2>Our Features</h2>
+        <p>✔ Voter ID Login</p>
+        <p>✔ OTP Verification Demo</p>
+        <p>✔ Candidate Selection</p>
+        <p>✔ Vote Confirmation</p>
+        <p>✔ Voter List Management</p>
+        <p>✔ Election Results Dashboard</p>
+    </div>
+</section>
+
+<!-- USER PAGE -->
+<section id="user" class="page">
+    <div class="card">
+        <h2>Voter Login</h2>
+
+        <label for="voterId">Enter Voter ID</label>
+        <input id="voterId" placeholder="Example: DEMO101">
+
+        <button class="action" onclick="login()">Login</button>
+    </div>
+
+    <div class="card" id="otpSection" hidden>
+        <h2>OTP Verification</h2>
+        <p id="otpMessage"></p>
+
+        <label for="otpInput">Enter Demo OTP</label>
+        <input id="otpInput" maxlength="6" placeholder="Enter 6-digit OTP">
+
+        <button class="action" onclick="verifyOTP()">Verify OTP</button>
+    </div>
+
+    <div class="card" id="voteSection" hidden>
+        <h2>Select Your Candidate</h2>
+        <p id="welcome"></p>
+
+        <form id="voteForm">
+
+            <label class="candidate">
+                <input type="radio" name="party" value="YSRCP" required>
+                YSRCP
+            </label>
+
+            <label class="candidate">
+                <input type="radio" name="party" value="TDP">
+                TDP
+            </label>
+
+            <label class="candidate">
+                <input type="radio" name="party" value="JSP">
+                JSP
+            </label>
+
+            <label class="candidate">
+                <input type="radio" name="party" value="BJP">
+                BJP
+            </label>
+
+            <label class="candidate">
+                <input type="radio" name="party" value="IND">
+                IND (Independent)
+            </label>
+
+            <button class="action" type="submit">Submit Vote</button>
+        </form>
+
+        <p id="confirmation"></p>
+    </div>
+</section>
+
+<!-- ADMIN PAGE -->
+<section id="admin" class="page">
+    <div class="card">
+        <h2>Admin Dashboard</h2>
+        <p>Create candidates and manage the demonstration voter list.</p>
+
+        <h3>Create Election Candidate</h3>
+        <input id="candidateName" placeholder="Enter candidate or party name">
+        <button class="action" onclick="addCandidate()">Add Candidate</button>
+
+        <h3>Allocate Voter to Election Ward</h3>
+        <input id="wardVoterId" placeholder="Enter Voter ID">
+
+        <select id="ward">
+            <option>Ward 1</option>
+            <option>Ward 2</option>
+            <option>Ward 3</option>
+            <option>Ward 4</option>
+            <option>Ward 5</option>
+        </select>
+
+        <button class="action" onclick="allocateWard()">Allocate Ward</button>
+
+        <h3>Create / Import Voter List</h3>
+        <input id="importVoter" placeholder="Enter Voter ID">
+        <button class="action" onclick="addVoter()">Add Voter</button>
+
+        <h3>View and Update Voter List</h3>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Voter ID</th>
+                    <th>Ward</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="voterTable"></tbody>
+        </table>
+    </div>
+
+    <div class="card">
+        <h2>Election Candidate List</h2>
+        <ul id="candidateList"></ul>
+    </div>
+</section>
+
+<!-- RESULTS PAGE -->
+<section id="results" class="page">
+    <div class="card">
+        <h2>Election Results</h2>
+        <p>Demo results update when votes are submitted.</p>
+
+        <h3>Total Votes: <span id="totalVotes">0</span></h3>
+
+        <h3>Party-wise Results</h3>
+        <div id="resultList"></div>
+    </div>
+</section>
+
+</div>
+
+<footer>
+    <p>VoteOnline E-Voting System | Student Project</p>
+</footer>
+
+<script>
+let candidates = ["YSRCP", "TDP", "JSP", "BJP", "IND"];
+
+let votes = {
+    YSRCP: 0,
+    TDP: 0,
+    JSP: 0,
+    BJP: 0,
+    IND: 0
+};
+
+let voters = {};
+let votedIDs = new Set();
+let currentVoter = "";
+let generatedOTP = "";
+
+function showPage(pageID) {
+    document.querySelectorAll(".page").forEach(page => {
+        page.classList.remove("active");
+    });
+
+    document.getElementById(pageID).classList.add("active");
+
+    if (pageID === "results") {
+        displayResults();
+    }
+
+    if (pageID === "admin") {
+        displayVoters();
+        displayCandidates();
+    }
+}
+
+function login() {
+    let id = document.getElementById("voterId").value.trim();
+
+    if (!id) {
+        alert("Please enter your Voter ID");
+        return;
+    }
+
+    id = id.toUpperCase();
+
+    if (votedIDs.has(id)) {
+        alert("This demo Voter ID has already voted.");
+        return;
+    }
+
+    currentVoter = id;
+
+    generatedOTP = String(
+        Math.floor(100000 + Math.random() * 900000)
+    );
+
+    document.getElementById("otpSection").hidden = false;
+    document.getElementById("voteSection").hidden = true;
+
+    // Demo only: display the OTP on screen.
+    document.getElementById("otpMessage").textContent =
+        "Your demo OTP is: " + generatedOTP +
+        ". No SMS has been sent.";
+
+    document.getElementById("otpInput").value = "";
+}
+
+function verifyOTP() {
+    let enteredOTP = document.getElementById("otpInput").value.trim();
+
+    if (enteredOTP !== generatedOTP || !generatedOTP) {
+        alert("Invalid OTP. Please try again.");
+        return;
+    }
+
+    document.getElementById("otpSection").hidden = true;
+    document.getElementById("voteSection").hidden = false;
+
+    document.getElementById("welcome").textContent =
+        "Welcome, " + currentVoter + ". Please select one candidate.";
+
+    displayVoteCandidates();
+}
+
+function displayVoteCandidates() {
+    let form = document.getElementById("voteForm");
+
+    form.innerHTML = "";
+
+    candidates.forEach(candidate => {
+        let label = document.createElement("label");
+        label.className = "candidate";
+
+        let radio = document.createElement("input");
+        radio.type = "radio";
+        radio.name = "party";
+        radio.value = candidate;
+        radio.required = true;
+
+        label.appendChild(radio);
+        label.appendChild(document.createTextNode(" " + candidate));
+        form.appendChild(label);
+    });
+
+    let submit = document.createElement("button");
+    submit.type = "submit";
+    submit.className = "action";
+    submit.textContent = "Submit Vote";
+
+    form.appendChild(submit);
+}
+
+document.getElementById("voteForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    if (!currentVoter || votedIDs.has(currentVoter)) {
+        alert("Please log in with an eligible demo Voter ID.");
+        return;
+    }
+
+    let selected = new FormData(this).get("party");
+
+    if (!selected) {
+        alert("Please select a candidate.");
+        return;
+    }
+
+    votes[selected] = (votes[selected] || 0) + 1;
+    votedIDs.add(currentVoter);
+
+    if (!voters[currentVoter]) {
+        voters[currentVoter] = {
+            ward: "Not allocated",
+            status: "Voted"
+        };
+    } else {
+        voters[currentVoter].status = "Voted";
+    }
+
+    document.getElementById("confirmation").textContent =
+        "Demo vote submitted successfully! Selected party: " + selected;
+
+    document.getElementById("voteSection").hidden = true;
+    document.getElementById("voterId").value = "";
+    currentVoter = "";
+    generatedOTP = "";
+
+    displayVoters();
+    displayResults();
+});
+
+function addCandidate() {
+    let name = document.getElementById("candidateName")
+        .value.trim().toUpperCase();
+
+    if (!name) {
+        alert("Enter a candidate or party name.");
+        return;
+    }
+
+    if (candidates.includes(name)) {
+        alert("Candidate already exists.");
+        return;
+    }
+
+    candidates.push(name);
+    votes[name] = 0;
+
+    document.getElementById("candidateName").value = "";
+
+    displayCandidates();
+    displayResults();
+
+    alert("Candidate added successfully.");
+}
+
+function displayCandidates() {
+    let list = document.getElementById("candidateList");
+    list.innerHTML = "";
+
+    candidates.forEach(candidate => {
+        let item = document.createElement("li");
+        item.textContent = candidate;
+        list.appendChild(item);
+    });
+}
+
+function addVoter() {
+    let id = document.getElementById("importVoter")
+        .value.trim().toUpperCase();
+
+    if (!id) {
+        alert("Enter a Voter ID.");
+        return;
+    }
+
+    if (voters[id]) {
+        alert("Voter already exists.");
+        return;
+    }
+
+    voters[id] = {
+        ward: "Not allocated",
+        status: "Not voted"
+    };
+
+    document.getElementById("importVoter").value = "";
+    displayVoters();
+    alert("Demo voter added successfully.");
+}
+
+function allocateWard() {
+    let id = document.getElementById("wardVoterId")
+        .value.trim().toUpperCase();
+
+    if (!id) {
+        alert("Enter a Voter ID.");
+        return;
+    }
+
+    if (!voters[id]) {
+        voters[id] = {
+            ward: "Not allocated",
+            status: "Not voted"
+        };
+    }
+
+    voters[id].ward = document.getElementById("ward").value;
+
+    document.getElementById("wardVoterId").value = "";
+    displayVoters();
+    alert("Ward allocated successfully.");
+}
+
+function displayVoters() {
+    let table = document.getElementById("voterTable");
+    table.innerHTML = "";
+
+    Object.keys(voters).forEach(id => {
+        let row = table.insertRow();
+
+        row.insertCell().textContent = id;
+        row.insertCell().textContent = voters[id].ward;
+        row.insertCell().textContent = voters[id].status;
+
+        let actionCell = row.insertCell();
+        let removeButton = document.createElement("button");
+
+        removeButton.textContent = "Remove";
+        removeButton.className = "action";
+
+        removeButton.onclick = function() {
+            if (votedIDs.has(id)) {
+                alert("Cannot remove a voter who has already voted in this demo.");
+                return;
+            }
+
+            delete voters[id];
+            displayVoters();
+        };
+
+        actionCell.appendChild(removeButton);
+    });
+}
+
+function displayResults() {
+    let total = Object.values(votes).reduce((sum, value) => sum + value, 0);
+
+    document.getElementById("totalVotes").textContent = total;
+
+    let list = document.getElementById("resultList");
+    list.innerHTML = "";
+
+    candidates.forEach(candidate => {
+        let count = votes[candidate] || 0;
+        let percent = total ? (count / total * 100).toFixed(1) : "0.0";
+
+        let row = document.createElement("p");
+        row.textContent = candidate + ": " + count +
+            " votes (" + percent + "%)";
+
+        list.appendChild(row);
+    });
+}
+
+displayCandidates();
+displayVoters();
+displayResults();
+</script>
+
+</body>
+</html>

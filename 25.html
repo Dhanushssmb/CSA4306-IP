@@ -1,0 +1,482 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RoadRescue - Vehicle Breakdown Assistance</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f4f7fb;color:#243047;line-height:1.6}
+header{background:#142b4a;color:white;padding:18px 5%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.logo{font-size:25px;font-weight:bold;color:#ffbf47}
+nav{display:flex;flex-wrap:wrap;gap:7px}
+button,.btn{background:#f39c12;color:white;border:0;padding:10px 15px;border-radius:6px;cursor:pointer;font-weight:bold;text-decoration:none;display:inline-block}
+button:hover,.btn:hover{opacity:.85}
+nav button{background:transparent;color:white}
+nav button:hover{background:#29486c}
+.hero{background:linear-gradient(120deg,#142b4a,#2874a6);color:white;text-align:center;padding:65px 15px}
+.hero h1{font-size:36px;margin-bottom:12px}
+.hero p{margin-bottom:20px}
+.container{max-width:1100px;margin:25px auto;padding:0 16px}
+.section{display:none}
+.section.active{display:block}
+h2{margin-bottom:15px;color:#18395e}
+h3{margin-bottom:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}
+.card{background:white;border-radius:10px;padding:20px;box-shadow:0 3px 12px #00000010;margin-bottom:15px}
+.card p{margin:6px 0}
+input,select,textarea{width:100%;padding:11px;margin:6px 0 13px;border:1px solid #ccd5e0;border-radius:6px;font-size:15px}
+textarea{min-height:85px;resize:vertical}
+label{font-weight:bold}
+.form-box{max-width:550px;margin:20px auto;background:white;padding:25px;border-radius:10px;box-shadow:0 3px 12px #00000010}
+.small{font-size:13px;color:#64748b}
+.status{font-weight:bold;color:#16804a}
+.pending{color:#b36b00}
+.danger{background:#d94343}
+.secondary{background:#42617e}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.notice{background:#fff5d9;padding:12px;border-radius:6px;margin:12px 0}
+footer{text-align:center;background:#142b4a;color:white;padding:20px;margin-top:40px}
+a{color:#1769aa}
+hr{border:0;border-top:1px solid #e4e8ee;margin:15px 0}
+@media(max-width:600px){.hero h1{font-size:27px}header{justify-content:center;text-align:center}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">🚗 RoadRescue</div>
+  <nav>
+    <button onclick="showPage('home')">Home</button>
+    <button onclick="showPage('search')">Find Mechanic</button>
+    <button onclick="showPage('register')">Register</button>
+    <button onclick="showPage('login')">Login</button>
+    <button onclick="showPage('dashboard')">Dashboard</button>
+    <button onclick="logout()">Logout</button>
+  </nav>
+</header>
+
+<div id="home" class="section active">
+  <div class="hero">
+    <h1>Vehicle Breakdown? We're Here to Help!</h1>
+    <p>Find approved mechanics near your location and get roadside assistance.</p>
+    <button onclick="showPage('search')">Find a Mechanic</button>
+    <button class="secondary" onclick="showPage('register')">Join RoadRescue</button>
+  </div>
+  <div class="container">
+    <h2>How It Works</h2>
+    <div class="grid">
+      <div class="card"><h3>🔍 Search Mechanics</h3><p>Search by location, service type, or mechanic name.</p></div>
+      <div class="card"><h3>📍 View Location</h3><p>Open Google Maps to view a mechanic's location and directions.</p></div>
+      <div class="card"><h3>🛠️ Roadside Support</h3><p>Contact an approved mechanic to discuss your vehicle issue.</p></div>
+    </div>
+    <div class="notice"><b>Safety note:</b> If your vehicle breaks down, move to a safe location if possible, switch on hazard lights, and avoid standing in traffic.</div>
+  </div>
+</div>
+
+<div class="container">
+  <section id="register" class="section">
+    <div class="form-box">
+      <h2>Create an Account</h2>
+      <form onsubmit="registerUser(event)">
+        <label>Full Name</label><input id="regName" required>
+        <label>Email</label><input id="regEmail" type="email" required>
+        <label>Phone Number</label><input id="regPhone" type="tel" required>
+        <label>Password</label><input id="regPassword" type="password" minlength="4" required>
+        <label>Register As</label>
+        <select id="regRole"><option value="user">User</option><option value="mechanic">Mechanic</option></select>
+        <button type="submit">Register</button>
+      </form>
+      <p class="small">Mechanic accounts must be approved by the admin before appearing in searches.</p>
+    </div>
+  </section>
+
+  <section id="login" class="section">
+    <div class="form-box">
+      <h2>Login</h2>
+      <form onsubmit="loginUser(event)">
+        <label>Email</label><input id="loginEmail" type="email" required>
+        <label>Password</label><input id="loginPassword" type="password" required>
+        <button type="submit">Login</button>
+      </form>
+      <hr>
+      <p><b>Demo admin login</b></p>
+      <p>Email: admin@roadrescue.com</p>
+      <p>Password: admin123</p>
+      <p class="small">Demo credentials are for this local project only.</p>
+    </div>
+  </section>
+
+  <section id="search" class="section">
+    <h2>Find Approved Mechanics</h2>
+    <div class="card">
+      <label>Search by mechanic, location, or service</label>
+      <input id="searchText" placeholder="e.g. Chennai, tyre repair, Ravi">
+      <label>Vehicle / Service Type</label>
+      <select id="searchType">
+        <option value="">All services</option>
+        <option>Car Repair</option><option>Bike Repair</option>
+        <option>Tyre Puncture</option><option>Battery Service</option>
+        <option>Towing</option><option>Engine Repair</option>
+      </select>
+      <button onclick="searchMechanics()">Search</button>
+      <button class="secondary" onclick="showNearby()">Use My Location</button>
+      <p class="small">Location access is optional. Search results show approved demo listings, not guaranteed real-time availability.</p>
+    </div>
+    <div id="mechanicResults" class="grid"></div>
+  </section>
+
+  <section id="dashboard" class="section">
+    <h2>Dashboard</h2>
+    <div id="dashboardContent"></div>
+  </section>
+</div>
+
+<footer>
+  <p>© 2026 RoadRescue | On Road Vehicle Breakdown Assistance</p>
+  <p class="small">Educational project demo. Verify credentials and service details before using any mechanic.</p>
+</footer>
+
+<script>
+const getData = (key, fallback=[]) => {
+  try { return JSON.parse(localStorage.getItem(key)) || fallback; }
+  catch { return fallback; }
+};
+const saveData = (key, value) => localStorage.setItem(key, JSON.stringify(value));
+
+let users = getData("rr_users", []);
+let businesses = getData("rr_businesses", []);
+let feedbacks = getData("rr_feedbacks", []);
+let currentUser = getData("rr_currentUser", null);
+let bookings = getData("rr_requests", []);
+
+if (!localStorage.getItem("rr_seeded")) {
+  businesses.push({
+    id: Date.now(),
+    ownerEmail: "demo.mechanic@roadrescue.com",
+    name: "City Car Care (Demo)",
+    phone: "9000000000",
+    location: "Chennai",
+    services: "Car Repair, Battery Service",
+    description: "Sample listing for demonstration. Contact to discuss availability.",
+    license: "DEMO-ONLY",
+    approved: true
+  });
+  saveData("rr_businesses", businesses);
+  localStorage.setItem("rr_seeded", "yes");
+}
+
+function refreshData() {
+  users = getData("rr_users", []);
+  businesses = getData("rr_businesses", []);
+  feedbacks = getData("rr_feedbacks", []);
+  bookings = getData("rr_requests", []);
+  currentUser = getData("rr_currentUser", null);
+}
+function persistAll() {
+  saveData("rr_users", users);
+  saveData("rr_businesses", businesses);
+  saveData("rr_feedbacks", feedbacks);
+  saveData("rr_requests", bookings);
+}
+function showPage(id) {
+  document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  if (id === "dashboard") renderDashboard();
+  if (id === "search") searchMechanics();
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+function registerUser(e) {
+  e.preventDefault();
+  refreshData();
+  const name = document.getElementById("regName").value.trim();
+  const email = document.getElementById("regEmail").value.trim().toLowerCase();
+  const phone = document.getElementById("regPhone").value.trim();
+  const password = document.getElementById("regPassword").value;
+  const role = document.getElementById("regRole").value;
+  if (email === "admin@roadrescue.com") return alert("This email is reserved for the demo admin.");
+  if (users.some(u => u.email === email)) return alert("This email is already registered.");
+  users.push({id:Date.now(), name, email, phone, password, role, approved:false});
+  saveData("rr_users", users);
+  alert(role === "mechanic"
+    ? "Mechanic registration successful. Please log in and submit your business details. Admin approval is required."
+    : "Registration successful. Please log in.");
+  e.target.reset();
+  showPage("login");
+}
+function loginUser(e) {
+  e.preventDefault();
+  refreshData();
+  const email = document.getElementById("loginEmail").value.trim().toLowerCase();
+  const password = document.getElementById("loginPassword").value;
+  let account;
+  if (email === "admin@roadrescue.com" && password === "admin123") {
+    account = {name:"Administrator", email, role:"admin"};
+  } else {
+    account = users.find(u => u.email === email && u.password === password);
+  }
+  if (!account) return alert("Invalid email or password.");
+  currentUser = account;
+  saveData("rr_currentUser", currentUser);
+  alert("Login successful!");
+  showPage("dashboard");
+}
+function logout() {
+  currentUser = null;
+  localStorage.removeItem("rr_currentUser");
+  alert("You have logged out.");
+  showPage("home");
+}
+function esc(value) {
+  return String(value ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+function mapLink(location) {
+  return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(location);
+}
+function searchMechanics() {
+  refreshData();
+  const term = (document.getElementById("searchText")?.value || "").toLowerCase().trim();
+  const type = document.getElementById("searchType")?.value || "";
+  const results = businesses.filter(b => b.approved &&
+    (!term || [b.name,b.location,b.services,b.description].join(" ").toLowerCase().includes(term)) &&
+    (!type || b.services.toLowerCase().includes(type.toLowerCase()))
+  );
+  const box = document.getElementById("mechanicResults");
+  if (!results.length) {
+    box.innerHTML = '<div class="card"><p>No approved mechanics found. Try another location or service.</p></div>';
+    return;
+  }
+  box.innerHTML = results.map(b => `
+    <div class="card">
+      <h3>${esc(b.name)}</h3>
+      <p><b>Location:</b> ${esc(b.location)}</p>
+      <p><b>Services:</b> ${esc(b.services)}</p>
+      <p><b>Phone:</b> ${esc(b.phone)}</p>
+      <p>${esc(b.description)}</p>
+      <p class="status">Admin Approved listing</p>
+      <div class="actions">
+        <a class="btn" target="_blank" rel="noopener" href="${mapLink(b.location)}">View Google Maps</a>
+        <button onclick="requestAssistance(${b.id})">Request Assistance</button>
+        <button class="secondary" onclick="showFeedbackForm(${b.id})">Post Feedback</button>
+      </div>
+      <div id="feedbackForm${b.id}"></div>
+    </div>`).join("");
+}
+function showNearby() {
+  if (!navigator.geolocation) return alert("Geolocation is not supported by this browser.");
+  navigator.geolocation.getCurrentPosition(pos => {
+    const lat = pos.coords.latitude, lon = pos.coords.longitude;
+    window.open(`https://www.google.com/maps/search/mechanics/@${lat},${lon},14z`, "_blank", "noopener");
+  }, () => alert("Location permission was denied or unavailable. You can search by typing a location."));
+}
+function requestAssistance(id) {
+  refreshData();
+  if (!currentUser || currentUser.role !== "user") {
+    alert("Please log in with a user account to request assistance.");
+    return showPage("login");
+  }
+  const b = businesses.find(x => x.id === id && x.approved);
+  if (!b) return alert("This mechanic is not currently approved.");
+  const issue = prompt("Describe your vehicle problem (e.g. flat tyre, battery issue):");
+  if (!issue || !issue.trim()) return;
+  bookings.push({
+    id:Date.now(), userEmail:currentUser.email, mechanicId:id,
+    issue:issue.trim(), status:"Request submitted", date:new Date().toLocaleString()
+  });
+  saveData("rr_requests", bookings);
+  alert("Request recorded in this demo. Please call the mechanic to confirm availability.");
+}
+function showFeedbackForm(id) {
+  const el = document.getElementById("feedbackForm"+id);
+  if (!el) return;
+  el.innerHTML = `
+    <hr><h3>Feedback</h3>
+    <label>Rating</label>
+    <select id="rating${id}"><option value="5">5 - Excellent</option><option value="4">4 - Good</option><option value="3">3 - Average</option><option value="2">2 - Poor</option><option value="1">1 - Very Poor</option></select>
+    <label>Comment</label><textarea id="comment${id}" placeholder="Write your feedback"></textarea>
+    <button onclick="submitFeedback(${id})">Submit Feedback</button>`;
+}
+function submitFeedback(id) {
+  refreshData();
+  if (!currentUser || currentUser.role !== "user") {
+    alert("Please log in as a user before submitting feedback.");
+    return showPage("login");
+  }
+  const comment = document.getElementById("comment"+id).value.trim();
+  const rating = document.getElementById("rating"+id).value;
+  if (!comment) return alert("Please enter your feedback.");
+  feedbacks.push({
+    id:Date.now(), mechanicId:id, userEmail:currentUser.email,
+    rating, comment, date:new Date().toLocaleDateString()
+  });
+  saveData("rr_feedbacks", feedbacks);
+  alert("Feedback submitted.");
+  searchMechanics();
+}
+function renderDashboard() {
+  refreshData();
+  const box = document.getElementById("dashboardContent");
+  if (!currentUser) {
+    box.innerHTML = '<div class="card">Please <a href="#" onclick="showPage(\'login\')">log in</a> to view your dashboard.</div>';
+    return;
+  }
+  if (currentUser.role === "admin") return renderAdmin(box);
+  if (currentUser.role === "mechanic") return renderMechanic(box);
+  renderUser(box);
+}
+function renderUser(box) {
+  const my = bookings.filter(r => r.userEmail === currentUser.email);
+  box.innerHTML = `
+    <div class="card"><h3>My Profile</h3>
+      <form onsubmit="updateProfile(event)">
+        <label>Name</label><input id="profileName" value="${esc(currentUser.name)}" required>
+        <label>Phone</label><input id="profilePhone" value="${esc(currentUser.phone)}" required>
+        <button>Update Profile</button>
+      </form>
+      <p><b>Email:</b> ${esc(currentUser.email)}</p>
+      <p><b>Role:</b> User</p>
+    </div>
+    <h3>My Assistance Requests</h3>
+    ${my.length ? my.map(r => {
+      const b = businesses.find(x => x.id === r.mechanicId);
+      return `<div class="card"><p><b>Mechanic:</b> ${esc(b?.name || "Listing unavailable")}</p>
+      <p><b>Issue:</b> ${esc(r.issue)}</p><p><b>Date:</b> ${esc(r.date)}</p>
+      <p><b>Status:</b> ${esc(r.status)}</p></div>`;
+    }).join("") : '<div class="card">No assistance requests yet.</div>'}`;
+}
+function updateProfile(e) {
+  e.preventDefault();
+  refreshData();
+  const i = users.findIndex(u => u.email === currentUser.email);
+  if (i < 0) return alert("User account not found.");
+  users[i].name = document.getElementById("profileName").value.trim();
+  users[i].phone = document.getElementById("profilePhone").value.trim();
+  currentUser = users[i];
+  saveData("rr_users", users);
+  saveData("rr_currentUser", currentUser);
+  alert("Profile updated.");
+  renderDashboard();
+}
+function renderMechanic(box) {
+  const business = businesses.find(b => b.ownerEmail === currentUser.email);
+  const mineFeedback = business ? feedbacks.filter(f => f.mechanicId === business.id) : [];
+  box.innerHTML = `
+    <div class="card"><h3>Mechanic Profile</h3>
+      <p><b>Name:</b> ${esc(currentUser.name)}</p><p><b>Email:</b> ${esc(currentUser.email)}</p>
+      <p><b>Phone:</b> ${esc(currentUser.phone)}</p>
+      <p><b>Approval:</b> ${currentUser.approved ? "Approved" : "Pending admin review"}</p>
+    </div>
+    <div class="card">
+      <h3>${business ? "Manage Business" : "Post Your Business"}</h3>
+      <form onsubmit="saveBusiness(event)">
+        <label>Business Name</label><input id="bizName" value="${esc(business?.name || "")}" required>
+        <label>Contact Phone</label><input id="bizPhone" value="${esc(business?.phone || currentUser.phone || "")}" required>
+        <label>Business Location (city/area/address)</label><input id="bizLocation" value="${esc(business?.location || "")}" required>
+        <label>Services Offered</label>
+        <select id="bizServices">
+          ${["Car Repair","Bike Repair","Tyre Puncture","Battery Service","Towing","Engine Repair","Car Repair, Battery Service","Multiple Services"].map(s=>`<option ${business?.services===s?"selected":""}>${s}</option>`).join("")}
+        </select>
+        <label>Business Description</label><textarea id="bizDescription" required>${esc(business?.description || "")}</textarea>
+        <label>Mechanic Licence / Registration Number</label><input id="bizLicense" value="${esc(business?.license || "")}" required>
+        <button type="submit">${business ? "Update Business" : "Submit Business for Approval"}</button>
+      </form>
+      ${business ? `<p>Listing status: <b class="${business.approved?"status":"pending"}">${business.approved?"Approved":"Pending admin approval"}</b></p>
+      <button class="danger" onclick="deleteBusiness(${business.id})">Delete Business Listing</button>` : ""}
+      <p class="small">Enter genuine licence information. This demo does not verify documents or licence validity.</p>
+    </div>
+    <h3>Feedback Received</h3>
+    ${mineFeedback.length ? mineFeedback.map(f=>`<div class="card"><p><b>Rating:</b> ${esc(f.rating)}/5</p><p>${esc(f.comment)}</p><p class="small">${esc(f.date)}</p></div>`).join("") : '<div class="card">No feedback received yet.</div>'}`;
+}
+function saveBusiness(e) {
+  e.preventDefault();
+  refreshData();
+  if (!currentUser || currentUser.role !== "mechanic") return alert("Please log in as a mechanic.");
+  let b = businesses.find(x => x.ownerEmail === currentUser.email);
+  const wasApproved = b?.approved === true;
+  const record = {
+    id:b?.id || Date.now(), ownerEmail:currentUser.email,
+    name:document.getElementById("bizName").value.trim(),
+    phone:document.getElementById("bizPhone").value.trim(),
+    location:document.getElementById("bizLocation").value.trim(),
+    services:document.getElementById("bizServices").value,
+    description:document.getElementById("bizDescription").value.trim(),
+    license:document.getElementById("bizLicense").value.trim(),
+    approved:wasApproved
+  };
+  if (b) businesses = businesses.map(x => x.id === b.id ? record : x);
+  else businesses.push(record);
+  saveData("rr_businesses", businesses);
+  alert(wasApproved ? "Business updated." : "Business submitted. Admin approval is required before it appears in search.");
+  renderDashboard();
+}
+function deleteBusiness(id) {
+  if (!confirm("Delete your business listing?")) return;
+  refreshData();
+  businesses = businesses.filter(b => b.id !== id || b.ownerEmail !== currentUser.email);
+  saveData("rr_businesses", businesses);
+  alert("Business listing deleted.");
+  renderDashboard();
+}
+function renderAdmin(box) {
+  const mechanics = users.filter(u => u.role === "mechanic");
+  box.innerHTML = `
+    <div class="card"><h3>Admin Dashboard</h3>
+      <p><b>Registered users:</b> ${users.filter(u=>u.role==="user").length}</p>
+      <p><b>Mechanics:</b> ${mechanics.length}</p>
+      <p><b>Business listings:</b> ${businesses.length}</p>
+      <p><b>Assistance requests:</b> ${bookings.length}</p>
+    </div>
+    <h3>Mechanic Business Approval</h3>
+    ${businesses.length ? businesses.map(b=>`
+      <div class="card">
+        <h3>${esc(b.name)}</h3>
+        <p><b>Owner email:</b> ${esc(b.ownerEmail)}</p>
+        <p><b>Phone:</b> ${esc(b.phone)}</p>
+        <p><b>Location:</b> ${esc(b.location)}</p>
+        <p><b>Services:</b> ${esc(b.services)}</p>
+        <p><b>Licence/Registration supplied:</b> ${esc(b.license)}</p>
+        <p><b>Description:</b> ${esc(b.description)}</p>
+        <p>Status: <b class="${b.approved?"status":"pending"}">${b.approved?"Approved":"Pending approval"}</b></p>
+        <div class="actions">
+          ${!b.approved ? `<button onclick="approveBusiness(${b.id},true)">Approve</button>` : `<button class="secondary" onclick="approveBusiness(${b.id},false)">Revoke Approval</button>`}
+          <button class="danger" onclick="adminDeleteBusiness(${b.id})">Delete Listing</button>
+        </div>
+      </div>`).join("") : '<div class="card">No business listings submitted.</div>'}
+    <h3>Assistance Requests</h3>
+    ${bookings.length ? bookings.map(r=> {
+      const b=businesses.find(x=>x.id===r.mechanicId);
+      return `<div class="card"><p><b>User:</b> ${esc(r.userEmail)}</p>
+      <p><b>Mechanic:</b> ${esc(b?.name || "Deleted listing")}</p>
+      <p><b>Issue:</b> ${esc(r.issue)}</p><p><b>Status:</b> ${esc(r.status)}</p>
+      <select id="reqStatus${r.id}"><option>Request submitted</option><option>Contacted</option><option>Completed</option><option>Cancelled</option></select>
+      <button onclick="updateRequest(${r.id})">Update Status</button></div>`;
+    }).join("") : '<div class="card">No requests yet.</div>'}
+  `;
+}
+function approveBusiness(id, approved) {
+  refreshData();
+  businesses = businesses.map(b => b.id === id ? {...b, approved} : b);
+  saveData("rr_businesses", businesses);
+  alert(approved ? "Business listing approved." : "Approval revoked.");
+  renderDashboard();
+}
+function adminDeleteBusiness(id) {
+  if (!confirm("Delete this business listing?")) return;
+  refreshData();
+  businesses = businesses.filter(b=>b.id!==id);
+  saveData("rr_businesses", businesses);
+  renderDashboard();
+}
+function updateRequest(id) {
+  refreshData();
+  const status = document.getElementById("reqStatus"+id).value;
+  bookings = bookings.map(r => r.id === id ? {...r, status} : r);
+  saveData("rr_requests", bookings);
+  alert("Request status updated.");
+  renderDashboard();
+}
+</script>
+</body>
+</html>

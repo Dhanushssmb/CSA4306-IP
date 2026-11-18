@@ -1,0 +1,865 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StyleHub - Fashion Store</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f7f7f7;
+    color: #222;
+}
+
+header {
+    background: #222;
+    color: white;
+    padding: 20px 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+header h1 {
+    color: #ff4081;
+}
+
+nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+nav button {
+    background: transparent;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+nav button:hover {
+    color: #ff4081;
+}
+
+.hero {
+    text-align: center;
+    padding: 55px 15px;
+    background: linear-gradient(120deg, #ffd5e3, #f7d7ff);
+}
+
+.hero h2 {
+    font-size: 36px;
+    margin-bottom: 12px;
+}
+
+.hero p {
+    margin-bottom: 20px;
+}
+
+button, .btn {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background: #ff4081;
+    color: white;
+}
+
+button:hover {
+    opacity: 0.85;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 25px auto;
+    padding: 15px;
+}
+
+h2, h3 {
+    margin-bottom: 15px;
+}
+
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+input, select, textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    min-width: 150px;
+    max-width: 100%;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 20px;
+}
+
+.product {
+    background: white;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 8px #ddd;
+}
+
+.product img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 5px;
+    background: #eee;
+}
+
+.product h3 {
+    margin: 12px 0 6px;
+}
+
+.product p {
+    margin: 7px 0;
+    line-height: 1.4;
+}
+
+.price {
+    color: #e91e63;
+    font-weight: bold;
+    font-size: 19px;
+}
+
+.product button {
+    margin: 5px 3px 0 0;
+}
+
+.panel {
+    background: white;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px #ddd;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.cart-item, .order-item {
+    padding: 14px 0;
+    border-bottom: 1px solid #ddd;
+    line-height: 1.8;
+}
+
+.cart-item button {
+    margin: 3px;
+}
+
+footer {
+    background: #222;
+    color: white;
+    text-align: center;
+    padding: 25px;
+    margin-top: 35px;
+}
+
+.status {
+    color: #00875a;
+    font-weight: bold;
+}
+
+label {
+    display: block;
+    margin: 12px 0 5px;
+}
+
+@media (max-width: 600px) {
+    header {
+        flex-direction: column;
+    }
+    .hero h2 {
+        font-size: 27px;
+    }
+    .product img {
+        height: 190px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>StyleHub</h1>
+    <nav>
+        <button onclick="showPage('home')">Home</button>
+        <button onclick="showPage('products')">Products</button>
+        <button onclick="showPage('cart')">Cart (<span id="cartCount">0</span>)</button>
+        <button onclick="showPage('orders')">My Orders</button>
+        <button onclick="showPage('login')">Login</button>
+        <button onclick="showPage('admin')">Admin</button>
+        <button onclick="logout()">Logout</button>
+    </nav>
+</header>
+
+<section class="hero" id="hero">
+    <h2>Discover Your Style</h2>
+    <p>Trendy clothing, footwear and accessories for everyone.</p>
+    <button onclick="showPage('products')">Shop Now</button>
+</section>
+
+<main class="container">
+
+    <!-- HOME PAGE -->
+    <section id="home" class="page">
+        <h2>Shop by Category</h2>
+        <div class="controls">
+            <button onclick="chooseCategory('All')">All Products</button>
+            <button onclick="chooseCategory('Men')">Men</button>
+            <button onclick="chooseCategory('Women')">Women</button>
+            <button onclick="chooseCategory('Kids')">Kids</button>
+            <button onclick="chooseCategory('Footwear')">Footwear</button>
+            <button onclick="chooseCategory('Accessories')">Accessories</button>
+        </div>
+        <h2>Popular Products</h2>
+        <div class="grid" id="homeProducts"></div>
+    </section>
+
+    <!-- PRODUCT CATALOGUE -->
+    <section id="products" class="page hidden">
+        <h2>Product Catalogue</h2>
+        <div class="controls">
+            <input id="search" placeholder="Search products..."
+                   oninput="renderProducts()">
+
+            <select id="category" onchange="renderProducts()">
+                <option value="All">All Categories</option>
+                <option>Men</option>
+                <option>Women</option>
+                <option>Kids</option>
+                <option>Footwear</option>
+                <option>Accessories</option>
+            </select>
+
+            <select id="sort" onchange="renderProducts()">
+                <option value="default">Sort By</option>
+                <option value="low">Price: Low to High</option>
+                <option value="high">Price: High to Low</option>
+                <option value="name">Name</option>
+            </select>
+        </div>
+
+        <div class="grid" id="productList"></div>
+    </section>
+
+    <!-- PRODUCT DETAILS -->
+    <section id="details" class="page hidden">
+        <div class="panel" id="productDetails"></div>
+    </section>
+
+    <!-- LOGIN -->
+    <section id="login" class="page hidden">
+        <div class="panel">
+            <h2>Customer Login / Registration</h2>
+            <p>Enter your name and email to use this demo store.</p>
+            <label>Name</label>
+            <input id="userName" placeholder="Enter your name">
+            <label>Email</label>
+            <input id="userEmail" type="email" placeholder="Enter email">
+            <br><br>
+            <button onclick="login()">Login / Register</button>
+            <p id="loginMessage"></p>
+        </div>
+    </section>
+
+    <!-- CART -->
+    <section id="cart" class="page hidden">
+        <h2>Shopping Cart</h2>
+        <div class="panel" id="cartItems"></div>
+        <h3 id="cartTotal">Total: ₹0</h3>
+        <button onclick="checkout()">Proceed to Checkout</button>
+        <button onclick="showPage('products')">Continue Shopping</button>
+    </section>
+
+    <!-- CHECKOUT -->
+    <section id="checkout" class="page hidden">
+        <div class="panel">
+            <h2>Checkout</h2>
+            <p id="checkoutUser"></p>
+            <label>Delivery Address</label>
+            <textarea id="address" placeholder="Enter complete delivery address"
+                      rows="3" style="width:100%"></textarea>
+            <label>Payment Method</label>
+            <select id="payment">
+                <option value="Cash on Delivery">Cash on Delivery</option>
+                <option value="Demo Online Payment">Demo Online Payment</option>
+            </select>
+            <p style="margin:15px 0">
+                Note: This demonstration does not process real payments.
+            </p>
+            <button onclick="placeOrder()">Place Order</button>
+        </div>
+    </section>
+
+    <!-- ORDER HISTORY -->
+    <section id="orders" class="page hidden">
+        <h2>Order History and Status</h2>
+        <div id="orderList"></div>
+    </section>
+
+    <!-- ADMIN PANEL -->
+    <section id="admin" class="page hidden">
+        <div class="panel">
+            <h2>Admin Panel</h2>
+            <p>Demo administrator access. This page is not protected by a real login.</p>
+            <h3>Add New Product</h3>
+
+            <label>Product Name</label>
+            <input id="newName" placeholder="Product name">
+
+            <label>Category</label>
+            <select id="newCategory">
+                <option>Men</option>
+                <option>Women</option>
+                <option>Kids</option>
+                <option>Footwear</option>
+                <option>Accessories</option>
+            </select>
+
+            <label>Price (₹)</label>
+            <input id="newPrice" type="number" min="1" placeholder="Price">
+
+            <label>Description</label>
+            <input id="newDescription" placeholder="Product description">
+
+            <label>Image URL</label>
+            <input id="newImage" placeholder="https://example.com/image.jpg">
+
+            <label>Stock Quantity</label>
+            <input id="newStock" type="number" min="0" value="10">
+
+            <br><br>
+            <button onclick="addProduct()">Add Product</button>
+        </div>
+
+        <div class="panel">
+            <h3>Manage Products</h3>
+            <div id="adminProducts"></div>
+        </div>
+
+        <div class="panel">
+            <h3>Customer Checkout Information</h3>
+            <div id="customerInfo"></div>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <h3>StyleHub Fashion Store</h3>
+    <p>Fashion for Every Moment</p>
+    <p>Contact: support@stylehub.example</p>
+    <p>&copy; 2026 StyleHub. All rights reserved.</p>
+</footer>
+
+<script>
+// INITIAL PRODUCT DATA
+const initialProducts = [
+    {
+        id: 1, name: "Men's Casual Shirt", category: "Men",
+        price: 799, stock: 15,
+        description: "Comfortable cotton shirt for everyday wear.",
+        image: "https://images.unsplash.com/photo-1603252109303-2751441dd157?w=500"
+    },
+    {
+        id: 2, name: "Women's Summer Dress", category: "Women",
+        price: 1299, stock: 10,
+        description: "Stylish summer dress with a modern design.",
+        image: "https://images.unsplash.com/photo-1539008835657-9e8e9680c956?w=500"
+    },
+    {
+        id: 3, name: "Kids Casual Outfit", category: "Kids",
+        price: 599, stock: 12,
+        description: "Soft and comfortable clothing for children.",
+        image: "https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?w=500"
+    },
+    {
+        id: 4, name: "Sports Shoes", category: "Footwear",
+        price: 1499, stock: 8,
+        description: "Lightweight shoes suitable for daily activities.",
+        image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500"
+    },
+    {
+        id: 5, name: "Fashion Handbag", category: "Accessories",
+        price: 999, stock: 6,
+        description: "Elegant handbag for everyday use.",
+        image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500"
+    },
+    {
+        id: 6, name: "Men's Denim Jeans", category: "Men",
+        price: 1199, stock: 10,
+        description: "Classic denim jeans with a comfortable fit.",
+        image: "https://images.unsplash.com/photo-1542272604-787c3835535d?w=500"
+    }
+];
+
+// LOCAL STORAGE DEMONSTRATION
+let products = JSON.parse(localStorage.getItem("shProducts")) || initialProducts;
+let cart = JSON.parse(localStorage.getItem("shCart")) || [];
+let orders = JSON.parse(localStorage.getItem("shOrders")) || [];
+let currentUser = JSON.parse(localStorage.getItem("shUser")) || null;
+let selectedCategory = "All";
+
+function saveData() {
+    localStorage.setItem("shProducts", JSON.stringify(products));
+    localStorage.setItem("shCart", JSON.stringify(cart));
+    localStorage.setItem("shOrders", JSON.stringify(orders));
+    localStorage.setItem("shUser", JSON.stringify(currentUser));
+}
+
+function showPage(page) {
+    document.querySelectorAll(".page").forEach(section => {
+        section.classList.add("hidden");
+    });
+
+    document.getElementById(page).classList.remove("hidden");
+    document.getElementById("hero").style.display =
+        page === "home" ? "block" : "none";
+
+    if (page === "home") renderHome();
+    if (page === "products") renderProducts();
+    if (page === "cart") renderCart();
+    if (page === "orders") renderOrders();
+    if (page === "admin") renderAdmin();
+    if (page === "checkout") {
+        document.getElementById("checkoutUser").textContent =
+            "Customer: " + (currentUser ? currentUser.name : "Guest");
+    }
+}
+
+function chooseCategory(category) {
+    selectedCategory = category;
+    document.getElementById("category").value = category;
+    showPage("products");
+}
+
+function productCard(p) {
+    return `
+        <div class="product">
+            <img src="${escapeHTML(p.image)}"
+                 alt="${escapeHTML(p.name)}"
+                 onerror="this.src='https://placehold.co/300x220?text=Fashion'">
+            <h3>${escapeHTML(p.name)}</h3>
+            <p>${escapeHTML(p.category)}</p>
+            <p class="price">₹${p.price}</p>
+            <p>Available: ${p.stock}</p>
+            <button onclick="viewDetails(${p.id})">Details</button>
+            <button onclick="addToCart(${p.id})"
+                    ${p.stock <= 0 ? "disabled" : ""}>Add to Cart</button>
+        </div>`;
+}
+
+function renderHome() {
+    document.getElementById("homeProducts").innerHTML =
+        products.slice(0, 4).map(productCard).join("");
+    updateCartCount();
+}
+
+function renderProducts() {
+    const search = document.getElementById("search").value.toLowerCase();
+    const category = document.getElementById("category").value;
+    const sort = document.getElementById("sort").value;
+
+    let filtered = products.filter(p =>
+        p.name.toLowerCase().includes(search) &&
+        (category === "All" || p.category === category)
+    );
+
+    if (sort === "low") filtered.sort((a, b) => a.price - b.price);
+    if (sort === "high") filtered.sort((a, b) => b.price - a.price);
+    if (sort === "name") filtered.sort((a, b) => a.name.localeCompare(b.name));
+
+    document.getElementById("productList").innerHTML =
+        filtered.length
+        ? filtered.map(productCard).join("")
+        : "<p>No products found.</p>";
+
+    updateCartCount();
+}
+
+function viewDetails(id) {
+    const p = products.find(item => item.id === id);
+    if (!p) return;
+
+    document.getElementById("productDetails").innerHTML = `
+        <img src="${escapeHTML(p.image)}" alt="${escapeHTML(p.name)}"
+             style="width:100%;max-width:350px;height:280px;object-fit:cover">
+        <h2>${escapeHTML(p.name)}</h2>
+        <p>Category: ${escapeHTML(p.category)}</p>
+        <p>${escapeHTML(p.description)}</p>
+        <p class="price">₹${p.price}</p>
+        <p>Available stock: ${p.stock}</p>
+        <button onclick="addToCart(${p.id})">Add to Cart</button>
+        <button onclick="showPage('products')">Back to Products</button>
+    `;
+    showPage("details");
+}
+
+function addToCart(id) {
+    const p = products.find(item => item.id === id);
+    if (!p || p.stock <= 0) {
+        alert("Product is unavailable.");
+        return;
+    }
+
+    const item = cart.find(item => item.id === id);
+    const quantity = item ? item.quantity : 0;
+
+    if (quantity >= p.stock) {
+        alert("Not enough stock available.");
+        return;
+    }
+
+    if (item) item.quantity++;
+    else cart.push({ id: p.id, quantity: 1 });
+
+    saveData();
+    updateCartCount();
+    alert("Product added to cart!");
+}
+
+function updateCartCount() {
+    document.getElementById("cartCount").textContent =
+        cart.reduce((sum, item) => sum + item.quantity, 0);
+}
+
+function renderCart() {
+    const container = document.getElementById("cartItems");
+    let total = 0;
+
+    if (cart.length === 0) {
+        container.innerHTML = "<p>Your cart is empty.</p>";
+        document.getElementById("cartTotal").textContent = "Total: ₹0";
+        return;
+    }
+
+    container.innerHTML = cart.map(item => {
+        const p = products.find(product => product.id === item.id);
+        if (!p) return "";
+
+        total += p.price * item.quantity;
+
+        return `
+            <div class="cart-item">
+                <strong>${escapeHTML(p.name)}</strong><br>
+                Price: ₹${p.price}<br>
+                Quantity: ${item.quantity}<br>
+                Subtotal: ₹${p.price * item.quantity}<br>
+                <button onclick="changeQuantity(${p.id},-1)">-</button>
+                <button onclick="changeQuantity(${p.id},1)">+</button>
+                <button onclick="removeFromCart(${p.id})">Remove</button>
+            </div>`;
+    }).join("");
+
+    document.getElementById("cartTotal").textContent = "Total: ₹" + total;
+}
+
+function changeQuantity(id, amount) {
+    const item = cart.find(i => i.id === id);
+    const p = products.find(i => i.id === id);
+    if (!item || !p) return;
+
+    const next = item.quantity + amount;
+
+    if (next <= 0) {
+        removeFromCart(id);
+        return;
+    }
+
+    if (next > p.stock) {
+        alert("Only " + p.stock + " units are available.");
+        return;
+    }
+
+    item.quantity = next;
+    saveData();
+    renderCart();
+    updateCartCount();
+}
+
+function removeFromCart(id) {
+    cart = cart.filter(item => item.id !== id);
+    saveData();
+    renderCart();
+    updateCartCount();
+}
+
+function login() {
+    const name = document.getElementById("userName").value.trim();
+    const email = document.getElementById("userEmail").value.trim();
+
+    if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        document.getElementById("loginMessage").textContent =
+            "Enter a name and valid email address.";
+        return;
+    }
+
+    currentUser = { name, email };
+    saveData();
+
+    document.getElementById("loginMessage").textContent =
+        "Welcome, " + name + "! You are logged in for this demo.";
+}
+
+function logout() {
+    currentUser = null;
+    saveData();
+    alert("Logged out.");
+    showPage("home");
+}
+
+function checkout() {
+    if (!cart.length) {
+        alert("Your cart is empty.");
+        return;
+    }
+
+    if (!currentUser) {
+        alert("Please log in before checkout.");
+        showPage("login");
+        return;
+    }
+
+    showPage("checkout");
+}
+
+function placeOrder() {
+    const address = document.getElementById("address").value.trim();
+    const payment = document.getElementById("payment").value;
+
+    if (!currentUser) {
+        alert("Please log in first.");
+        showPage("login");
+        return;
+    }
+
+    if (!address) {
+        alert("Please enter your delivery address.");
+        return;
+    }
+
+    if (!cart.length) {
+        alert("Your cart is empty.");
+        showPage("cart");
+        return;
+    }
+
+    // Verify stock before changing any inventory.
+    for (const item of cart) {
+        const p = products.find(product => product.id === item.id);
+        if (!p || p.stock < item.quantity) {
+            alert("Insufficient stock for " + (p ? p.name : "an item"));
+            return;
+        }
+    }
+
+    let total = 0;
+    const purchasedItems = cart.map(item => {
+        const p = products.find(product => product.id === item.id);
+        total += p.price * item.quantity;
+        p.stock -= item.quantity;
+
+        return {
+            id: p.id,
+            name: p.name,
+            price: p.price,
+            quantity: item.quantity
+        };
+    });
+
+    const order = {
+        orderId: "SH" + Date.now(),
+        customer: currentUser,
+        items: purchasedItems,
+        total: total,
+        address: address,
+        payment: payment,
+        status: "Order Placed",
+        date: new Date().toLocaleString()
+    };
+
+    orders.push(order);
+    cart = [];
+    saveData();
+
+    alert("Order placed successfully! Order ID: " + order.orderId);
+    showPage("orders");
+}
+
+function renderOrders() {
+    const container = document.getElementById("orderList");
+
+    if (!currentUser) {
+        container.innerHTML =
+            '<div class="panel">Please log in to view your orders.</div>';
+        return;
+    }
+
+    const myOrders = orders.filter(o =>
+        o.customer.email === currentUser.email
+    );
+
+    if (!myOrders.length) {
+        container.innerHTML = "<p>You have not placed any orders yet.</p>";
+        return;
+    }
+
+    container.innerHTML = myOrders.slice().reverse().map(o => `
+        <div class="panel order-item">
+            <h3>Order ID: ${escapeHTML(o.orderId)}</h3>
+            <p>Date: ${escapeHTML(o.date)}</p>
+            <p>Total: ₹${o.total}</p>
+            <p>Payment: ${escapeHTML(o.payment)}</p>
+            <p>Status: <span class="status">${escapeHTML(o.status)}</span></p>
+            <p>Items: ${o.items.map(i =>
+                escapeHTML(i.name) + " × " + i.quantity
+            ).join(", ")}</p>
+        </div>
+    `).join("");
+}
+
+function addProduct() {
+    const name = document.getElementById("newName").value.trim();
+    const category = document.getElementById("newCategory").value;
+    const price = Number(document.getElementById("newPrice").value);
+    const description = document.getElementById("newDescription").value.trim();
+    const image = document.getElementById("newImage").value.trim();
+    const stock = Number(document.getElementById("newStock").value);
+
+    if (!name || !description || !Number.isFinite(price) ||
+        price <= 0 || !Number.isInteger(stock) || stock < 0) {
+        alert("Enter a name, description, valid price and stock.");
+        return;
+    }
+
+    products.push({
+        id: Date.now(),
+        name,
+        category,
+        price,
+        description,
+        image: image || "https://placehold.co/300x220?text=Fashion",
+        stock
+    });
+
+    saveData();
+    renderAdmin();
+    renderHome();
+
+    document.getElementById("newName").value = "";
+    document.getElementById("newPrice").value = "";
+    document.getElementById("newDescription").value = "";
+    document.getElementById("newImage").value = "";
+    document.getElementById("newStock").value = "10";
+
+    alert("Product added successfully.");
+}
+
+function editProduct(id) {
+    const p = products.find(item => item.id === id);
+    if (!p) return;
+
+    const name = prompt("Product name:", p.name);
+    if (name === null) return;
+
+    const priceText = prompt("Price:", p.price);
+    if (priceText === null) return;
+
+    const price = Number(priceText);
+    if (!name.trim() || !Number.isFinite(price) || price <= 0) {
+        alert("Invalid name or price.");
+        return;
+    }
+
+    const description = prompt("Description:", p.description);
+    if (description === null) return;
+
+    p.name = name.trim();
+    p.price = price;
+    p.description = description.trim();
+
+    saveData();
+    renderAdmin();
+    renderHome();
+    alert("Product updated.");
+}
+
+function deleteProduct(id) {
+    if (!confirm("Are you sure you want to remove this product?")) return;
+
+    products = products.filter(p => p.id !== id);
+    cart = cart.filter(item => item.id !== id);
+
+    saveData();
+    renderAdmin();
+    renderHome();
+    alert("Product removed.");
+}
+
+function renderAdmin() {
+    document.getElementById("adminProducts").innerHTML =
+        products.map(p => `
+            <div class="cart-item">
+                <strong>${escapeHTML(p.name)}</strong>
+                — ₹${p.price}, Stock: ${p.stock}
+                <button onclick="editProduct(${p.id})">Edit</button>
+                <button onclick="deleteProduct(${p.id})">Delete</button>
+            </div>
+        `).join("");
+
+    document.getElementById("customerInfo").innerHTML =
+        orders.length
+        ? orders.map(o => `
+            <div class="cart-item">
+                <strong>${escapeHTML(o.customer.name)}</strong><br>
+                Email: ${escapeHTML(o.customer.email)}<br>
+                Address: ${escapeHTML(o.address)}<br>
+                Order: ${escapeHTML(o.orderId)}<br>
+                Total: ₹${o.total}<br>
+                Status: ${escapeHTML(o.status)}
+            </div>
+        `).join("")
+        : "<p>No customer orders yet.</p>";
+}
+
+// Basic HTML escaping for user-entered text.
+function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[char]);
+}
+
+// INITIALIZE WEBSITE
+document.getElementById("category").value = "All";
+renderHome();
+updateCartCount();
+</script>
+
+</body>
+</html>

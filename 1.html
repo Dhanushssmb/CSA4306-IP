@@ -1,0 +1,897 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Library Management System</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f1f5f9;
+    color: #1e293b;
+}
+
+header {
+    background: #123b70;
+    color: white;
+    padding: 20px 6%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+header h1 {
+    font-size: 24px;
+}
+
+header button {
+    background: white;
+    color: #123b70;
+}
+
+nav {
+    background: #fff;
+    padding: 14px 5%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    box-shadow: 0 2px 5px #ddd;
+}
+
+button, nav button {
+    border: none;
+    padding: 11px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+nav button, .primary {
+    background: #2563eb;
+    color: white;
+}
+
+button:hover {
+    opacity: .85;
+}
+
+main {
+    max-width: 1200px;
+    margin: 28px auto;
+    padding: 0 18px;
+}
+
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+}
+
+.hero {
+    background: linear-gradient(120deg, #123b70, #3983db);
+    color: white;
+    padding: 38px 28px;
+    border-radius: 14px;
+    margin-bottom: 24px;
+}
+
+.hero h2 {
+    font-size: 30px;
+    margin-bottom: 12px;
+}
+
+.hero p {
+    line-height: 1.7;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 18px;
+    margin: 20px 0;
+}
+
+.card, .panel {
+    background: white;
+    padding: 22px;
+    border-radius: 10px;
+    box-shadow: 0 3px 12px #0000000c;
+    margin-bottom: 20px;
+}
+
+.stat-number {
+    font-size: 28px;
+    color: #2563eb;
+    font-weight: bold;
+    margin-top: 12px;
+}
+
+h2, h3 {
+    margin-bottom: 16px;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+label {
+    font-weight: bold;
+}
+
+form {
+    max-width: 650px;
+}
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    margin-top: 15px;
+}
+
+th, td {
+    padding: 13px;
+    border-bottom: 1px solid #e2e8f0;
+    text-align: left;
+    white-space: nowrap;
+}
+
+th {
+    background: #e8f0ff;
+    color: #123b70;
+}
+
+.badge {
+    padding: 5px 9px;
+    border-radius: 5px;
+    background: #dcfce7;
+    color: #166534;
+}
+
+footer {
+    background: #123b70;
+    color: white;
+    padding: 22px;
+    text-align: center;
+    margin-top: 40px;
+}
+
+.small-btn {
+    padding: 7px 10px;
+    margin: 2px;
+}
+
+.danger {
+    background: #dc2626;
+    color: white;
+}
+
+.secondary {
+    background: #e2e8f0;
+    color: #1e293b;
+}
+
+.notice {
+    color: #64748b;
+    margin-top: 12px;
+    line-height: 1.6;
+}
+
+@media(max-width: 600px) {
+    header h1 { font-size: 19px; }
+    .hero h2 { font-size: 24px; }
+    nav button { flex: 1 1 40%; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>📚 College Library Management</h1>
+    <button onclick="showPage('login')">Login</button>
+</header>
+
+<nav>
+    <button onclick="showPage('home')">Home</button>
+    <button onclick="showPage('catalog')">Search Books</button>
+    <button onclick="showPage('history')">Borrow History</button>
+    <button onclick="showPage('materials')">Study Materials</button>
+    <button onclick="showPage('fine')">My Fine</button>
+    <button onclick="showPage('profile')">My Profile</button>
+    <button onclick="showPage('contact')">Contact</button>
+    <button onclick="showPage('admin')">Librarian Admin</button>
+</nav>
+
+<main>
+
+<!-- HOME -->
+<section id="home" class="page active">
+    <div class="hero">
+        <h2>Welcome to Your College Library</h2>
+        <p>Search books, manage borrowing history, check fines,
+        and access year-wise and semester-wise study materials
+        from one place.</p>
+        <br>
+        <button onclick="showPage('catalog')">Explore Books</button>
+        <button onclick="showPage('materials')">Study Materials</button>
+    </div>
+
+    <div class="stats">
+        <div class="card">
+            <h3>Total Books</h3>
+            <div class="stat-number" id="totalBooks">4</div>
+        </div>
+        <div class="card">
+            <h3>Available Books</h3>
+            <div class="stat-number" id="availableBooks">3</div>
+        </div>
+        <div class="card">
+            <h3>Study Materials</h3>
+            <div class="stat-number" id="totalMaterials">2</div>
+        </div>
+        <div class="card">
+            <h3>My Fine</h3>
+            <div class="stat-number" id="homeFine">₹0</div>
+        </div>
+    </div>
+</section>
+
+<!-- LOGIN -->
+<section id="login" class="page">
+    <div class="panel">
+        <h2>User Login</h2>
+        <form id="loginForm">
+            <label>Email</label>
+            <input type="email" id="loginEmail" required
+                   placeholder="Enter your email">
+
+            <label>Password</label>
+            <input type="password" id="loginPassword" required
+                   placeholder="Enter password">
+
+            <button class="primary" type="submit">Login</button>
+            <button class="secondary" type="button"
+                    onclick="showPage('register')">Register</button>
+        </form>
+        <p class="notice">Demo only: this login is not secure and does
+        not authenticate users against a server.</p>
+    </div>
+</section>
+
+<!-- REGISTER -->
+<section id="register" class="page">
+    <div class="panel">
+        <h2>Student Registration</h2>
+        <form id="registerForm">
+            <label>Full Name</label>
+            <input id="regName" required placeholder="Full name">
+
+            <label>Student ID</label>
+            <input id="regId" required placeholder="College ID">
+
+            <label>Email</label>
+            <input id="regEmail" type="email" required
+                   placeholder="Email address">
+
+            <label>Department</label>
+            <input id="regDepartment" required
+                   placeholder="CSE, ECE, etc.">
+
+            <label>Password</label>
+            <input id="regPassword" type="password" minlength="6"
+                   required placeholder="Create password">
+
+            <button class="primary" type="submit">Create Account</button>
+        </form>
+    </div>
+</section>
+
+<!-- BOOK CATALOG -->
+<section id="catalog" class="page">
+    <div class="panel">
+        <h2>Search Book Catalog</h2>
+        <input id="bookSearch" placeholder="Search by title, author or ISBN..."
+               oninput="renderBooks()">
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Book ID</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>ISBN</th>
+                        <th>Available</th>
+                    </tr>
+                </thead>
+                <tbody id="bookTable"></tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- BORROW HISTORY -->
+<section id="history" class="page">
+    <div class="panel">
+        <h2>My Borrow History</h2>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Book</th>
+                        <th>Issue Date</th>
+                        <th>Expected Return</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="historyTable"></tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- FINES -->
+<section id="fine" class="page">
+    <div class="panel">
+        <h2>My Fine Details</h2>
+        <p>Current fine: <strong id="fineAmount">₹0</strong></p>
+        <p class="notice">Fine amounts in this demo are calculated at
+        ₹5 per overdue day. Actual rules should be set by the librarian.</p>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Book</th>
+                        <th>Expected Return</th>
+                        <th>Fine</th>
+                    </tr>
+                </thead>
+                <tbody id="fineTable"></tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- STUDY MATERIALS -->
+<section id="materials" class="page">
+    <div class="panel">
+        <h2>Study Materials</h2>
+
+        <label>Academic Year</label>
+        <select id="yearFilter" onchange="renderMaterials()">
+            <option value="">All Years</option>
+            <option>1st Year</option>
+            <option>2nd Year</option>
+            <option>3rd Year</option>
+            <option>4th Year</option>
+        </select>
+
+        <label>Semester</label>
+        <select id="semesterFilter" onchange="renderMaterials()">
+            <option value="">All Semesters</option>
+            <option>Semester 1</option>
+            <option>Semester 2</option>
+        </select>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Material</th>
+                        <th>Year</th>
+                        <th>Semester</th>
+                        <th>Download</th>
+                    </tr>
+                </thead>
+                <tbody id="materialTable"></tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- PROFILE -->
+<section id="profile" class="page">
+    <div class="panel">
+        <h2>My Profile</h2>
+        <form id="profileForm">
+            <label>Full Name</label>
+            <input id="profileName" required>
+            <label>Student ID</label>
+            <input id="profileId">
+            <label>Email</label>
+            <input id="profileEmail" type="email">
+            <label>Department</label>
+            <input id="profileDepartment">
+            <button class="primary" type="submit">Update Profile</button>
+        </form>
+    </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="page">
+    <div class="panel">
+        <h2>Contact Librarian</h2>
+        <form id="contactForm">
+            <label>Name</label>
+            <input required placeholder="Your name">
+            <label>Email</label>
+            <input type="email" required placeholder="Your email">
+            <label>Message</label>
+            <textarea rows="5" required
+                      placeholder="Write your message"></textarea>
+            <button class="primary" type="submit">Submit Message</button>
+        </form>
+        <p class="notice">A backend is required to deliver messages to
+        the librarian.</p>
+    </div>
+</section>
+
+<!-- ADMIN DASHBOARD -->
+<section id="admin" class="page">
+    <div class="hero">
+        <h2>Librarian Admin Dashboard</h2>
+        <p>Manage books, issue and return records, fines, and
+        study materials.</p>
+    </div>
+
+    <div class="panel">
+        <h3>Add Book</h3>
+        <form id="addBookForm">
+            <label>Book Title</label>
+            <input id="newTitle" required>
+            <label>Author</label>
+            <input id="newAuthor" required>
+            <label>ISBN</label>
+            <input id="newIsbn" required>
+            <label>Quantity</label>
+            <input id="newQuantity" type="number" min="1" value="1" required>
+            <button class="primary" type="submit">Add Book</button>
+        </form>
+    </div>
+
+    <div class="panel">
+        <h3>Update / Delete Books</h3>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th><th>Title</th><th>Author</th>
+                        <th>Available</th><th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="adminBookTable"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="panel">
+        <h3>Issue Book to Student</h3>
+        <form id="issueForm">
+            <label>Student Email</label>
+            <input id="issueEmail" type="email" required>
+            <label>Book</label>
+            <select id="issueBook" required></select>
+            <label>Issue Date</label>
+            <input id="issueDate" type="date" required>
+            <label>Expected Return Date</label>
+            <input id="dueDate" type="date" required>
+            <button class="primary" type="submit">Issue Book</button>
+        </form>
+    </div>
+
+    <div class="panel">
+        <h3>Return Book Status</h3>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr><th>Student</th><th>Book</th><th>Due Date</th>
+                    <th>Status</th><th>Action</th></tr>
+                </thead>
+                <tbody id="adminHistoryTable"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="panel">
+        <h3>Study Material Management</h3>
+        <form id="addMaterialForm">
+            <label>Material Title</label>
+            <input id="materialTitle" required>
+            <label>Academic Year</label>
+            <select id="materialYear" required>
+                <option value="">Select Year</option>
+                <option>1st Year</option><option>2nd Year</option>
+                <option>3rd Year</option><option>4th Year</option>
+            </select>
+            <label>Semester</label>
+            <select id="materialSemester" required>
+                <option value="">Select Semester</option>
+                <option>Semester 1</option><option>Semester 2</option>
+            </select>
+            <label>Material File URL</label>
+            <input id="materialUrl" type="url" required
+                   placeholder="https://example.com/notes.pdf">
+            <button class="primary" type="submit">Add Material</button>
+        </form>
+    </div>
+
+    <div class="panel">
+        <h3>Student Records</h3>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr><th>Name</th><th>Student ID</th>
+                    <th>Email</th><th>Department</th></tr>
+                </thead>
+                <tbody id="studentTable"></tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer>
+    <p>© 2026 College Library Management System</p>
+    <p>Learn • Read • Grow</p>
+</footer>
+
+<script>
+const initialBooks = [
+    {id: 1, title: "Java Programming", author: "Herbert Schildt",
+     isbn: "9780071808552", quantity: 5, available: 5},
+    {id: 2, title: "Database Management Systems", author: "Raghu Ramakrishnan",
+     isbn: "9780072465631", quantity: 4, available: 4},
+    {id: 3, title: "Data Structures", author: "Mark Allen Weiss",
+     isbn: "9780132847377", quantity: 3, available: 3},
+    {id: 4, title: "Operating Systems", author: "Abraham Silberschatz",
+     isbn: "9781119800361", quantity: 2, available: 2}
+];
+
+let books = initialBooks;
+let students = [];
+let borrowings = [];
+let materials = [
+    {id: 1, title: "Java Programming Notes", year: "1st Year",
+     semester: "Semester 1", url: "https://example.com/java-notes.pdf"},
+    {id: 2, title: "DBMS Notes", year: "2nd Year",
+     semester: "Semester 1", url: "https://example.com/dbms-notes.pdf"}
+];
+let currentUser = null;
+let nextBookId = 5;
+let nextMaterialId = 3;
+
+function showPage(id) {
+    document.querySelectorAll(".page").forEach(page =>
+        page.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+    renderAll();
+}
+
+function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;",
+        '"': "&quot;", "'": "&#39;"
+    })[char]);
+}
+
+function dateToday() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+}
+
+function calculateFine(record) {
+    if (record.status === "Returned") return 0;
+    const due = new Date(record.dueDate + "T00:00:00");
+    const today = new Date(dateToday() + "T00:00:00");
+    return Math.max(0, Math.floor((today - due) / 86400000)) * 5;
+}
+
+function renderBooks() {
+    const q = document.getElementById("bookSearch").value.toLowerCase();
+    const filtered = books.filter(b =>
+        [b.title, b.author, b.isbn].some(v =>
+            v.toLowerCase().includes(q)));
+
+    document.getElementById("bookTable").innerHTML = filtered.map(b => `
+        <tr>
+            <td>${b.id}</td><td>${escapeHTML(b.title)}</td>
+            <td>${escapeHTML(b.author)}</td><td>${escapeHTML(b.isbn)}</td>
+            <td>${b.available > 0
+                ? `<span class="badge">${b.available} available</span>`
+                : "Not available"}</td>
+        </tr>`).join("");
+}
+
+function renderHistory() {
+    const mine = borrowings.filter(b =>
+        currentUser && b.email === currentUser.email);
+
+    document.getElementById("historyTable").innerHTML = mine.map(b => `
+        <tr><td>${escapeHTML(b.title)}</td>
+        <td>${escapeHTML(b.issueDate)}</td>
+        <td>${escapeHTML(b.dueDate)}</td>
+        <td>${escapeHTML(b.status)}</td></tr>`).join("") ||
+        '<tr><td colspan="4">No borrowing records for the current user.</td></tr>';
+
+    document.getElementById("fineTable").innerHTML = mine.map(b => `
+        <tr><td>${escapeHTML(b.title)}</td>
+        <td>${escapeHTML(b.dueDate)}</td>
+        <td>₹${calculateFine(b)}</td></tr>`).join("") ||
+        '<tr><td colspan="3">No fine records.</td></tr>';
+
+    const total = mine.reduce((sum, b) => sum + calculateFine(b), 0);
+    document.getElementById("fineAmount").textContent = "₹" + total;
+    document.getElementById("homeFine").textContent = "₹" + total;
+}
+
+function renderMaterials() {
+    const year = document.getElementById("yearFilter").value;
+    const semester = document.getElementById("semesterFilter").value;
+    const list = materials.filter(m =>
+        (!year || m.year === year) &&
+        (!semester || m.semester === semester));
+
+    document.getElementById("materialTable").innerHTML = list.map(m => `
+        <tr><td>${escapeHTML(m.title)}</td>
+        <td>${escapeHTML(m.year)}</td>
+        <td>${escapeHTML(m.semester)}</td>
+        <td><a href="${escapeHTML(m.url)}" target="_blank"
+        rel="noopener noreferrer">Open / Download</a></td></tr>`).join("") ||
+        '<tr><td colspan="4">No materials found.</td></tr>';
+}
+
+function renderAdmin() {
+    document.getElementById("adminBookTable").innerHTML = books.map(b => `
+        <tr><td>${b.id}</td><td>${escapeHTML(b.title)}</td>
+        <td>${escapeHTML(b.author)}</td><td>${b.available}/${b.quantity}</td>
+        <td><button class="small-btn secondary"
+        onclick="editBook(${b.id})">Edit</button>
+        <button class="small-btn danger"
+        onclick="deleteBook(${b.id})">Delete</button></td></tr>`).join("");
+
+    document.getElementById("issueBook").innerHTML =
+        '<option value="">Select a book</option>' +
+        books.filter(b => b.available > 0).map(b =>
+            `<option value="${b.id}">${escapeHTML(b.title)} (${b.available})</option>`
+        ).join("");
+
+    document.getElementById("adminHistoryTable").innerHTML =
+        borrowings.map((b, i) => `
+        <tr><td>${escapeHTML(b.email)}</td>
+        <td>${escapeHTML(b.title)}</td><td>${escapeHTML(b.dueDate)}</td>
+        <td>${escapeHTML(b.status)}</td><td>
+        ${b.status === "Issued" ?
+        `<button class="small-btn primary" onclick="returnBook(${i})">Return</button>` :
+        "Completed"} | Fine: ₹${calculateFine(b)}</td></tr>`).join("") ||
+        '<tr><td colspan="5">No issued books.</td></tr>';
+
+    document.getElementById("studentTable").innerHTML = students.map(s => `
+        <tr><td>${escapeHTML(s.name)}</td><td>${escapeHTML(s.studentId)}</td>
+        <td>${escapeHTML(s.email)}</td><td>${escapeHTML(s.department)}</td></tr>`
+    ).join("") || '<tr><td colspan="4">No registered students.</td></tr>';
+}
+
+function renderProfile() {
+    document.getElementById("profileName").value = currentUser?.name || "";
+    document.getElementById("profileId").value = currentUser?.studentId || "";
+    document.getElementById("profileEmail").value = currentUser?.email || "";
+    document.getElementById("profileDepartment").value =
+        currentUser?.department || "";
+}
+
+function renderAll() {
+    renderBooks();
+    renderHistory();
+    renderMaterials();
+    renderAdmin();
+    renderProfile();
+    document.getElementById("totalBooks").textContent =
+        books.reduce((s, b) => s + b.quantity, 0);
+    document.getElementById("availableBooks").textContent =
+        books.reduce((s, b) => s + b.available, 0);
+    document.getElementById("totalMaterials").textContent = materials.length;
+}
+
+document.getElementById("registerForm").addEventListener("submit", e => {
+    e.preventDefault();
+    const email = document.getElementById("regEmail").value.trim().toLowerCase();
+
+    if (students.some(s => s.email === email)) {
+        alert("This email is already registered.");
+        return;
+    }
+
+    const user = {
+        name: document.getElementById("regName").value.trim(),
+        studentId: document.getElementById("regId").value.trim(),
+        email,
+        department: document.getElementById("regDepartment").value.trim()
+    };
+
+    students.push({...user});
+    currentUser = user;
+    alert("Demo registration successful!");
+    e.target.reset();
+    showPage("profile");
+});
+
+document.getElementById("loginForm").addEventListener("submit", e => {
+    e.preventDefault();
+    const email = document.getElementById("loginEmail").value.trim().toLowerCase();
+    const user = students.find(s => s.email === email);
+
+    if (!user) {
+        alert("Demo account not found. Please register first.");
+        return;
+    }
+
+    // Demo only: this does not verify the password.
+    currentUser = user;
+    alert("Demo login successful!");
+    e.target.reset();
+    showPage("home");
+});
+
+document.getElementById("profileForm").addEventListener("submit", e => {
+    e.preventDefault();
+    if (!currentUser) {
+        alert("Please register or log in first.");
+        showPage("login");
+        return;
+    }
+
+    currentUser.name = document.getElementById("profileName").value.trim();
+    currentUser.studentId = document.getElementById("profileId").value.trim();
+    currentUser.department =
+        document.getElementById("profileDepartment").value.trim();
+
+    const student = students.find(s => s.email === currentUser.email);
+    if (student) Object.assign(student, currentUser);
+    alert("Demo profile updated.");
+    renderAll();
+});
+
+document.getElementById("addBookForm").addEventListener("submit", e => {
+    e.preventDefault();
+    const quantity = Number(document.getElementById("newQuantity").value);
+
+    books.push({
+        id: nextBookId++,
+        title: document.getElementById("newTitle").value.trim(),
+        author: document.getElementById("newAuthor").value.trim(),
+        isbn: document.getElementById("newIsbn").value.trim(),
+        quantity,
+        available: quantity
+    });
+
+    e.target.reset();
+    renderAll();
+    alert("Book added in this demo.");
+});
+
+function editBook(id) {
+    const b = books.find(book => book.id === id);
+    if (!b) return;
+
+    const title = prompt("Enter book title:", b.title);
+    if (title === null || !title.trim()) return;
+
+    const author = prompt("Enter author:", b.author);
+    if (author === null || !author.trim()) return;
+
+    b.title = title.trim();
+    b.author = author.trim();
+    renderAll();
+}
+
+function deleteBook(id) {
+    const b = books.find(book => book.id === id);
+    if (!b) return;
+
+    if (b.available !== b.quantity) {
+        alert("Return all issued copies before deleting this book.");
+        return;
+    }
+
+    if (confirm("Delete this book?")) {
+        books = books.filter(book => book.id !== id);
+        renderAll();
+    }
+}
+
+document.getElementById("issueDate").value = dateToday();
+
+document.getElementById("issueForm").addEventListener("submit", e => {
+    e.preventDefault();
+
+    const email = document.getElementById("issueEmail").value.trim().toLowerCase();
+    const book = books.find(b =>
+        b.id === Number(document.getElementById("issueBook").value));
+    const issueDate = document.getElementById("issueDate").value;
+    const dueDate = document.getElementById("dueDate").value;
+
+    if (!students.some(s => s.email === email)) {
+        alert("Register the student in this demo before issuing a book.");
+        return;
+    }
+    if (!book || book.available < 1) {
+        alert("Book is not available.");
+        return;
+    }
+    if (dueDate < issueDate) {
+        alert("Return date cannot be before issue date.");
+        return;
+    }
+
+    book.available--;
+    borrowings.push({
+        email, bookId: book.id, title: book.title,
+        issueDate, dueDate, status: "Issued"
+    });
+
+    e.target.reset();
+    document.getElementById("issueDate").value = dateToday();
+    renderAll();
+    alert("Book issued in this demo.");
+});
+
+function returnBook(index) {
+    const b = borrowings[index];
+    if (!b || b.status !== "Issued") return;
+
+    const fine = calculateFine(b);
+    b.status = "Returned";
+    const book = books.find(book => book.id === b.bookId);
+    if (book) book.available++;
+
+    renderAll();
+    alert("Book returned. Fine recorded by this demo: ₹" + fine);
+}
+
+document.getElementById("addMaterialForm").addEventListener("submit", e => {
+    e.preventDefault();
+    materials.push({
+        id: nextMaterialId++,
+        title: document.getElementById("materialTitle").value.trim(),
+        year: document.getElementById("materialYear").value,
+        semester: document.getElementById("materialSemester").value,
+        url: document.getElementById("materialUrl").value.trim()
+    });
+    e.target.reset();
+    renderAll();
+    alert("Material added in this demo.");
+});
+
+document.getElementById("contactForm").addEventListener("submit", e => {
+    e.preventDefault();
+    alert("Demo only: message was not sent. Connect a backend to deliver it.");
+    e.target.reset();
+});
+
+renderAll();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,867 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JobConnect - Online Job Portal</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f3f6fb;
+    color: #222;
+}
+
+header {
+    background: #173b70;
+    color: white;
+    padding: 20px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+header h1 {
+    font-size: 26px;
+}
+
+nav button {
+    background: white;
+    color: #173b70;
+    border: none;
+    padding: 10px 14px;
+    margin: 3px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+nav button:hover {
+    background: #dce9ff;
+}
+
+.hero {
+    background: linear-gradient(120deg, #173b70, #2879c7);
+    color: white;
+    text-align: center;
+    padding: 50px 15px;
+}
+
+.hero h2 {
+    font-size: 32px;
+    margin-bottom: 12px;
+}
+
+.hero p {
+    margin-bottom: 20px;
+}
+
+.container {
+    width: 90%;
+    max-width: 1100px;
+    margin: 25px auto;
+}
+
+.section {
+    display: none;
+    background: white;
+    padding: 25px;
+    margin-bottom: 25px;
+    border-radius: 10px;
+    box-shadow: 0 3px 12px #00000012;
+}
+
+.section.active {
+    display: block;
+}
+
+h2, h3 {
+    color: #173b70;
+    margin-bottom: 18px;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 11px;
+    margin: 7px 0 14px;
+    border: 1px solid #ccd4e0;
+    border-radius: 5px;
+}
+
+textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+button {
+    cursor: pointer;
+}
+
+.primary {
+    background: #1769aa;
+    color: white;
+    border: none;
+    padding: 11px 18px;
+    border-radius: 5px;
+    margin: 4px 2px;
+}
+
+.primary:hover {
+    background: #104d80;
+}
+
+.secondary {
+    background: #e5ecf5;
+    color: #173b70;
+    border: none;
+    padding: 9px 13px;
+    border-radius: 5px;
+    margin: 4px 2px;
+}
+
+.danger {
+    background: #c0392b;
+    color: white;
+    border: none;
+    padding: 9px 13px;
+    border-radius: 5px;
+}
+
+.filters {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 10px;
+}
+
+.jobs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 18px;
+    margin-top: 20px;
+}
+
+.job-card {
+    border: 1px solid #e0e6ef;
+    padding: 18px;
+    border-radius: 8px;
+    background: #fff;
+}
+
+.job-card h3 {
+    margin-bottom: 10px;
+}
+
+.job-card p {
+    margin: 9px 0;
+    line-height: 1.5;
+}
+
+.tag {
+    display: inline-block;
+    background: #e5efff;
+    color: #174d88;
+    padding: 5px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    margin: 4px 0;
+}
+
+.status {
+    color: #218838;
+    font-weight: bold;
+}
+
+.notice {
+    padding: 12px;
+    background: #edf5ff;
+    border-radius: 5px;
+    margin: 12px 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+th {
+    background: #eaf0f8;
+}
+
+footer {
+    text-align: center;
+    background: #173b70;
+    color: white;
+    padding: 20px;
+    margin-top: 35px;
+}
+
+@media (max-width: 650px) {
+    header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .filters {
+        grid-template-columns: 1fr;
+    }
+
+    .hero h2 {
+        font-size: 25px;
+    }
+
+    .container {
+        width: 94%;
+    }
+
+    .section {
+        padding: 15px;
+        overflow-x: auto;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>JobConnect</h1>
+    <nav>
+        <button onclick="showSection('home')">Home</button>
+        <button onclick="showSection('jobsSection')">Find Jobs</button>
+        <button onclick="showSection('registerSection')">Register</button>
+        <button onclick="showSection('loginSection')">Login</button>
+        <button onclick="showSection('dashboard')">Dashboard</button>
+    </nav>
+</header>
+
+<div class="hero" id="home">
+    <h2>Find Your Dream Job Today</h2>
+    <p>Explore vacancies, apply online, and connect with employers.</p>
+    <button class="primary" onclick="showSection('jobsSection')">
+        Explore Jobs
+    </button>
+    <button class="primary" onclick="showSection('registerSection')">
+        Create Account
+    </button>
+</div>
+
+<main class="container">
+
+    <!-- JOB SEARCH -->
+    <section id="jobsSection" class="section active">
+        <h2>Search Job Vacancies</h2>
+        <p>Search and filter jobs according to your requirements.</p>
+
+        <div class="filters">
+            <input id="searchInput" placeholder="Search job title or company"
+                   oninput="displayJobs()">
+
+            <select id="locationFilter" onchange="displayJobs()">
+                <option value="">All Locations</option>
+                <option>Chennai</option>
+                <option>Bangalore</option>
+                <option>Hyderabad</option>
+                <option>Delhi</option>
+                <option>Remote</option>
+            </select>
+
+            <select id="categoryFilter" onchange="displayJobs()">
+                <option value="">All Categories</option>
+                <option>IT</option>
+                <option>Marketing</option>
+                <option>Finance</option>
+                <option>Design</option>
+                <option>HR</option>
+            </select>
+        </div>
+
+        <div id="jobList" class="jobs"></div>
+    </section>
+
+    <!-- REGISTRATION -->
+    <section id="registerSection" class="section">
+        <h2>Create an Account</h2>
+
+        <form id="registerForm">
+            <label>Full Name</label>
+            <input id="regName" required placeholder="Enter your full name">
+
+            <label>Email Address</label>
+            <input id="regEmail" type="email" required
+                   placeholder="Enter your email">
+
+            <label>Password</label>
+            <input id="regPassword" type="password" required minlength="4"
+                   placeholder="Create a password">
+
+            <label>Register As</label>
+            <select id="regRole" required>
+                <option value="user">Applicant / User</option>
+                <option value="director">Director / Employer</option>
+            </select>
+
+            <button class="primary" type="submit">Register</button>
+        </form>
+
+        <p>Already registered?
+            <a href="#" onclick="showSection('loginSection')">Login here</a>
+        </p>
+    </section>
+
+    <!-- LOGIN -->
+    <section id="loginSection" class="section">
+        <h2>Login to JobConnect</h2>
+
+        <form id="loginForm">
+            <label>Email Address</label>
+            <input id="loginEmail" type="email" required>
+
+            <label>Password</label>
+            <input id="loginPassword" type="password" required>
+
+            <button class="primary" type="submit">Login</button>
+        </form>
+
+        <div class="notice">
+            <strong>Demo Admin Login</strong><br>
+            Email: admin@jobconnect.com<br>
+            Password: admin123
+        </div>
+    </section>
+
+    <!-- DASHBOARD -->
+    <section id="dashboard" class="section">
+        <h2>Dashboard</h2>
+        <div id="dashboardContent">
+            <p>Please login to access your dashboard.</p>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <p>&copy; 2026 JobConnect | Online Job Recruitment Portal</p>
+    <p>Connecting Applicants and Employers</p>
+</footer>
+
+<script>
+// Demo data
+let users = JSON.parse(localStorage.getItem("jc_users") || "[]");
+let jobs = JSON.parse(localStorage.getItem("jc_jobs") || "null") || [
+    {
+        id: 1,
+        title: "Frontend Developer",
+        company: "Tech Solutions",
+        location: "Chennai",
+        category: "IT",
+        salary: "₹3-6 LPA",
+        description: "Develop responsive websites using HTML, CSS and JavaScript.",
+        contact: "careers@techsolutions.com",
+        director: "Demo Employer",
+        approved: true
+    },
+    {
+        id: 2,
+        title: "Python Developer",
+        company: "Digital Systems",
+        location: "Bangalore",
+        category: "IT",
+        salary: "₹4-8 LPA",
+        description: "Build Python applications and work with databases.",
+        contact: "jobs@digitalsystems.com",
+        director: "Demo Employer",
+        approved: true
+    },
+    {
+        id: 3,
+        title: "Marketing Executive",
+        company: "Bright Marketing",
+        location: "Hyderabad",
+        category: "Marketing",
+        salary: "₹2-4 LPA",
+        description: "Support digital marketing campaigns and customer outreach.",
+        contact: "hr@brightmarketing.com",
+        director: "Demo Employer",
+        approved: true
+    }
+];
+
+let applications = JSON.parse(localStorage.getItem("jc_apps") || "[]");
+let savedJobs = JSON.parse(localStorage.getItem("jc_saved") || "[]");
+let currentUser = null;
+
+function saveData() {
+    localStorage.setItem("jc_users", JSON.stringify(users));
+    localStorage.setItem("jc_jobs", JSON.stringify(jobs));
+    localStorage.setItem("jc_apps", JSON.stringify(applications));
+    localStorage.setItem("jc_saved", JSON.stringify(savedJobs));
+}
+
+function showSection(id) {
+    document.querySelectorAll(".section").forEach(section => {
+        section.classList.remove("active");
+    });
+
+    if (id !== "home") {
+        document.getElementById(id).classList.add("active");
+    }
+
+    if (id === "jobsSection") displayJobs();
+    if (id === "dashboard") renderDashboard();
+
+    window.scrollTo({ top: id === "home" ? 0 : 200, behavior: "smooth" });
+}
+
+// REGISTER
+document.getElementById("registerForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const name = document.getElementById("regName").value.trim();
+    const email = document.getElementById("regEmail").value.trim().toLowerCase();
+    const password = document.getElementById("regPassword").value;
+    const role = document.getElementById("regRole").value;
+
+    if (users.some(u => u.email === email) ||
+        email === "admin@jobconnect.com") {
+        alert("This email is already registered.");
+        return;
+    }
+
+    users.push({
+        id: Date.now(),
+        name,
+        email,
+        password,
+        role,
+        approved: role === "user"
+    });
+
+    saveData();
+    alert(role === "director"
+        ? "Registration successful. Wait for admin approval."
+        : "Registration successful. Please login.");
+
+    this.reset();
+    showSection("loginSection");
+});
+
+// LOGIN
+document.getElementById("loginForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const email = document.getElementById("loginEmail").value.trim().toLowerCase();
+    const password = document.getElementById("loginPassword").value;
+
+    if (email === "admin@jobconnect.com" && password === "admin123") {
+        currentUser = {
+            name: "Administrator",
+            email,
+            role: "admin",
+            approved: true
+        };
+    } else {
+        const found = users.find(u =>
+            u.email === email && u.password === password
+        );
+
+        if (!found) {
+            alert("Invalid email or password.");
+            return;
+        }
+
+        if (found.role === "director" && !found.approved) {
+            alert("Your director account is waiting for admin approval.");
+            return;
+        }
+
+        currentUser = found;
+    }
+
+    alert("Welcome " + currentUser.name + "!");
+    this.reset();
+    showSection("dashboard");
+});
+
+// DISPLAY JOBS
+function displayJobs() {
+    const list = document.getElementById("jobList");
+    const search = document.getElementById("searchInput").value.toLowerCase();
+    const location = document.getElementById("locationFilter").value;
+    const category = document.getElementById("categoryFilter").value;
+
+    const filtered = jobs.filter(job =>
+        job.approved &&
+        (job.title.toLowerCase().includes(search) ||
+         job.company.toLowerCase().includes(search)) &&
+        (!location || job.location === location) &&
+        (!category || job.category === category)
+    );
+
+    if (filtered.length === 0) {
+        list.innerHTML = "<p>No matching vacancies found.</p>";
+        return;
+    }
+
+    list.innerHTML = filtered.map(job => `
+        <div class="job-card">
+            <h3>${escapeHTML(job.title)}</h3>
+            <p><strong>Company:</strong> ${escapeHTML(job.company)}</p>
+            <p><strong>Location:</strong> ${escapeHTML(job.location)}</p>
+            <p><strong>Category:</strong> ${escapeHTML(job.category)}</p>
+            <p><strong>Salary:</strong> ${escapeHTML(job.salary)}</p>
+            <p>${escapeHTML(job.description)}</p>
+            <span class="tag">${escapeHTML(job.category)}</span>
+            <br>
+            <button class="primary" onclick="applyJob(${job.id})">
+                Apply Now
+            </button>
+            <button class="secondary" onclick="saveJob(${job.id})">
+                Save Job
+            </button>
+        </div>
+    `).join("");
+}
+
+// APPLY FOR JOB
+function applyJob(jobId) {
+    if (!currentUser || currentUser.role !== "user") {
+        alert("Please login as an applicant to apply for jobs.");
+        showSection("loginSection");
+        return;
+    }
+
+    if (applications.some(a =>
+        a.jobId === jobId && a.email === currentUser.email
+    )) {
+        alert("You have already applied for this job.");
+        return;
+    }
+
+    applications.push({
+        id: Date.now(),
+        jobId,
+        name: currentUser.name,
+        email: currentUser.email,
+        date: new Date().toLocaleDateString(),
+        status: "Applied"
+    });
+
+    saveData();
+    alert("Your job application has been submitted successfully!");
+}
+
+// SAVE JOB
+function saveJob(jobId) {
+    if (!currentUser || currentUser.role !== "user") {
+        alert("Please login as an applicant first.");
+        showSection("loginSection");
+        return;
+    }
+
+    const alreadySaved = savedJobs.some(s =>
+        s.jobId === jobId && s.email === currentUser.email
+    );
+
+    if (alreadySaved) {
+        alert("Job already saved.");
+        return;
+    }
+
+    savedJobs.push({ jobId, email: currentUser.email });
+    saveData();
+    alert("Job saved successfully!");
+}
+
+// DASHBOARD
+function renderDashboard() {
+    const area = document.getElementById("dashboardContent");
+
+    if (!currentUser) {
+        area.innerHTML = "<p>Please login to access your dashboard.</p>";
+        return;
+    }
+
+    if (currentUser.role === "admin") {
+        area.innerHTML = `
+            <h3>Admin Panel</h3>
+            <p>Manage users, approve directors, and view reports.</p>
+            <button class="primary" onclick="viewUsers()">View Users</button>
+            <button class="primary" onclick="viewDirectors()">View Directors</button>
+            <button class="primary" onclick="viewReport()">View Reports</button>
+            <div id="adminResults"></div>
+            ${logoutButton()}
+        `;
+    } else if (currentUser.role === "director") {
+        area.innerHTML = `
+            <h3>Director Dashboard</h3>
+            <p>Welcome, ${escapeHTML(currentUser.name)}</p>
+
+            <h3>Post a New Vacancy</h3>
+            <form id="vacancyForm">
+                <label>Job Title</label>
+                <input id="jobTitle" required placeholder="e.g. Web Developer">
+
+                <label>Company Name</label>
+                <input id="companyName" required>
+
+                <label>Location</label>
+                <select id="jobLocation" required>
+                    <option value="">Select Location</option>
+                    <option>Chennai</option>
+                    <option>Bangalore</option>
+                    <option>Hyderabad</option>
+                    <option>Delhi</option>
+                    <option>Remote</option>
+                </select>
+
+                <label>Category</label>
+                <select id="jobCategory" required>
+                    <option value="">Select Category</option>
+                    <option>IT</option>
+                    <option>Marketing</option>
+                    <option>Finance</option>
+                    <option>Design</option>
+                    <option>HR</option>
+                </select>
+
+                <label>Salary</label>
+                <input id="jobSalary" required placeholder="e.g. ₹3-5 LPA">
+
+                <label>Job Description</label>
+                <textarea id="jobDescription" required></textarea>
+
+                <label>Contact Email</label>
+                <input id="jobContact" type="email" required>
+
+                <label>Company Image URL (optional)</label>
+                <input id="jobImage" type="url" placeholder="https://example.com/image.jpg">
+
+                <button class="primary" type="submit">Post Vacancy</button>
+            </form>
+
+            <h3>Your Vacancies</h3>
+            <div id="directorJobs"></div>
+            ${logoutButton()}
+        `;
+
+        document.getElementById("vacancyForm").addEventListener("submit", postJob);
+        renderDirectorJobs();
+    } else {
+        const myApplications = applications.filter(
+            a => a.email === currentUser.email
+        );
+
+        const mySaved = savedJobs.filter(
+            s => s.email === currentUser.email
+        );
+
+        area.innerHTML = `
+            <h3>Applicant Dashboard</h3>
+            <p>Welcome, ${escapeHTML(currentUser.name)}</p>
+
+            <h3>Your Applications</h3>
+            ${myApplications.length ? myApplications.map(a => {
+                const job = jobs.find(j => j.id === a.jobId);
+                return `<div class="notice">
+                    <strong>${escapeHTML(job ? job.title : "Removed vacancy")}</strong><br>
+                    Applied on: ${escapeHTML(a.date)}<br>
+                    Status: ${escapeHTML(a.status)}
+                </div>`;
+            }).join("") : "<p>You have not applied for any jobs yet.</p>"}
+
+            <h3>Saved Jobs</h3>
+            ${mySaved.length ? mySaved.map(s => {
+                const job = jobs.find(j => j.id === s.jobId);
+                return job ? `<div class="notice">
+                    ${escapeHTML(job.title)} - ${escapeHTML(job.company)}
+                    <button class="primary" onclick="applyJob(${job.id})">Apply</button>
+                </div>` : "";
+            }).join("") : "<p>No saved jobs.</p>"}
+
+            <h3>Privacy Settings</h3>
+            <label>
+                <input type="checkbox" id="privacySetting"
+                    style="width:auto"
+                    ${currentUser.private ? "checked" : ""}
+                    onchange="updatePrivacy(this.checked)">
+                Keep my profile private from employers
+            </label>
+
+            ${logoutButton()}
+        `;
+    }
+}
+
+// POST VACANCY
+function postJob(e) {
+    e.preventDefault();
+
+    jobs.push({
+        id: Date.now(),
+        title: document.getElementById("jobTitle").value.trim(),
+        company: document.getElementById("companyName").value.trim(),
+        location: document.getElementById("jobLocation").value,
+        category: document.getElementById("jobCategory").value,
+        salary: document.getElementById("jobSalary").value.trim(),
+        description: document.getElementById("jobDescription").value.trim(),
+        contact: document.getElementById("jobContact").value.trim(),
+        image: document.getElementById("jobImage").value.trim(),
+        director: currentUser.email,
+        approved: true
+    });
+
+    saveData();
+    alert("Vacancy posted successfully!");
+    renderDashboard();
+    displayJobs();
+}
+
+// DIRECTOR VACANCIES AND APPLICANTS
+function renderDirectorJobs() {
+    const area = document.getElementById("directorJobs");
+    if (!area) return;
+
+    const ownJobs = jobs.filter(j => j.director === currentUser.email);
+
+    area.innerHTML = ownJobs.length ? ownJobs.map(job => {
+        const applicants = applications.filter(a => a.jobId === job.id);
+
+        return `
+            <div class="job-card">
+                <h3>${escapeHTML(job.title)}</h3>
+                <p>${escapeHTML(job.company)} - ${escapeHTML(job.location)}</p>
+                <p>Applicants: ${applicants.length}</p>
+                <button class="primary" onclick="viewApplicants(${job.id})">
+                    View Applicants
+                </button>
+            </div>
+        `;
+    }).join("") : "<p>You have not posted any vacancies.</p>";
+}
+
+function viewApplicants(jobId) {
+    const applicants = applications.filter(a => a.jobId === jobId);
+
+    if (!applicants.length) {
+        alert("No applicants for this vacancy yet.");
+        return;
+    }
+
+    alert("Applicants:\n\n" + applicants.map(a =>
+        a.name + " | " + a.email + " | " + a.date
+    ).join("\n"));
+
+    // Full applicant details can be added to a dedicated page.
+}
+
+// ADMIN FUNCTIONS
+function viewUsers() {
+    const area = document.getElementById("adminResults");
+    const applicants = users.filter(u => u.role === "user");
+
+    area.innerHTML = "<h3>Registered Applicants</h3>" +
+        (applicants.length ? applicants.map(u => `
+            <div class="notice">
+                ${escapeHTML(u.name)} - ${escapeHTML(u.email)}
+            </div>
+        `).join("") : "<p>No registered applicants.</p>");
+}
+
+function viewDirectors() {
+    const area = document.getElementById("adminResults");
+    const directors = users.filter(u => u.role === "director");
+
+    area.innerHTML = "<h3>Director Management</h3>" +
+        (directors.length ? directors.map(u => `
+            <div class="notice">
+                <strong>${escapeHTML(u.name)}</strong> -
+                ${escapeHTML(u.email)} -
+                ${u.approved ? "Approved" : "Pending Approval"}
+                ${!u.approved ? `
+                    <button class="primary"
+                        onclick="approveDirector(${u.id})">
+                        Approve
+                    </button>` : ""}
+            </div>
+        `).join("") : "<p>No directors registered.</p>");
+}
+
+function approveDirector(id) {
+    const director = users.find(u => u.id === id && u.role === "director");
+
+    if (!director) return;
+
+    director.approved = true;
+    saveData();
+    viewDirectors();
+    alert("Director approved successfully.");
+}
+
+function viewReport() {
+    document.getElementById("adminResults").innerHTML = `
+        <h3>Portal Report</h3>
+        <div class="notice">Total registered users: ${users.filter(u => u.role === "user").length}</div>
+        <div class="notice">Total directors: ${users.filter(u => u.role === "director").length}</div>
+        <div class="notice">Total vacancies: ${jobs.length}</div>
+        <div class="notice">Total applications: ${applications.length}</div>
+    `;
+}
+
+// PRIVACY
+function updatePrivacy(value) {
+    const user = users.find(u => u.email === currentUser.email);
+    if (!user) return;
+
+    user.private = value;
+    currentUser.private = value;
+    saveData();
+
+    alert(value ? "Your profile is marked private." :
+        "Your profile is visible to employers.");
+}
+
+// LOGOUT
+function logoutButton() {
+    return `<button class="danger" onclick="logout()">Logout</button>`;
+}
+
+function logout() {
+    currentUser = null;
+    alert("You have logged out.");
+    showSection("home");
+    showSection("jobsSection");
+}
+
+// BASIC HTML OUTPUT ESCAPING
+function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[char]);
+}
+
+// INITIALIZE
+displayJobs();
+</script>
+
+</body>
+</html>

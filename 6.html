@@ -1,0 +1,947 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sweet Cake - Online Cake Ordering</title>
+<style>
+:root {
+  --primary: #9b3156;
+  --secondary: #e88aa6;
+  --bg: #fff5f7;
+  --text: #35252c;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+header {
+  background: var(--primary);
+  color: white;
+  padding: 16px 4%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+header h1 { margin: 0; }
+nav { display: flex; gap: 6px; flex-wrap: wrap; }
+button {
+  border: 0;
+  border-radius: 6px;
+  padding: 10px 13px;
+  background: var(--primary);
+  color: white;
+  cursor: pointer;
+}
+nav button {
+  background: transparent;
+  border: 1px solid #ffffff80;
+}
+button:hover { opacity: .88; }
+.secondary { background: #6c6670; }
+.danger { background: #c0392b; }
+main { max-width: 1150px; margin: 25px auto; padding: 0 15px; }
+.hero {
+  padding: 35px;
+  border-radius: 14px;
+  color: white;
+  background: linear-gradient(120deg, #9b3156, #e88aa6);
+  margin-bottom: 22px;
+}
+.hero h2 { font-size: 30px; margin-top: 0; }
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 21px;
+  margin-bottom: 20px;
+  box-shadow: 0 3px 14px #5320360c;
+}
+h2, h3 { color: var(--primary); }
+label { display: block; font-weight: bold; margin-bottom: 6px; }
+input, select, textarea {
+  width: 100%;
+  padding: 11px;
+  border: 1px solid #dfcbd2;
+  border-radius: 6px;
+  margin-bottom: 13px;
+  font: inherit;
+}
+textarea { min-height: 75px; }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 13px;
+}
+.products {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+}
+.product {
+  background: white;
+  border: 1px solid #f0dce3;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.cake-image {
+  height: 145px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 65px;
+  background: #ffe4ec;
+}
+.product-info { padding: 15px; }
+.product-info h3 { margin-top: 0; }
+.price { color: var(--primary); font-weight: bold; font-size: 19px; }
+.product-info button { margin: 3px 2px 0 0; }
+.hidden { display: none !important; }
+.notice {
+  background: #fff0f4;
+  border-left: 4px solid var(--primary);
+  padding: 13px;
+  margin: 12px 0;
+}
+.muted { color: #786b71; font-size: 14px; }
+.pill {
+  display: inline-block;
+  background: #fce1ea;
+  color: #8b294a;
+  padding: 5px 9px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+th, td {
+  padding: 10px;
+  border: 1px solid #ead9df;
+  text-align: left;
+  font-size: 14px;
+}
+th { background: #fff0f4; }
+footer { text-align: center; padding: 24px; background: #f6dce5; }
+@media(max-width:600px) {
+  header { align-items: flex-start; }
+  .hero { padding: 23px; }
+  .hero h2 { font-size: 24px; }
+  .card { padding: 15px; }
+}
+@media print {
+  header, footer, button, .no-print { display: none !important; }
+  body { background: white; }
+  .card { box-shadow: none; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🎂 Sweet Cake</h1>
+  <nav>
+    <button onclick="showPage('home')">Home</button>
+    <button onclick="showPage('register')">Register</button>
+    <button onclick="showPage('login')">Login</button>
+    <button onclick="showPage('cart')">My Cart</button>
+    <button onclick="showPage('orders')">My Orders</button>
+    <button onclick="showPage('tracking')">Track Order</button>
+    <button onclick="showPage('address')">My Address</button>
+    <button onclick="showPage('admin')">Admin</button>
+    <button onclick="logout()">Logout</button>
+  </nav>
+</header>
+
+<main>
+<section id="home">
+  <div class="hero">
+    <h2>Make Every Celebration Sweeter!</h2>
+    <p>Discover delicious cakes for birthdays, weddings, parties, and special occasions.</p>
+    <button onclick="document.getElementById('cakeCatalog').scrollIntoView({behavior:'smooth'})">
+      Explore Cakes
+    </button>
+  </div>
+
+  <div class="card">
+    <h2>Search and Filter Cakes</h2>
+    <div class="grid">
+      <div>
+        <label>Search Cake</label>
+        <input id="searchCake" placeholder="Search by cake name..." oninput="renderCakes()">
+      </div>
+      <div>
+        <label>Category</label>
+        <select id="categoryFilter" onchange="renderCakes()">
+          <option value="">All Categories</option>
+          <option>Birthday</option>
+          <option>Chocolate</option>
+          <option>Wedding</option>
+          <option>Fruit</option>
+          <option>Special Occasion</option>
+        </select>
+      </div>
+      <div>
+        <label>Subcategory / Flavor</label>
+        <select id="flavorFilter" onchange="renderCakes()">
+          <option value="">All Flavors</option>
+          <option>Chocolate</option>
+          <option>Vanilla</option>
+          <option>Strawberry</option>
+          <option>Black Forest</option>
+          <option>Butterscotch</option>
+          <option>Red Velvet</option>
+        </select>
+      </div>
+      <div>
+        <label>Maximum Price (₹)</label>
+        <input id="maxPrice" type="number" min="0" placeholder="e.g. 1000" oninput="renderCakes()">
+      </div>
+    </div>
+  </div>
+
+  <div id="cakeCatalog">
+    <h2>Our Cakes</h2>
+    <div id="cakeList" class="products"></div>
+  </div>
+</section>
+
+<section id="register" class="card hidden">
+  <h2>Student / Customer Registration</h2>
+  <form onsubmit="registerUser(event)">
+    <label>Full Name</label>
+    <input id="regName" required>
+    <label>Email</label>
+    <input id="regEmail" type="email" required>
+    <label>Phone Number</label>
+    <input id="regPhone" type="tel" required>
+    <label>Password</label>
+    <input id="regPassword" type="password" minlength="6" required>
+    <button type="submit">Create Account</button>
+  </form>
+</section>
+
+<section id="login" class="card hidden">
+  <h2>Login</h2>
+  <form onsubmit="loginUser(event)">
+    <label>Email</label>
+    <input id="loginEmail" type="email" required>
+    <label>Password</label>
+    <input id="loginPassword" type="password" required>
+    <button type="submit">Login</button>
+  </form>
+  <p class="muted">Demo admin: admin@cake.com / admin123</p>
+</section>
+
+<section id="details" class="card hidden">
+  <h2>Cake Description and Customization</h2>
+  <div id="cakeDetails"></div>
+</section>
+
+<section id="cart" class="card hidden">
+  <h2>My Shopping Cart</h2>
+  <div id="cartContents"></div>
+</section>
+
+<section id="checkout" class="card hidden">
+  <h2>Place Your Order</h2>
+  <div id="checkoutSummary"></div>
+  <form onsubmit="placeOrder(event)">
+    <label>Delivery Address</label>
+    <textarea id="deliveryAddress" required placeholder="House number, street, city, postal code"></textarea>
+    <label>Delivery Date</label>
+    <input id="deliveryDate" type="date" required>
+    <label>Payment Method</label>
+    <select id="paymentMethod">
+      <option>Cash on Delivery (Demo)</option>
+      <option>UPI (Demo)</option>
+      <option>Card Payment (Demo)</option>
+    </select>
+    <div class="notice">Demo payment only. No actual money is collected.</div>
+    <button type="submit">Confirm Order</button>
+  </form>
+</section>
+
+<section id="confirmation" class="card hidden">
+  <h2>Order Confirmation</h2>
+  <div id="confirmationDetails"></div>
+  <button onclick="window.print()">Print Order</button>
+  <button class="secondary" onclick="showPage('orders')">My Orders</button>
+</section>
+
+<section id="orders" class="card hidden">
+  <h2>My Orders</h2>
+  <div id="orderHistory"></div>
+</section>
+
+<section id="tracking" class="card hidden">
+  <h2>View Shipping Status</h2>
+  <label>Enter Order ID</label>
+  <input id="trackingId" placeholder="Enter your order ID">
+  <button onclick="trackOrder()">Track Order</button>
+  <div id="trackingResult"></div>
+</section>
+
+<section id="address" class="card hidden">
+  <h2>Shipping Address</h2>
+  <form onsubmit="saveAddress(event)">
+    <label>Full Delivery Address</label>
+    <textarea id="savedAddress" required></textarea>
+    <button type="submit">Save Address</button>
+  </form>
+</section>
+
+<section id="admin" class="card hidden">
+  <h2>Administrator Panel</h2>
+  <div id="adminContent"></div>
+</section>
+</main>
+
+<footer>
+  <p>Sweet Cake Online Ordering System</p>
+  <p class="muted">College project demonstration — sample products and simulated orders.</p>
+</footer>
+
+<script>
+const ADMIN_EMAIL = "admin@cake.com";
+const ADMIN_PASSWORD = "admin123";
+
+const defaultCakes = [
+  {id:1,name:"Chocolate Cake",category:"Chocolate",flavor:"Chocolate",
+   price:650,weight:"1 kg",description:"Rich chocolate cake with chocolate cream.",
+   emoji:"🍫"},
+  {id:2,name:"Birthday Cake",category:"Birthday",flavor:"Vanilla",
+   price:800,weight:"1 kg",description:"Beautiful vanilla birthday cake for celebrations.",
+   emoji:"🎂"},
+  {id:3,name:"Strawberry Cake",category:"Fruit",flavor:"Strawberry",
+   price:700,weight:"1 kg",description:"Fresh strawberry flavor with soft cream.",
+   emoji:"🍓"},
+  {id:4,name:"Black Forest Cake",category:"Special Occasion",flavor:"Black Forest",
+   price:750,weight:"1 kg",description:"Classic black forest cake with chocolate layers.",
+   emoji:"🍰"},
+  {id:5,name:"Wedding Cake",category:"Wedding",flavor:"Vanilla",
+   price:2500,weight:"2 kg",description:"Elegant cake suitable for wedding celebrations.",
+   emoji:"💒"},
+  {id:6,name:"Red Velvet Cake",category:"Special Occasion",flavor:"Red Velvet",
+   price:950,weight:"1 kg",description:"Red velvet sponge with creamy frosting.",
+   emoji:"🧁"},
+  {id:7,name:"Butterscotch Cake",category:"Birthday",flavor:"Butterscotch",
+   price:680,weight:"1 kg",description:"Sweet butterscotch flavor with crunchy praline.",
+   emoji:"🍮"}
+];
+
+function readStore(key,fallback) {
+  try {
+    const value = localStorage.getItem(key);
+    return value ? JSON.parse(value) : fallback;
+  } catch {
+    return fallback;
+  }
+}
+function saveStore(key,value) {
+  localStorage.setItem(key,JSON.stringify(value));
+}
+function getCakes() { return readStore("cake_products",defaultCakes); }
+function getUsers() { return readStore("cake_users",[]); }
+function getOrders() { return readStore("cake_orders",[]); }
+function getCart() { return readStore("cake_cart",{}); }
+function getFeedback() { return readStore("cake_feedback",[]); }
+function currentUser() { return sessionStorage.getItem("cake_user"); }
+function isAdmin() { return currentUser() === ADMIN_EMAIL; }
+function money(value) { return "₹" + Number(value).toLocaleString("en-IN"); }
+function safe(value) {
+  return String(value ?? "").replace(/[&<>"']/g,c=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+
+function showPage(id) {
+  document.querySelectorAll("main > section").forEach(section =>
+    section.classList.add("hidden")
+  );
+  document.getElementById(id).classList.remove("hidden");
+
+  if (id === "home") renderCakes();
+  if (id === "cart") renderCart();
+  if (id === "orders") renderOrders();
+  if (id === "admin") renderAdmin();
+  if (id === "address") loadAddress();
+
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function registerUser(event) {
+  event.preventDefault();
+
+  const name = document.getElementById("regName").value.trim();
+  const email = document.getElementById("regEmail").value.trim().toLowerCase();
+  const phone = document.getElementById("regPhone").value.trim();
+  const password = document.getElementById("regPassword").value;
+  const users = getUsers();
+
+  if (email === ADMIN_EMAIL || users.some(u => u.email === email)) {
+    alert("This email is already registered.");
+    return;
+  }
+
+  users.push({name,email,phone,password});
+  saveStore("cake_users",users);
+  event.target.reset();
+  alert("Registration successful. Please log in.");
+  showPage("login");
+}
+
+function loginUser(event) {
+  event.preventDefault();
+  const email = document.getElementById("loginEmail").value.trim().toLowerCase();
+  const password = document.getElementById("loginPassword").value;
+
+  if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+    sessionStorage.setItem("cake_user",ADMIN_EMAIL);
+    alert("Admin login successful.");
+    showPage("admin");
+    return;
+  }
+
+  const user = getUsers().find(u => u.email === email && u.password === password);
+  if (!user) {
+    alert("Invalid email or password. Please register first.");
+    return;
+  }
+
+  sessionStorage.setItem("cake_user",user.email);
+  alert("Welcome, " + user.name + "!");
+  showPage("home");
+}
+
+function logout() {
+  sessionStorage.removeItem("cake_user");
+  alert("Logged out successfully.");
+  showPage("home");
+}
+
+function renderCakes() {
+  const search = (document.getElementById("searchCake")?.value || "").trim().toLowerCase();
+  const category = document.getElementById("categoryFilter")?.value || "";
+  const flavor = document.getElementById("flavorFilter")?.value || "";
+  const maxPriceValue = document.getElementById("maxPrice")?.value || "";
+  const maxPrice = maxPriceValue === "" ? Infinity : Number(maxPriceValue);
+
+  const cakes = getCakes().filter(cake =>
+    cake.name.toLowerCase().includes(search) &&
+    (!category || cake.category === category) &&
+    (!flavor || cake.flavor === flavor) &&
+    cake.price <= maxPrice
+  );
+
+  const output = document.getElementById("cakeList");
+  if (!cakes.length) {
+    output.innerHTML = "<p>No cakes match your search.</p>";
+    return;
+  }
+
+  output.innerHTML = cakes.map(cake => `
+    <div class="product">
+      <div class="cake-image">${safe(cake.emoji || "🎂")}</div>
+      <div class="product-info">
+        <h3>${safe(cake.name)}</h3>
+        <p><span class="pill">${safe(cake.category)}</span></p>
+        <p>${safe(cake.weight)} | ${safe(cake.flavor)}</p>
+        <p class="price">${money(cake.price)}</p>
+        <button onclick="viewCake(${cake.id})">View Description</button>
+        <button class="secondary" onclick="addToCart(${cake.id})">Add to Cart</button>
+      </div>
+    </div>`).join("");
+}
+
+function viewCake(id) {
+  const cake = getCakes().find(c => c.id === id);
+  if (!cake) return;
+
+  document.getElementById("cakeDetails").innerHTML = `
+    <div class="cake-image">${safe(cake.emoji || "🎂")}</div>
+    <h3>${safe(cake.name)}</h3>
+    <p>${safe(cake.description)}</p>
+    <p>Category: ${safe(cake.category)}</p>
+    <p>Flavor: ${safe(cake.flavor)}</p>
+    <p>Weight: ${safe(cake.weight)}</p>
+    <p class="price">${money(cake.price)}</p>
+    <label>Choose Cake Size</label>
+    <select id="cakeSize">
+      <option value="1">1 kg</option>
+      <option value="2">2 kg</option>
+      <option value="3">3 kg</option>
+    </select>
+    <label>Custom Message on Cake (optional)</label>
+    <input id="cakeMessage" maxlength="50" placeholder="e.g. Happy Birthday">
+    <button onclick="addCustomizedCake(${cake.id})">Add Customized Cake to Cart</button>
+  `;
+  showPage("details");
+}
+
+function addToCart(id) {
+  if (!currentUser() || isAdmin()) {
+    alert("Please log in with a customer account first.");
+    showPage("login");
+    return;
+  }
+
+  const cake = getCakes().find(c => c.id === id);
+  if (!cake) return;
+
+  const cart = getCart();
+  const key = String(id) + "_1";
+  if (!cart[currentUser()]) cart[currentUser()] = [];
+  const item = cart[currentUser()].find(i => i.key === key);
+
+  if (item) item.quantity++;
+  else cart[currentUser()].push({
+    key,id,size:1,message:"",quantity:1
+  });
+
+  saveStore("cake_cart",cart);
+  alert("Cake added to cart.");
+}
+
+function addCustomizedCake(id) {
+  if (!currentUser() || isAdmin()) {
+    alert("Please log in as a customer first.");
+    showPage("login");
+    return;
+  }
+
+  const size = Number(document.getElementById("cakeSize").value);
+  const message = document.getElementById("cakeMessage").value.trim();
+  const cart = getCart();
+
+  if (!cart[currentUser()]) cart[currentUser()] = [];
+  const key = String(id) + "_" + size + "_" + message;
+
+  const item = cart[currentUser()].find(i => i.key === key);
+  if (item) item.quantity++;
+  else cart[currentUser()].push({key,id,size,message,quantity:1});
+
+  saveStore("cake_cart",cart);
+  alert("Customized cake added to cart.");
+  showPage("cart");
+}
+
+function cartItems() {
+  if (!currentUser() || isAdmin()) return [];
+  const cart = getCart();
+  return cart[currentUser()] || [];
+}
+
+function itemPrice(item) {
+  const cake = getCakes().find(c => c.id === item.id);
+  return cake ? cake.price * item.size : 0;
+}
+
+function renderCart() {
+  const output = document.getElementById("cartContents");
+
+  if (!currentUser() || isAdmin()) {
+    output.innerHTML = "<p>Please log in with a customer account to view your cart.</p>";
+    return;
+  }
+
+  const items = cartItems();
+  if (!items.length) {
+    output.innerHTML = "<p>Your cart is empty. Browse our cakes to get started.</p>";
+    return;
+  }
+
+  let total = 0;
+  output.innerHTML = `<div class="table-wrap"><table>
+    <tr><th>Cake</th><th>Size</th><th>Message</th><th>Qty</th><th>Price</th><th>Action</th></tr>
+    ${items.map(item => {
+      const cake = getCakes().find(c => c.id === item.id);
+      const price = itemPrice(item) * item.quantity;
+      total += price;
+      return `<tr>
+        <td>${safe(cake?.name || "Unavailable cake")}</td>
+        <td>${item.size} kg</td>
+        <td>${safe(item.message || "-")}</td>
+        <td>${item.quantity}</td>
+        <td>${money(price)}</td>
+        <td><button class="danger" onclick="removeCartItem('${safe(item.key)}')">Remove</button></td>
+      </tr>`;
+    }).join("")}
+    </table></div>
+    <h3>Total: ${money(total)}</h3>
+    <button onclick="beginCheckout()">Proceed to Checkout</button>`;
+}
+
+function removeCartItem(key) {
+  const cart = getCart();
+  if (!cart[currentUser()]) return;
+  cart[currentUser()] = cart[currentUser()].filter(item => item.key !== key);
+  saveStore("cake_cart",cart);
+  renderCart();
+}
+
+function beginCheckout() {
+  if (!currentUser() || isAdmin()) {
+    alert("Please log in first.");
+    showPage("login");
+    return;
+  }
+
+  const items = cartItems();
+  if (!items.length) {
+    alert("Your cart is empty.");
+    return;
+  }
+
+  const total = items.reduce((sum,item) => sum + itemPrice(item) * item.quantity,0);
+  document.getElementById("checkoutSummary").innerHTML = `
+    <div class="notice">
+      <p>Total cake items: ${items.reduce((sum,item) => sum + item.quantity,0)}</p>
+      <h3>Order Total: ${money(total)}</h3>
+    </div>`;
+
+  document.getElementById("deliveryDate").min = new Date().toISOString().slice(0,10);
+  document.getElementById("deliveryAddress").value = getSavedAddress();
+  showPage("checkout");
+}
+
+function placeOrder(event) {
+  event.preventDefault();
+
+  if (!currentUser() || isAdmin()) {
+    alert("Please log in as a customer.");
+    showPage("login");
+    return;
+  }
+
+  const items = cartItems();
+  if (!items.length) {
+    alert("Your cart is empty.");
+    showPage("cart");
+    return;
+  }
+
+  const deliveryDate = document.getElementById("deliveryDate").value;
+  if (deliveryDate < new Date().toISOString().slice(0,10)) {
+    alert("Please select a valid delivery date.");
+    return;
+  }
+
+  const address = document.getElementById("deliveryAddress").value.trim();
+  if (!address) {
+    alert("Please enter your shipping address.");
+    return;
+  }
+
+  const cakes = getCakes();
+  const orderItems = items.map(item => {
+    const cake = cakes.find(c => c.id === item.id);
+    return {
+      cakeId:item.id,
+      name:cake?.name || "Cake",
+      size:item.size,
+      message:item.message,
+      quantity:item.quantity,
+      unitPrice:cake ? cake.price * item.size : 0
+    };
+  });
+
+  const total = orderItems.reduce((sum,item) => sum + item.unitPrice * item.quantity,0);
+  const order = {
+    id:"CAKE" + Date.now().toString().slice(-8),
+    email:currentUser(),
+    items:orderItems,
+    total,
+    address,
+    deliveryDate,
+    paymentMethod:document.getElementById("paymentMethod").value,
+    paymentStatus:"Demo payment recorded",
+    status:"Order Placed",
+    createdAt:new Date().toLocaleString()
+  };
+
+  const orders = getOrders();
+  orders.push(order);
+  saveStore("cake_orders",orders);
+
+  const cart = getCart();
+  cart[currentUser()] = [];
+  saveStore("cake_cart",cart);
+  saveAddressValue(address);
+
+  document.getElementById("confirmationDetails").innerHTML = orderHTML(order);
+  event.target.reset();
+  showPage("confirmation");
+}
+
+function orderHTML(order) {
+  return `<div class="notice">
+    <h3>Order placed successfully!</h3>
+    <p><strong>Order ID:</strong> ${safe(order.id)}</p>
+    <p><strong>Order Date:</strong> ${safe(order.createdAt)}</p>
+    <p><strong>Delivery Date:</strong> ${safe(order.deliveryDate)}</p>
+    <p><strong>Shipping Address:</strong> ${safe(order.address)}</p>
+    <p><strong>Payment Method:</strong> ${safe(order.paymentMethod)}</p>
+    <p><strong>Payment Status:</strong> ${safe(order.paymentStatus)}</p>
+    <p><strong>Order Status:</strong> ${safe(order.status)}</p>
+    <h3>Items</h3>
+    ${order.items.map(item => `
+      <p>${safe(item.name)} — ${item.size} kg × ${item.quantity}
+      ${item.message ? " | Message: " + safe(item.message) : ""}
+      — ${money(item.unitPrice * item.quantity)}</p>`).join("")}
+    <h3>Total: ${money(order.total)}</h3>
+  </div>
+  <p class="muted">This is a demo order confirmation, not a real payment receipt.</p>`;
+}
+
+function renderOrders() {
+  const output = document.getElementById("orderHistory");
+
+  if (!currentUser() || isAdmin()) {
+    output.innerHTML = "<p>Please log in with a customer account to view your orders.</p>";
+    return;
+  }
+
+  const orders = getOrders().filter(o => o.email === currentUser());
+  if (!orders.length) {
+    output.innerHTML = "<p>No orders have been placed yet.</p>";
+    return;
+  }
+
+  output.innerHTML = orders.slice().reverse().map(order => `
+    <div class="card">
+      <h3>Order ID: ${safe(order.id)}</h3>
+      <p>Delivery date: ${safe(order.deliveryDate)}</p>
+      <p>Total: ${money(order.total)}</p>
+      <p>Status: <span class="pill">${safe(order.status)}</span></p>
+      <button onclick="viewOrder('${safe(order.id)}')">View Order</button>
+      <button class="secondary" onclick="fillTracking('${safe(order.id)}')">Track Order</button>
+    </div>`).join("");
+}
+
+function viewOrder(id) {
+  const order = getOrders().find(o => o.id === id);
+  if (!order) return;
+  if (!isAdmin() && order.email !== currentUser()) {
+    alert("You cannot view another customer's order.");
+    return;
+  }
+  document.getElementById("confirmationDetails").innerHTML = orderHTML(order);
+  showPage("confirmation");
+}
+
+function fillTracking(id) {
+  document.getElementById("trackingId").value = id;
+  showPage("tracking");
+  trackOrder();
+}
+
+function trackOrder() {
+  const id = document.getElementById("trackingId").value.trim();
+  const order = getOrders().find(o => o.id === id);
+  const output = document.getElementById("trackingResult");
+
+  if (!order) {
+    output.innerHTML = "<p>Order not found. Please check the order ID.</p>";
+    return;
+  }
+
+  if (!isAdmin() && order.email !== currentUser()) {
+    output.innerHTML = "<p>Please log in as the customer who placed this order.</p>";
+    return;
+  }
+
+  output.innerHTML = `<div class="notice">
+    <h3>Order Tracking</h3>
+    <p>Order ID: ${safe(order.id)}</p>
+    <p>Status: <strong>${safe(order.status)}</strong></p>
+    <p>Delivery date: ${safe(order.deliveryDate)}</p>
+    <p>Delivery address: ${safe(order.address)}</p>
+  </div>`;
+}
+
+function addressKey() {
+  return "cake_address_" + currentUser();
+}
+function getSavedAddress() {
+  if (!currentUser() || isAdmin()) return "";
+  return localStorage.getItem(addressKey()) || "";
+}
+function saveAddressValue(address) {
+  if (currentUser() && !isAdmin()) {
+    localStorage.setItem(addressKey(),address);
+  }
+}
+function loadAddress() {
+  document.getElementById("savedAddress").value = getSavedAddress();
+}
+function saveAddress(event) {
+  event.preventDefault();
+  if (!currentUser() || isAdmin()) {
+    alert("Please log in with a customer account first.");
+    showPage("login");
+    return;
+  }
+  saveAddressValue(document.getElementById("savedAddress").value.trim());
+  alert("Shipping address saved.");
+}
+
+function renderAdmin() {
+  const output = document.getElementById("adminContent");
+
+  if (!isAdmin()) {
+    output.innerHTML = `
+      <div class="notice">Admin login required.</div>
+      <p>Demo email: <strong>${ADMIN_EMAIL}</strong></p>
+      <p>Demo password: <strong>${ADMIN_PASSWORD}</strong></p>
+      <button onclick="showPage('login')">Go to Login</button>`;
+    return;
+  }
+
+  const cakes = getCakes();
+  const orders = getOrders();
+  const users = getUsers();
+  const feedback = getFeedback();
+
+  output.innerHTML = `
+    <h3>Post Cake Details / Manage Products</h3>
+    <form onsubmit="addCake(event)">
+      <div class="grid">
+        <div><label>Cake Name</label><input id="newCakeName" required></div>
+        <div><label>Category</label>
+          <select id="newCakeCategory">
+            <option>Birthday</option><option>Chocolate</option>
+            <option>Wedding</option><option>Fruit</option>
+            <option>Special Occasion</option>
+          </select>
+        </div>
+        <div><label>Flavor</label>
+          <select id="newCakeFlavor">
+            <option>Chocolate</option><option>Vanilla</option>
+            <option>Strawberry</option><option>Black Forest</option>
+            <option>Butterscotch</option><option>Red Velvet</option>
+          </select>
+        </div>
+        <div><label>Price per kg (₹)</label><input id="newCakePrice" type="number" min="1" required></div>
+        <div><label>Weight Label</label><input id="newCakeWeight" value="1 kg" required></div>
+        <div><label>Image / Emoji</label><input id="newCakeEmoji" value="🎂" maxlength="10"></div>
+      </div>
+      <label>Description</label><textarea id="newCakeDescription" required></textarea>
+      <button type="submit">Add Cake</button>
+    </form>
+
+    <h3>Product List</h3>
+    <div class="table-wrap"><table>
+      <tr><th>Name</th><th>Category</th><th>Flavor</th><th>Price</th><th>Action</th></tr>
+      ${cakes.map(c => `<tr>
+        <td>${safe(c.name)}</td><td>${safe(c.category)}</td>
+        <td>${safe(c.flavor)}</td><td>${money(c.price)}</td>
+        <td><button class="danger" onclick="deleteCake(${c.id})">Delete</button></td>
+      </tr>`).join("")}
+    </table></div>
+
+    <h3>Manage Orders / Update Status</h3>
+    <p>Registered customers: ${users.length}</p>
+    <p>Total orders: ${orders.length}</p>
+    <p>Non-cancelled order value: ${money(orders.filter(o => o.status !== "Cancelled").reduce((s,o) => s + o.total,0))}</p>
+    <div class="table-wrap"><table>
+      <tr><th>Order ID</th><th>Customer</th><th>Total</th><th>Payment</th><th>Status</th><th>Update</th></tr>
+      ${orders.map(o => `<tr>
+        <td>${safe(o.id)}</td><td>${safe(o.email)}</td>
+        <td>${money(o.total)}</td><td>${safe(o.paymentMethod)}</td>
+        <td>${safe(o.status)}</td>
+        <td>
+          <select id="status_${safe(o.id)}">
+            ${["Order Placed","Preparing","Ready for Dispatch","Out for Delivery","Delivered","Cancelled"].map(s =>
+              `<option ${o.status === s ? "selected" : ""}>${s}</option>`
+            ).join("")}
+          </select>
+          <button onclick="updateOrderStatus('${safe(o.id)}')">Save</button>
+        </td>
+      </tr>`).join("")}
+    </table></div>
+
+    <h3>Customer Feedback</h3>
+    ${feedback.length ? feedback.map(f => `
+      <div class="notice"><strong>${safe(f.name)}</strong> (${f.rating}/5)
+      <p>${safe(f.message)}</p></div>`).join("") : "<p>No feedback submitted.</p>"}
+
+    <button class="secondary" onclick="downloadReport()">Download Order Report CSV</button>`;
+}
+
+function addCake(event) {
+  event.preventDefault();
+  if (!isAdmin()) return alert("Admin login required.");
+
+  const cakes = getCakes();
+  cakes.push({
+    id:Date.now(),
+    name:document.getElementById("newCakeName").value.trim(),
+    category:document.getElementById("newCakeCategory").value,
+    flavor:document.getElementById("newCakeFlavor").value,
+    price:Number(document.getElementById("newCakePrice").value),
+    weight:document.getElementById("newCakeWeight").value.trim(),
+    emoji:document.getElementById("newCakeEmoji").value.trim() || "🎂",
+    description:document.getElementById("newCakeDescription").value.trim()
+  });
+
+  saveStore("cake_products",cakes);
+  alert("Cake added successfully.");
+  renderAdmin();
+}
+
+function deleteCake(id) {
+  if (!isAdmin()) return;
+  if (!confirm("Delete this cake from the catalog?")) return;
+  saveStore("cake_products",getCakes().filter(c => c.id !== id));
+  renderAdmin();
+}
+
+function updateOrderStatus(id) {
+  if (!isAdmin()) return;
+
+  const orders = getOrders();
+  const order = orders.find(o => o.id === id);
+  if (!order) return;
+
+  order.status = document.getElementById("status_" + id).value;
+  saveStore("cake_orders",orders);
+  alert("Order status updated.");
+  renderAdmin();
+}
+
+function downloadReport() {
+  if (!isAdmin()) return alert("Admin login required.");
+
+  const orders = getOrders();
+  const columns = ["Order ID","Customer Email","Items","Total","Address","Delivery Date","Payment","Status"];
+  const rows = orders.map(o => [
+    o.id,o.email,o.items.map(i => i.name + " x " + i.quantity).join("; "),
+    o.total,o.address,o.deliveryDate,o.paymentMethod,o.status
+  ]);
+
+  const csv = [columns,...rows].map(row =>
+    row.map(v => '"' + String(v ?? "").replace(/"/g,'""') + '"').join(",")
+  ).join("\r\n");
+
+  const url = URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8;"}));
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "cake-order-report.csv";
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+if (!localStorage.getItem("cake_products")) {
+  saveStore("cake_products",defaultCakes);
+}
+
+renderCakes();
+showPage("home");
+</script>
+</body>
+</html>

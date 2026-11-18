@@ -1,0 +1,855 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LifeSaver - Blood Management System</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f7f3f3;
+    color: #292929;
+}
+
+header {
+    background: #a3132a;
+    color: white;
+    padding: 18px 6%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+header h1 {
+    font-size: 26px;
+}
+
+nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 5px;
+    margin: 3px;
+}
+
+nav button {
+    color: #a3132a;
+    background: white;
+    font-weight: bold;
+}
+
+nav button:hover {
+    background: #ffe0e5;
+}
+
+.hero {
+    background: linear-gradient(120deg, #a3132a, #e34b60);
+    color: white;
+    text-align: center;
+    padding: 48px 15px;
+}
+
+.hero h2 {
+    font-size: 31px;
+    margin-bottom: 12px;
+}
+
+.hero p {
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.container {
+    width: 92%;
+    max-width: 1150px;
+    margin: 25px auto;
+}
+
+.section {
+    display: none;
+    background: white;
+    padding: 24px;
+    margin-bottom: 24px;
+    border-radius: 10px;
+    box-shadow: 0 3px 12px #00000012;
+}
+
+.section.active {
+    display: block;
+}
+
+h2, h3 {
+    color: #a3132a;
+    margin-bottom: 15px;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 11px;
+    margin: 7px 0 14px;
+    border: 1px solid #d7c8cb;
+    border-radius: 5px;
+}
+
+textarea {
+    min-height: 85px;
+    resize: vertical;
+}
+
+.primary {
+    background: #b51f37;
+    color: white;
+}
+
+.primary:hover {
+    background: #8e1026;
+}
+
+.secondary {
+    background: #ffe8ec;
+    color: #a3132a;
+}
+
+.danger {
+    background: #333;
+    color: white;
+}
+
+.filters {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 10px;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-top: 18px;
+}
+
+.card {
+    padding: 18px;
+    border: 1px solid #eadadd;
+    border-radius: 8px;
+    background: white;
+}
+
+.card h3 {
+    margin-bottom: 10px;
+}
+
+.card p {
+    margin: 7px 0;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.blood {
+    display: inline-block;
+    background: #ffe3e8;
+    color: #a3132a;
+    font-weight: bold;
+    font-size: 20px;
+    padding: 9px 13px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+}
+
+.info {
+    background: #fff0f2;
+    border-left: 4px solid #b51f37;
+    padding: 13px;
+    margin: 12px 0;
+    border-radius: 5px;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.stat {
+    background: #fff0f2;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+}
+
+.stat strong {
+    display: block;
+    font-size: 27px;
+    color: #a3132a;
+    margin-top: 8px;
+}
+
+footer {
+    background: #761022;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: 30px;
+}
+
+.small {
+    color: #666;
+    font-size: 13px;
+}
+
+@media(max-width: 650px) {
+    header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .filters {
+        grid-template-columns: 1fr;
+    }
+
+    .hero h2 {
+        font-size: 24px;
+    }
+
+    .container {
+        width: 95%;
+    }
+
+    .section {
+        padding: 15px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🩸 LifeSaver</h1>
+    <nav>
+        <button onclick="showSection('home')">Home</button>
+        <button onclick="showSection('donorsSection')">Find Donors</button>
+        <button onclick="showSection('banksSection')">Blood Banks</button>
+        <button onclick="showSection('registerSection')">Register</button>
+        <button onclick="showSection('loginSection')">Login</button>
+        <button onclick="showSection('dashboardSection')">Dashboard</button>
+    </nav>
+</header>
+
+<section class="hero" id="home">
+    <h2>Donate Blood, Save Lives</h2>
+    <p>Connect blood donors, hospitals, and blood banks through one platform.</p>
+    <button class="primary" onclick="showSection('donorsSection')">Find a Donor</button>
+    <button class="primary" onclick="showSection('registerSection')">Become a Donor</button>
+</section>
+
+<main class="container">
+
+    <!-- SEARCH DONORS -->
+    <section id="donorsSection" class="section active">
+        <h2>Search Blood Donors</h2>
+        <p>Search registered donor information by blood group and city.</p>
+
+        <div class="filters">
+            <input id="donorSearch" placeholder="Search donor name or city"
+                   oninput="displayDonors()">
+
+            <select id="bloodFilter" onchange="displayDonors()">
+                <option value="">All Blood Groups</option>
+                <option>A+</option><option>A-</option>
+                <option>B+</option><option>B-</option>
+                <option>AB+</option><option>AB-</option>
+                <option>O+</option><option>O-</option>
+            </select>
+
+            <select id="donorCityFilter" onchange="displayDonors()">
+                <option value="">All Cities</option>
+                <option>Chennai</option>
+                <option>Bangalore</option>
+                <option>Hyderabad</option>
+                <option>Delhi</option>
+                <option>Mumbai</option>
+            </select>
+        </div>
+
+        <div id="donorList" class="cards"></div>
+    </section>
+
+    <!-- SEARCH BLOOD BANKS -->
+    <section id="banksSection" class="section">
+        <h2>Search Blood Banks</h2>
+
+        <div class="filters">
+            <input id="bankSearch" placeholder="Search blood bank or city"
+                   oninput="displayBanks()">
+
+            <select id="bankBloodFilter" onchange="displayBanks()">
+                <option value="">All Blood Groups</option>
+                <option>A+</option><option>A-</option>
+                <option>B+</option><option>B-</option>
+                <option>AB+</option><option>AB-</option>
+                <option>O+</option><option>O-</option>
+            </select>
+
+            <select id="bankCityFilter" onchange="displayBanks()">
+                <option value="">All Cities</option>
+                <option>Chennai</option>
+                <option>Bangalore</option>
+                <option>Hyderabad</option>
+                <option>Delhi</option>
+                <option>Mumbai</option>
+            </select>
+        </div>
+
+        <div id="bankList" class="cards"></div>
+    </section>
+
+    <!-- REGISTRATION -->
+    <section id="registerSection" class="section">
+        <h2>Create an Account</h2>
+
+        <form id="registerForm">
+            <label>Full Name / Hospital Name</label>
+            <input id="regName" required placeholder="Enter your name">
+
+            <label>Email Address</label>
+            <input id="regEmail" type="email" required>
+
+            <label>Password</label>
+            <input id="regPassword" type="password" minlength="4" required>
+
+            <label>Register As</label>
+            <select id="regRole" required>
+                <option value="donor">Donor / User</option>
+                <option value="hospital">Hospital / Blood Bank</option>
+            </select>
+
+            <button class="primary" type="submit">Register</button>
+        </form>
+    </section>
+
+    <!-- LOGIN -->
+    <section id="loginSection" class="section">
+        <h2>Login</h2>
+
+        <form id="loginForm">
+            <label>Email Address</label>
+            <input id="loginEmail" type="email" required>
+
+            <label>Password</label>
+            <input id="loginPassword" type="password" required>
+
+            <button class="primary" type="submit">Login</button>
+        </form>
+
+        <div class="info">
+            <strong>Demo Administrator Login</strong>
+            <p>Email: admin@lifesaver.com</p>
+            <p>Password: admin123</p>
+        </div>
+    </section>
+
+    <!-- DASHBOARD -->
+    <section id="dashboardSection" class="section">
+        <h2>Dashboard</h2>
+        <div id="dashboardContent">
+            <p>Please log in to access your dashboard.</p>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <p>© 2026 LifeSaver | Blood Management Information System</p>
+    <p>Every Drop Counts. Every Donor Matters.</p>
+</footer>
+
+<script>
+// Load data from browser storage
+let users = JSON.parse(localStorage.getItem("bs_users") || "[]");
+let donors = JSON.parse(localStorage.getItem("bs_donors") || "null");
+let banks = JSON.parse(localStorage.getItem("bs_banks") || "null");
+let currentUser = null;
+
+if (!donors) {
+    donors = [
+        {
+            id: 1,
+            name: "Demo Donor One",
+            blood: "O+",
+            city: "Chennai",
+            phone: "9000000001",
+            email: "donor1@example.com",
+            lastDonation: "Not specified",
+            available: true,
+            owner: ""
+        },
+        {
+            id: 2,
+            name: "Demo Donor Two",
+            blood: "B+",
+            city: "Bangalore",
+            phone: "9000000002",
+            email: "donor2@example.com",
+            lastDonation: "Not specified",
+            available: true,
+            owner: ""
+        }
+    ];
+}
+
+if (!banks) {
+    banks = [
+        {
+            id: 1,
+            name: "City Blood Bank",
+            city: "Chennai",
+            address: "Central Chennai",
+            phone: "04400000001",
+            email: "citybank@example.com",
+            stocks: {
+                "A+": 10, "A-": 3,
+                "B+": 8, "B-": 2,
+                "AB+": 4, "AB-": 1,
+                "O+": 12, "O-": 3
+            },
+            owner: ""
+        },
+        {
+            id: 2,
+            name: "LifeCare Blood Centre",
+            city: "Hyderabad",
+            address: "Main Road, Hyderabad",
+            phone: "04000000002",
+            email: "lifecare@example.com",
+            stocks: {
+                "A+": 5, "A-": 2,
+                "B+": 6, "B-": 2,
+                "AB+": 3, "AB-": 1,
+                "O+": 9, "O-": 2
+            },
+            owner: ""
+        }
+    ];
+}
+
+function saveData() {
+    localStorage.setItem("bs_users", JSON.stringify(users));
+    localStorage.setItem("bs_donors", JSON.stringify(donors));
+    localStorage.setItem("bs_banks", JSON.stringify(banks));
+}
+
+function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, ch => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[ch]);
+}
+
+function showSection(id) {
+    document.querySelectorAll(".section").forEach(s =>
+        s.classList.remove("active")
+    );
+
+    if (id !== "home") {
+        document.getElementById(id).classList.add("active");
+    }
+
+    if (id === "donorsSection") displayDonors();
+    if (id === "banksSection") displayBanks();
+    if (id === "dashboardSection") renderDashboard();
+
+    window.scrollTo({
+        top: id === "home" ? 0 : 150,
+        behavior: "smooth"
+    });
+}
+
+// REGISTER
+document.getElementById("registerForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const name = document.getElementById("regName").value.trim();
+    const email = document.getElementById("regEmail").value.trim().toLowerCase();
+    const password = document.getElementById("regPassword").value;
+    const role = document.getElementById("regRole").value;
+
+    if (email === "admin@lifesaver.com" ||
+        users.some(u => u.email === email)) {
+        alert("This email is already registered.");
+        return;
+    }
+
+    users.push({
+        id: Date.now(),
+        name,
+        email,
+        password,
+        role
+    });
+
+    saveData();
+    alert("Registration successful. Please log in.");
+    this.reset();
+    showSection("loginSection");
+});
+
+// LOGIN
+document.getElementById("loginForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const email = document.getElementById("loginEmail").value.trim().toLowerCase();
+    const password = document.getElementById("loginPassword").value;
+
+    if (email === "admin@lifesaver.com" && password === "admin123") {
+        currentUser = {
+            id: 0,
+            name: "Administrator",
+            email,
+            role: "admin"
+        };
+    } else {
+        currentUser = users.find(u =>
+            u.email === email && u.password === password
+        );
+
+        if (!currentUser) {
+            alert("Invalid email or password.");
+            return;
+        }
+    }
+
+    alert("Welcome " + currentUser.name + "!");
+    this.reset();
+    showSection("dashboardSection");
+});
+
+// DISPLAY DONORS
+function displayDonors() {
+    const search = document.getElementById("donorSearch").value.toLowerCase();
+    const blood = document.getElementById("bloodFilter").value;
+    const city = document.getElementById("donorCityFilter").value;
+
+    const filtered = donors.filter(d =>
+        (d.name.toLowerCase().includes(search) ||
+         d.city.toLowerCase().includes(search)) &&
+        (!blood || d.blood === blood) &&
+        (!city || d.city === city)
+    );
+
+    document.getElementById("donorList").innerHTML = filtered.length ?
+        filtered.map(d => `
+            <div class="card">
+                <div class="blood">${escapeHTML(d.blood)}</div>
+                <h3>${escapeHTML(d.name)}</h3>
+                <p><strong>City:</strong> ${escapeHTML(d.city)}</p>
+                <p><strong>Availability:</strong> ${d.available ? "Available (self-reported)" : "Not available"}</p>
+                <p><strong>Last Donation:</strong> ${escapeHTML(d.lastDonation)}</p>
+                ${currentUser && currentUser.role === "hospital" ?
+                    `<p><strong>Contact:</strong> ${escapeHTML(d.phone)}</p>` :
+                    `<p class="small">Contact details are restricted in this demo.</p>`}
+            </div>
+        `).join("") :
+        "<p>No matching donors found.</p>";
+}
+
+// DISPLAY BLOOD BANKS
+function displayBanks() {
+    const search = document.getElementById("bankSearch").value.toLowerCase();
+    const blood = document.getElementById("bankBloodFilter").value;
+    const city = document.getElementById("bankCityFilter").value;
+
+    const filtered = banks.filter(b =>
+        (b.name.toLowerCase().includes(search) ||
+         b.city.toLowerCase().includes(search)) &&
+        (!city || b.city === city) &&
+        (!blood || Number(b.stocks[blood]) > 0)
+    );
+
+    document.getElementById("bankList").innerHTML = filtered.length ?
+        filtered.map(b => `
+            <div class="card">
+                <h3>🏥 ${escapeHTML(b.name)}</h3>
+                <p><strong>City:</strong> ${escapeHTML(b.city)}</p>
+                <p><strong>Address:</strong> ${escapeHTML(b.address)}</p>
+                <p><strong>Phone:</strong> ${escapeHTML(b.phone)}</p>
+                <p><strong>Blood Group:</strong> ${blood ? escapeHTML(blood) : "All groups"}</p>
+                <p><strong>Units Available:</strong>
+                    ${blood ? Number(b.stocks[blood]) :
+                        Object.values(b.stocks).reduce((sum, n) => sum + Number(n), 0)}
+                </p>
+                <p class="small">Demo stock only. Contact the facility to confirm availability.</p>
+            </div>
+        `).join("") :
+        "<p>No matching blood banks found.</p>";
+}
+
+// DASHBOARD
+function renderDashboard() {
+    const area = document.getElementById("dashboardContent");
+
+    if (!currentUser) {
+        area.innerHTML = "<p>Please log in to access your dashboard.</p>";
+        return;
+    }
+
+    if (currentUser.role === "admin") {
+        area.innerHTML = `
+            <h3>Administrator Dashboard</h3>
+
+            <div class="dashboard-grid">
+                <div class="stat">Registered Users<strong>${users.filter(u => u.role === "donor").length}</strong></div>
+                <div class="stat">Hospitals<strong>${users.filter(u => u.role === "hospital").length}</strong></div>
+                <div class="stat">Donor Records<strong>${donors.length}</strong></div>
+                <div class="stat">Blood Banks<strong>${banks.length}</strong></div>
+            </div>
+
+            <h3>Registered Accounts</h3>
+            ${users.length ? users.map(u => `
+                <div class="info">
+                    ${escapeHTML(u.name)} — ${escapeHTML(u.email)}
+                    (${escapeHTML(u.role)})
+                </div>
+            `).join("") : "<p>No registered accounts.</p>"}
+
+            ${logoutButton()}
+        `;
+    } else if (currentUser.role === "donor") {
+        const mine = donors.find(d => d.owner === currentUser.email);
+
+        area.innerHTML = `
+            <h3>Donor / User Dashboard</h3>
+            <p>Welcome, ${escapeHTML(currentUser.name)}.</p>
+
+            <h3>Post Donor Information</h3>
+            <form id="donorForm">
+                <label>Blood Group</label>
+                <select id="donorBlood" required>
+                    <option value="">Select Blood Group</option>
+                    <option>A+</option><option>A-</option>
+                    <option>B+</option><option>B-</option>
+                    <option>AB+</option><option>AB-</option>
+                    <option>O+</option><option>O-</option>
+                </select>
+
+                <label>City</label>
+                <input id="donorCity" required>
+
+                <label>Contact Number</label>
+                <input id="donorPhone" type="tel" required
+                       pattern="[0-9+() -]{7,20}">
+
+                <label>Last Donation Date (optional)</label>
+                <input id="lastDonation" type="date">
+
+                <label>Donation Availability</label>
+                <select id="donorAvailable">
+                    <option value="true">Available</option>
+                    <option value="false">Not Available</option>
+                </select>
+
+                <button class="primary" type="submit">
+                    ${mine ? "Update My Donor Info" : "Save Donor Info"}
+                </button>
+            </form>
+
+            <h3>My Donor Information</h3>
+            <div id="myDonorInfo"></div>
+
+            ${logoutButton()}
+        `;
+
+        if (mine) {
+            document.getElementById("donorBlood").value = mine.blood;
+            document.getElementById("donorCity").value = mine.city;
+            document.getElementById("donorPhone").value = mine.phone;
+            document.getElementById("lastDonation").value = mine.lastDonation === "Not specified" ? "" : mine.lastDonation;
+            document.getElementById("donorAvailable").value = String(mine.available);
+        }
+
+        renderMyDonorInfo();
+        document.getElementById("donorForm").addEventListener("submit", saveDonor);
+    } else if (currentUser.role === "hospital") {
+        const mine = banks.find(b => b.owner === currentUser.email);
+
+        area.innerHTML = `
+            <h3>Hospital / Blood Bank Dashboard</h3>
+            <p>Welcome, ${escapeHTML(currentUser.name)}.</p>
+
+            <h3>Post or Update Blood Bank Information</h3>
+            <form id="bankForm">
+                <label>Blood Bank Name</label>
+                <input id="bankName" required value="${escapeHTML(mine ? mine.name : currentUser.name)}">
+
+                <label>City</label>
+                <input id="bankCity" required value="${escapeHTML(mine ? mine.city : "")}">
+
+                <label>Address</label>
+                <textarea id="bankAddress" required>${escapeHTML(mine ? mine.address : "")}</textarea>
+
+                <label>Contact Number</label>
+                <input id="bankPhone" type="tel" required
+                       value="${escapeHTML(mine ? mine.phone : "")}">
+
+                <h3>Blood Group Stock (units)</h3>
+                ${["A+","A-","B+","B-","AB+","AB-","O+","O-"].map(group => `
+                    <label>${group}</label>
+                    <input type="number" min="0" id="stock-${group.replace("+","plus").replace("-","minus")}"
+                        value="${mine ? Number(mine.stocks[group] || 0) : 0}" required>
+                `).join("")}
+
+                <button class="primary" type="submit">
+                    ${mine ? "Update Blood Bank" : "Register Blood Bank"}
+                </button>
+            </form>
+
+            <h3>My Blood Bank Details</h3>
+            <div id="myBankInfo"></div>
+
+            ${logoutButton()}
+        `;
+
+        renderMyBankInfo();
+        document.getElementById("bankForm").addEventListener("submit", saveBank);
+    }
+}
+
+// SAVE DONOR INFORMATION
+function saveDonor(e) {
+    e.preventDefault();
+
+    const mine = donors.find(d => d.owner === currentUser.email);
+
+    const record = {
+        id: mine ? mine.id : Date.now(),
+        name: currentUser.name,
+        email: currentUser.email,
+        owner: currentUser.email,
+        blood: document.getElementById("donorBlood").value,
+        city: document.getElementById("donorCity").value.trim(),
+        phone: document.getElementById("donorPhone").value.trim(),
+        lastDonation: document.getElementById("lastDonation").value || "Not specified",
+        available: document.getElementById("donorAvailable").value === "true"
+    };
+
+    if (mine) {
+        Object.assign(mine, record);
+    } else {
+        donors.push(record);
+    }
+
+    saveData();
+    renderDashboard();
+    displayDonors();
+    alert("Donor information saved successfully.");
+}
+
+// SHOW MY DONOR INFORMATION
+function renderMyDonorInfo() {
+    const area = document.getElementById("myDonorInfo");
+    if (!area) return;
+
+    const mine = donors.find(d => d.owner === currentUser.email);
+
+    area.innerHTML = mine ? `
+        <div class="info">
+            <p><strong>Name:</strong> ${escapeHTML(mine.name)}</p>
+            <p><strong>Blood Group:</strong> ${escapeHTML(mine.blood)}</p>
+            <p><strong>City:</strong> ${escapeHTML(mine.city)}</p>
+            <p><strong>Phone:</strong> ${escapeHTML(mine.phone)}</p>
+            <p><strong>Availability:</strong> ${mine.available ? "Available" : "Not Available"}</p>
+        </div>
+    ` : "<p>You have not posted your donor information yet.</p>";
+}
+
+// SAVE BLOOD BANK INFORMATION
+function saveBank(e) {
+    e.preventDefault();
+
+    const mine = banks.find(b => b.owner === currentUser.email);
+    const stocks = {};
+
+    ["A+","A-","B+","B-","AB+","AB-","O+","O-"].forEach(group => {
+        const key = group.replace("+","plus").replace("-","minus");
+        stocks[group] = Number(document.getElementById("stock-" + key).value);
+    });
+
+    const record = {
+        id: mine ? mine.id : Date.now(),
+        owner: currentUser.email,
+        name: document.getElementById("bankName").value.trim(),
+        city: document.getElementById("bankCity").value.trim(),
+        address: document.getElementById("bankAddress").value.trim(),
+        phone: document.getElementById("bankPhone").value.trim(),
+        email: currentUser.email,
+        stocks
+    };
+
+    if (mine) {
+        Object.assign(mine, record);
+    } else {
+        banks.push(record);
+    }
+
+    saveData();
+    renderDashboard();
+    displayBanks();
+    alert("Blood bank information updated successfully.");
+}
+
+// SHOW MY BLOOD BANK
+function renderMyBankInfo() {
+    const area = document.getElementById("myBankInfo");
+    if (!area) return;
+
+    const mine = banks.find(b => b.owner === currentUser.email);
+
+    area.innerHTML = mine ? `
+        <div class="info">
+            <h3>${escapeHTML(mine.name)}</h3>
+            <p>City: ${escapeHTML(mine.city)}</p>
+            <p>Address: ${escapeHTML(mine.address)}</p>
+            <p>Contact: ${escapeHTML(mine.phone)}</p>
+            <p>Total listed units: ${Object.values(mine.stocks).reduce((sum, n) => sum + Number(n), 0)}</p>
+        </div>
+    ` : "<p>No blood bank information posted yet.</p>";
+}
+
+function logoutButton() {
+    return `<button class="danger" onclick="logout()">Logout</button>`;
+}
+
+function logout() {
+    currentUser = null;
+    alert("Logged out successfully.");
+    showSection("home");
+    showSection("donorsSection");
+}
+
+// INITIAL DISPLAY
+displayDonors();
+displayBanks();
+</script>
+
+</body>
+</html>

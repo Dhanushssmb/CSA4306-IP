@@ -1,0 +1,865 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RailConnect - Train Reservation System</title>
+<style>
+:root {
+  --primary: #174a8b;
+  --secondary: #087e8b;
+  --bg: #f3f6fb;
+  --text: #202b3c;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+header {
+  background: var(--primary);
+  color: white;
+  padding: 18px 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+header h1 { margin: 0; font-size: 25px; }
+nav { display: flex; gap: 8px; flex-wrap: wrap; }
+nav button {
+  background: transparent;
+  color: white;
+  border: 1px solid #ffffff80;
+  padding: 9px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+nav button:hover { background: #ffffff22; }
+main { max-width: 1150px; margin: 25px auto; padding: 0 16px; }
+.hero {
+  padding: 35px;
+  border-radius: 14px;
+  color: white;
+  background: linear-gradient(120deg, #174a8b, #087e8b);
+  margin-bottom: 22px;
+}
+.hero h2 { font-size: 30px; margin-top: 0; }
+.card {
+  background: white;
+  padding: 22px;
+  border-radius: 12px;
+  box-shadow: 0 3px 14px #1b35520d;
+  margin-bottom: 20px;
+}
+h2, h3 { color: var(--primary); }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 14px;
+}
+label { display: block; font-weight: bold; margin-bottom: 6px; }
+input, select {
+  width: 100%;
+  padding: 11px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  margin-bottom: 14px;
+  font-size: 15px;
+}
+button, .btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 11px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+button:hover, .btn:hover { opacity: .9; }
+.secondary { background: var(--secondary); }
+.danger { background: #c0392b; }
+.muted { color: #64748b; font-size: 14px; }
+.train {
+  border: 1px solid #dbe3ee;
+  border-radius: 10px;
+  padding: 18px;
+  margin-top: 14px;
+}
+.train-top {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.train h3 { margin-top: 0; }
+.pill {
+  display: inline-block;
+  background: #e4f5ec;
+  color: #17663a;
+  border-radius: 20px;
+  padding: 5px 10px;
+  font-size: 12px;
+}
+.hidden { display: none !important; }
+.notice {
+  background: #e8f2ff;
+  border-left: 4px solid var(--primary);
+  padding: 12px;
+  margin-bottom: 16px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+  background: white;
+}
+th, td {
+  padding: 11px;
+  border: 1px solid #dbe3ee;
+  text-align: left;
+  font-size: 14px;
+}
+th { background: #eaf0f8; }
+.table-wrap { overflow-x: auto; }
+footer {
+  text-align: center;
+  padding: 25px;
+  background: #e4eaf2;
+  margin-top: 35px;
+}
+@media(max-width:600px) {
+  header { align-items: flex-start; }
+  .hero { padding: 23px; }
+  .hero h2 { font-size: 24px; }
+  .card { padding: 16px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🚆 RailConnect</h1>
+  <nav>
+    <button onclick="showPage('home')">Home</button>
+    <button onclick="showPage('login')">Login</button>
+    <button onclick="showPage('register')">Register</button>
+    <button onclick="showPage('pnr')">Check PNR</button>
+    <button onclick="showPage('cancel')">Cancel Ticket</button>
+    <button onclick="showPage('bookings')">My Bookings</button>
+    <button onclick="showPage('admin')">Admin</button>
+    <button onclick="logout()">Logout</button>
+  </nav>
+</header>
+
+<main>
+  <section id="home">
+    <div class="hero">
+      <h2>Book Your Train Journey Easily</h2>
+      <p>Search trains, compare classes, reserve tickets, and check PNR status.</p>
+    </div>
+
+    <div class="card">
+      <h2>Search Trains</h2>
+      <form onsubmit="searchTrains(event)">
+        <div class="grid">
+          <div>
+            <label for="origin">From Station</label>
+            <input id="origin" placeholder="e.g. Chennai" required>
+          </div>
+          <div>
+            <label for="destination">To Station</label>
+            <input id="destination" placeholder="e.g. Bengaluru" required>
+          </div>
+          <div>
+            <label for="journeyDate">Journey Date</label>
+            <input id="journeyDate" type="date" required>
+          </div>
+          <div>
+            <label for="travelClass">Travel Class</label>
+            <select id="travelClass">
+              <option value="Sleeper">Sleeper (SL)</option>
+              <option value="AC 3 Tier">AC 3 Tier (3A)</option>
+              <option value="AC 2 Tier">AC 2 Tier (2A)</option>
+              <option value="AC First Class">AC First Class (1A)</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit">Search Trains</button>
+      </form>
+    </div>
+    <div id="searchResults"></div>
+  </section>
+
+  <section id="login" class="card hidden">
+    <h2>Passenger Login</h2>
+    <form onsubmit="loginUser(event)">
+      <label>Email</label>
+      <input id="loginEmail" type="email" required>
+      <label>Password</label>
+      <input id="loginPassword" type="password" required>
+      <button type="submit">Login</button>
+    </form>
+    <p class="muted">Demo admin: admin@railconnect.com / admin123</p>
+  </section>
+
+  <section id="register" class="card hidden">
+    <h2>Create Passenger Account</h2>
+    <form onsubmit="registerUser(event)">
+      <label>Full Name</label>
+      <input id="regName" required>
+      <label>Email</label>
+      <input id="regEmail" type="email" required>
+      <label>Phone Number</label>
+      <input id="regPhone" type="tel" required>
+      <label>Password</label>
+      <input id="regPassword" type="password" minlength="6" required>
+      <button type="submit">Register</button>
+    </form>
+  </section>
+
+  <section id="booking" class="card hidden">
+    <h2>Passenger and Ticket Details</h2>
+    <div id="selectedTrain"></div>
+    <form onsubmit="confirmBooking(event)">
+      <label>Passenger Name</label>
+      <input id="passengerName" required>
+      <label>Passenger Age</label>
+      <input id="passengerAge" type="number" min="1" max="120" required>
+      <label>Gender</label>
+      <select id="passengerGender" required>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
+      </select>
+      <label>Number of Tickets</label>
+      <select id="ticketCount" onchange="updateFare()">
+        <option value="1">1 passenger</option>
+        <option value="2">2 passengers</option>
+        <option value="3">3 passengers</option>
+        <option value="4">4 passengers</option>
+        <option value="5">5 passengers</option>
+        <option value="6">6 passengers</option>
+      </select>
+      <p id="fareSummary"></p>
+      <div class="notice">
+        Demo payment only. No real money is collected by this website.
+      </div>
+      <label>Payment Method</label>
+      <select id="paymentMethod">
+        <option value="UPI (Demo)">UPI (Demo)</option>
+        <option value="Card (Demo)">Card (Demo)</option>
+        <option value="Offline (Demo)">Offline (Demo)</option>
+      </select>
+      <button type="submit">Confirm Booking</button>
+      <button type="button" class="secondary" onclick="showPage('home')">Go Back</button>
+    </form>
+  </section>
+
+  <section id="ticket" class="card hidden">
+    <h2>Booking Confirmation</h2>
+    <div id="ticketDetails"></div>
+    <button onclick="window.print()">Print Ticket</button>
+    <button class="secondary" onclick="showPage('bookings')">My Bookings</button>
+  </section>
+
+  <section id="pnr" class="card hidden">
+    <h2>Check PNR Status</h2>
+    <label>Enter PNR Number</label>
+    <input id="pnrInput" placeholder="Enter your 10-digit demo PNR">
+    <button onclick="checkPNR()">Check Status</button>
+    <div id="pnrResult"></div>
+  </section>
+
+  <section id="cancel" class="card hidden">
+    <h2>Cancel Train Ticket</h2>
+    <label>Enter PNR Number</label>
+    <input id="cancelPNR" placeholder="Enter your PNR">
+    <button class="danger" onclick="cancelTicket()">Cancel Ticket</button>
+    <div id="cancelResult"></div>
+  </section>
+
+  <section id="bookings" class="card hidden">
+    <h2>My Booking History</h2>
+    <div id="bookingHistory"></div>
+  </section>
+
+  <section id="admin" class="card hidden">
+    <h2>Admin Panel</h2>
+    <p class="muted">Log in using the demo admin account to manage trains and reservations.</p>
+    <div id="adminContent"></div>
+  </section>
+</main>
+
+<footer>
+  <p>RailConnect Train Reservation System</p>
+  <p class="muted">College project demonstration. Not an official railway booking service.</p>
+</footer>
+
+<script>
+const ADMIN_EMAIL = "admin@railconnect.com";
+const ADMIN_PASSWORD = "admin123";
+
+const defaultTrains = [
+  { id: 101, name: "Chennai Express", number: "12601",
+    from: "Chennai", to: "Bengaluru", departure: "06:00",
+    arrival: "11:00", seats: 60, fares: {
+      "Sleeper": 350, "AC 3 Tier": 850,
+      "AC 2 Tier": 1250, "AC First Class": 2200
+    }},
+  { id: 102, name: "Southern Superfast", number: "12605",
+    from: "Chennai", to: "Hyderabad", departure: "08:30",
+    arrival: "17:00", seats: 45, fares: {
+      "Sleeper": 420, "AC 3 Tier": 950,
+      "AC 2 Tier": 1400, "AC First Class": 2400
+    }},
+  { id: 103, name: "Bengaluru Intercity", number: "16527",
+    from: "Bengaluru", to: "Mysuru", departure: "09:00",
+    arrival: "11:45", seats: 40, fares: {
+      "Sleeper": 180, "AC 3 Tier": 450,
+      "AC 2 Tier": 700, "AC First Class": 1100
+    }},
+  { id: 104, name: "Hyderabad Express", number: "12727",
+    from: "Hyderabad", to: "Vijayawada", departure: "07:15",
+    arrival: "12:00", seats: 50, fares: {
+      "Sleeper": 260, "AC 3 Tier": 650,
+      "AC 2 Tier": 950, "AC First Class": 1600
+    }}
+];
+
+function readStore(key, fallback) {
+  try {
+    const value = localStorage.getItem(key);
+    return value ? JSON.parse(value) : fallback;
+  } catch {
+    return fallback;
+  }
+}
+function saveStore(key, value) {
+  localStorage.setItem(key, JSON.stringify(value));
+}
+function getTrains() {
+  return readStore("rail_trains", defaultTrains);
+}
+function getUsers() {
+  return readStore("rail_users", []);
+}
+function getBookings() {
+  return readStore("rail_bookings", []);
+}
+function currentUser() {
+  return sessionStorage.getItem("rail_user");
+}
+function isAdmin() {
+  return currentUser() === ADMIN_EMAIL;
+}
+function money(amount) {
+  return "₹" + Number(amount).toLocaleString("en-IN");
+}
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, c => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;",
+    '"': "&quot;", "'": "&#39;"
+  }[c]));
+}
+
+function showPage(id) {
+  document.querySelectorAll("main > section").forEach(section =>
+    section.classList.add("hidden")
+  );
+  document.getElementById(id).classList.remove("hidden");
+
+  if (id === "bookings") renderBookings();
+  if (id === "admin") renderAdmin();
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function registerUser(event) {
+  event.preventDefault();
+
+  const name = document.getElementById("regName").value.trim();
+  const email = document.getElementById("regEmail").value.trim().toLowerCase();
+  const phone = document.getElementById("regPhone").value.trim();
+  const password = document.getElementById("regPassword").value;
+
+  const users = getUsers();
+  if (users.some(user => user.email === email)) {
+    alert("This email is already registered.");
+    return;
+  }
+
+  users.push({ name, email, phone, password });
+  saveStore("rail_users", users);
+  alert("Registration successful. Please log in.");
+  event.target.reset();
+  showPage("login");
+}
+
+function loginUser(event) {
+  event.preventDefault();
+
+  const email = document.getElementById("loginEmail").value.trim().toLowerCase();
+  const password = document.getElementById("loginPassword").value;
+
+  if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+    sessionStorage.setItem("rail_user", ADMIN_EMAIL);
+    alert("Admin login successful.");
+    showPage("admin");
+    return;
+  }
+
+  const user = getUsers().find(
+    item => item.email === email && item.password === password
+  );
+
+  if (!user) {
+    alert("Invalid email or password. Please register first.");
+    return;
+  }
+
+  sessionStorage.setItem("rail_user", user.email);
+  alert("Welcome, " + user.name + "!");
+  showPage("home");
+}
+
+function logout() {
+  sessionStorage.removeItem("rail_user");
+  alert("You have been logged out.");
+  showPage("home");
+}
+
+function searchTrains(event) {
+  event.preventDefault();
+
+  const from = document.getElementById("origin").value.trim().toLowerCase();
+  const to = document.getElementById("destination").value.trim().toLowerCase();
+  const date = document.getElementById("journeyDate").value;
+  const travelClass = document.getElementById("travelClass").value;
+
+  if (from === to) {
+    alert("Origin and destination must be different.");
+    return;
+  }
+
+  const trains = getTrains().filter(train =>
+    train.from.toLowerCase().includes(from) &&
+    train.to.toLowerCase().includes(to)
+  );
+
+  const results = document.getElementById("searchResults");
+
+  if (!trains.length) {
+    results.innerHTML = '<div class="card">No matching trains found. Try another route.</div>';
+    return;
+  }
+
+  results.innerHTML = '<div class="card"><h2>Available Trains</h2>' +
+    trains.map(train => {
+      const fare = train.fares[travelClass] || 0;
+      return `
+        <div class="train">
+          <div class="train-top">
+            <div>
+              <h3>${escapeHTML(train.name)} (${escapeHTML(train.number)})</h3>
+              <p>${escapeHTML(train.from)} → ${escapeHTML(train.to)}</p>
+              <p>${escapeHTML(train.departure)} – ${escapeHTML(train.arrival)}</p>
+              <p>Journey date: ${escapeHTML(date)}</p>
+              <p>Class: ${escapeHTML(travelClass)}</p>
+              <p>Available demo seats: ${Number(train.seats)}</p>
+            </div>
+            <div>
+              <h3>${money(fare)}</h3>
+              <span class="pill">Demo availability</span>
+              <p><button onclick="startBooking(${Number(train.id)}, '${escapeHTML(date)}', '${escapeHTML(travelClass)}')">Book Ticket</button></p>
+            </div>
+          </div>
+        </div>`;
+    }).join("") + "</div>";
+}
+
+let pendingBooking = null;
+
+function startBooking(trainId, date, travelClass) {
+  if (!currentUser() || isAdmin()) {
+    alert("Please log in with a passenger account to book a ticket.");
+    showPage("login");
+    return;
+  }
+
+  const train = getTrains().find(item => item.id === trainId);
+  if (!train) return;
+
+  pendingBooking = {
+    trainId,
+    date,
+    travelClass,
+    fare: Number(train.fares[travelClass] || 0)
+  };
+
+  document.getElementById("selectedTrain").innerHTML = `
+    <div class="notice">
+      <strong>${escapeHTML(train.name)}</strong> —
+      ${escapeHTML(train.from)} to ${escapeHTML(train.to)}<br>
+      Date: ${escapeHTML(date)} | Class: ${escapeHTML(travelClass)}
+    </div>`;
+
+  updateFare();
+  showPage("booking");
+}
+
+function updateFare() {
+  if (!pendingBooking) return;
+  const count = Number(document.getElementById("ticketCount").value);
+  document.getElementById("fareSummary").textContent =
+    "Total fare: " + money(pendingBooking.fare * count);
+}
+
+function confirmBooking(event) {
+  event.preventDefault();
+
+  if (!currentUser() || isAdmin() || !pendingBooking) {
+    alert("Please log in and select a train again.");
+    showPage("login");
+    return;
+  }
+
+  const passengerName = document.getElementById("passengerName").value.trim();
+  const passengerAge = Number(document.getElementById("passengerAge").value);
+  const passengerGender = document.getElementById("passengerGender").value;
+  const count = Number(document.getElementById("ticketCount").value);
+  const trains = getTrains();
+  const train = trains.find(item => item.id === pendingBooking.trainId);
+
+  if (!train || train.seats < count) {
+    alert("Not enough demo seats are available.");
+    return;
+  }
+
+  train.seats -= count;
+  saveStore("rail_trains", trains);
+
+  const pnr = String(Math.floor(1000000000 + Math.random() * 9000000000));
+  const booking = {
+    pnr,
+    email: currentUser(),
+    passengerName,
+    passengerAge,
+    passengerGender,
+    count,
+    trainId: train.id,
+    trainName: train.name,
+    trainNumber: train.number,
+    from: train.from,
+    to: train.to,
+    date: pendingBooking.date,
+    travelClass: pendingBooking.travelClass,
+    fare: pendingBooking.fare * count,
+    paymentMethod: document.getElementById("paymentMethod").value,
+    paymentStatus: "Demo payment recorded",
+    status: "Confirmed",
+    refund: 0,
+    createdAt: new Date().toLocaleString()
+  };
+
+  const bookings = getBookings();
+  bookings.push(booking);
+  saveStore("rail_bookings", bookings);
+
+  document.getElementById("ticketDetails").innerHTML = `
+    <div class="notice">
+      <h3>Booking Successful!</h3>
+      <p><strong>PNR:</strong> ${escapeHTML(pnr)}</p>
+      <p><strong>Passenger:</strong> ${escapeHTML(passengerName)}</p>
+      <p><strong>Age / Gender:</strong> ${passengerAge} / ${escapeHTML(passengerGender)}</p>
+      <p><strong>Train:</strong> ${escapeHTML(train.name)} (${escapeHTML(train.number)})</p>
+      <p><strong>Route:</strong> ${escapeHTML(train.from)} → ${escapeHTML(train.to)}</p>
+      <p><strong>Date:</strong> ${escapeHTML(booking.date)}</p>
+      <p><strong>Class:</strong> ${escapeHTML(booking.travelClass)}</p>
+      <p><strong>Tickets:</strong> ${count}</p>
+      <p><strong>Total fare:</strong> ${money(booking.fare)}</p>
+      <p><strong>Payment:</strong> ${escapeHTML(booking.paymentStatus)}</p>
+      <p><strong>Status:</strong> ${escapeHTML(booking.status)}</p>
+    </div>
+    <p class="muted">This is a demo ticket, not a valid railway travel document.</p>`;
+
+  pendingBooking = null;
+  event.target.reset();
+  showPage("ticket");
+}
+
+function checkPNR() {
+  const pnr = document.getElementById("pnrInput").value.trim();
+  const booking = getBookings().find(item => item.pnr === pnr);
+  const result = document.getElementById("pnrResult");
+
+  if (!booking) {
+    result.innerHTML = "<p>No booking found for this PNR.</p>";
+    return;
+  }
+
+  result.innerHTML = `
+    <div class="notice">
+      <h3>PNR Status: ${escapeHTML(booking.status)}</h3>
+      <p>PNR: ${escapeHTML(booking.pnr)}</p>
+      <p>Passenger: ${escapeHTML(booking.passengerName)}</p>
+      <p>Train: ${escapeHTML(booking.trainName)}</p>
+      <p>Route: ${escapeHTML(booking.from)} → ${escapeHTML(booking.to)}</p>
+      <p>Journey date: ${escapeHTML(booking.date)}</p>
+      <p>Class: ${escapeHTML(booking.travelClass)}</p>
+      <p>Fare: ${money(booking.fare)}</p>
+    </div>`;
+}
+
+function cancelTicket() {
+  const pnr = document.getElementById("cancelPNR").value.trim();
+  const bookings = getBookings();
+  const booking = bookings.find(item => item.pnr === pnr);
+  const result = document.getElementById("cancelResult");
+
+  if (!booking) {
+    result.innerHTML = "<p>PNR not found.</p>";
+    return;
+  }
+
+  if (!isAdmin() && booking.email !== currentUser()) {
+    result.innerHTML = "<p>Please log in as the passenger who made this booking.</p>";
+    return;
+  }
+
+  if (booking.status === "Cancelled") {
+    result.innerHTML = "<p>This ticket has already been cancelled.</p>";
+    return;
+  }
+
+  const confirmed = confirm(
+    "Cancel ticket " + pnr + "? A demo refund of 80% of the fare will be calculated."
+  );
+  if (!confirmed) return;
+
+  booking.status = "Cancelled";
+  booking.refund = Math.round(booking.fare * 0.8);
+  booking.refundStatus = "Pending admin processing";
+
+  const trains = getTrains();
+  const train = trains.find(item => item.id === booking.trainId);
+  if (train) {
+    train.seats += booking.count;
+    saveStore("rail_trains", trains);
+  }
+
+  saveStore("rail_bookings", bookings);
+
+  result.innerHTML = `
+    <div class="notice">
+      <h3>Ticket Cancelled</h3>
+      <p>PNR: ${escapeHTML(booking.pnr)}</p>
+      <p>Original fare: ${money(booking.fare)}</p>
+      <p>Demo refund (80%): ${money(booking.refund)}</p>
+      <p>Refund status: ${escapeHTML(booking.refundStatus)}</p>
+    </div>`;
+}
+
+function renderBookings() {
+  const user = currentUser();
+  const output = document.getElementById("bookingHistory");
+
+  if (!user || isAdmin()) {
+    output.innerHTML = "<p>Please log in with your passenger account to view bookings.</p>";
+    return;
+  }
+
+  const bookings = getBookings().filter(item => item.email === user);
+
+  if (!bookings.length) {
+    output.innerHTML = "<p>No bookings found.</p>";
+    return;
+  }
+
+  output.innerHTML = `<div class="table-wrap"><table>
+    <tr><th>PNR</th><th>Train</th><th>Route</th><th>Date</th><th>Fare</th><th>Status</th></tr>
+    ${bookings.map(item => `
+      <tr>
+        <td>${escapeHTML(item.pnr)}</td>
+        <td>${escapeHTML(item.trainName)}</td>
+        <td>${escapeHTML(item.from)} → ${escapeHTML(item.to)}</td>
+        <td>${escapeHTML(item.date)}</td>
+        <td>${money(item.fare)}</td>
+        <td>${escapeHTML(item.status)}</td>
+      </tr>`).join("")}
+    </table></div>`;
+}
+
+function renderAdmin() {
+  const output = document.getElementById("adminContent");
+
+  if (!isAdmin()) {
+    output.innerHTML = `
+      <div class="notice">Admin login is required.</div>
+      <p>Demo email: <strong>${ADMIN_EMAIL}</strong></p>
+      <p>Demo password: <strong>${ADMIN_PASSWORD}</strong></p>
+      <button onclick="showPage('login')">Go to Login</button>`;
+    return;
+  }
+
+  const trains = getTrains();
+  const bookings = getBookings();
+  const users = getUsers();
+
+  output.innerHTML = `
+    <h3>Add Train</h3>
+    <form onsubmit="addTrain(event)">
+      <div class="grid">
+        <div><label>Train Name</label><input id="newTrainName" required></div>
+        <div><label>Train Number</label><input id="newTrainNumber" required></div>
+        <div><label>Origin</label><input id="newTrainFrom" required></div>
+        <div><label>Destination</label><input id="newTrainTo" required></div>
+        <div><label>Departure</label><input id="newTrainDeparture" type="time" required></div>
+        <div><label>Arrival</label><input id="newTrainArrival" type="time" required></div>
+        <div><label>Available Demo Seats</label><input id="newTrainSeats" type="number" min="0" value="40" required></div>
+        <div><label>Sleeper Fare</label><input id="newFareSL" type="number" min="0" value="300" required></div>
+        <div><label>AC 3 Tier Fare</label><input id="newFare3A" type="number" min="0" value="800" required></div>
+        <div><label>AC 2 Tier Fare</label><input id="newFare2A" type="number" min="0" value="1200" required></div>
+        <div><label>AC First Class Fare</label><input id="newFare1A" type="number" min="0" value="2000" required></div>
+      </div>
+      <button type="submit">Add Train</button>
+    </form>
+
+    <h3>Train Management</h3>
+    <div class="table-wrap"><table>
+      <tr><th>Number</th><th>Name</th><th>Route</th><th>Seats</th><th>Action</th></tr>
+      ${trains.map(train => `
+        <tr>
+          <td>${escapeHTML(train.number)}</td>
+          <td>${escapeHTML(train.name)}</td>
+          <td>${escapeHTML(train.from)} → ${escapeHTML(train.to)}</td>
+          <td>${train.seats}</td>
+          <td><button class="danger" onclick="deleteTrain(${train.id})">Delete</button></td>
+        </tr>`).join("")}
+    </table></div>
+
+    <h3>Reservation and Payment Records</h3>
+    <p>Total registered passengers: ${users.length}</p>
+    <p>Total bookings: ${bookings.length}</p>
+    <p>Demo revenue from non-cancelled bookings: ${money(
+      bookings.filter(item => item.status !== "Cancelled")
+      .reduce((sum, item) => sum + item.fare, 0)
+    )}</p>
+    <div class="table-wrap"><table>
+      <tr><th>PNR</th><th>Passenger</th><th>Train</th><th>Fare</th><th>Payment</th><th>Status</th><th>Refund</th></tr>
+      ${bookings.map(item => `
+        <tr>
+          <td>${escapeHTML(item.pnr)}</td>
+          <td>${escapeHTML(item.passengerName)}</td>
+          <td>${escapeHTML(item.trainName)}</td>
+          <td>${money(item.fare)}</td>
+          <td>${escapeHTML(item.paymentMethod)}</td>
+          <td>${escapeHTML(item.status)}</td>
+          <td>${money(item.refund || 0)}
+            ${item.status === "Cancelled" && item.refundStatus !== "Refunded"
+              ? `<button onclick="markRefunded('${item.pnr}')">Mark Refunded</button>`
+              : ""}
+          </td>
+        </tr>`).join("")}
+    </table></div>
+
+    <button class="secondary" onclick="downloadCSV()">Download Booking Report (CSV)</button>`;
+}
+
+function addTrain(event) {
+  event.preventDefault();
+  if (!isAdmin()) return alert("Admin login required.");
+
+  const trains = getTrains();
+  const number = document.getElementById("newTrainNumber").value.trim();
+
+  if (trains.some(item => item.number === number)) {
+    alert("A train with this number already exists.");
+    return;
+  }
+
+  trains.push({
+    id: Date.now(),
+    name: document.getElementById("newTrainName").value.trim(),
+    number,
+    from: document.getElementById("newTrainFrom").value.trim(),
+    to: document.getElementById("newTrainTo").value.trim(),
+    departure: document.getElementById("newTrainDeparture").value,
+    arrival: document.getElementById("newTrainArrival").value,
+    seats: Number(document.getElementById("newTrainSeats").value),
+    fares: {
+      "Sleeper": Number(document.getElementById("newFareSL").value),
+      "AC 3 Tier": Number(document.getElementById("newFare3A").value),
+      "AC 2 Tier": Number(document.getElementById("newFare2A").value),
+      "AC First Class": Number(document.getElementById("newFare1A").value)
+    }
+  });
+
+  saveStore("rail_trains", trains);
+  alert("Train added successfully.");
+  renderAdmin();
+}
+
+function deleteTrain(id) {
+  if (!isAdmin()) return;
+  if (!confirm("Delete this train from the demo schedule?")) return;
+
+  saveStore("rail_trains", getTrains().filter(train => train.id !== id));
+  renderAdmin();
+}
+
+function markRefunded(pnr) {
+  if (!isAdmin()) return;
+
+  const bookings = getBookings();
+  const booking = bookings.find(item => item.pnr === pnr);
+  if (!booking || booking.status !== "Cancelled") return;
+
+  booking.refundStatus = "Refunded (Demo)";
+  saveStore("rail_bookings", bookings);
+  alert("Refund marked as processed in the demo.");
+  renderAdmin();
+}
+
+function downloadCSV() {
+  if (!isAdmin()) return alert("Admin login required.");
+
+  const bookings = getBookings();
+  const columns = [
+    "PNR", "Passenger", "Email", "Train", "From", "To",
+    "Date", "Class", "Fare", "Payment Method", "Status", "Refund"
+  ];
+
+  const rows = bookings.map(item => [
+    item.pnr, item.passengerName, item.email, item.trainName,
+    item.from, item.to, item.date, item.travelClass,
+    item.fare, item.paymentMethod, item.status, item.refund || 0
+  ]);
+
+  const csv = [columns, ...rows].map(row =>
+    row.map(value => '"' + String(value ?? "").replace(/"/g, '""') + '"').join(",")
+  ).join("\r\n");
+
+  const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8;" }));
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "train-booking-report.csv";
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+document.getElementById("journeyDate").min =
+  new Date().toISOString().slice(0, 10);
+
+if (!localStorage.getItem("rail_trains")) {
+  saveStore("rail_trains", defaultTrains);
+}
+
+showPage("home");
+</script>
+</body>
+</html>

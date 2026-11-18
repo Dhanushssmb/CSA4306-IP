@@ -1,0 +1,1312 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TechSavvy - Online Gadget Store</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6fa;
+    color: #222;
+    line-height: 1.5;
+}
+
+header {
+    background: #172554;
+    color: white;
+    padding: 16px 4%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+header h1 {
+    color: #38bdf8;
+}
+
+nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 13px;
+    margin: 3px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #1d4ed8;
+}
+
+nav button {
+    background: transparent;
+    border: 1px solid #64748b;
+}
+
+.danger {
+    background: #dc2626;
+}
+
+.secondary {
+    background: #64748b;
+}
+
+main {
+    max-width: 1250px;
+    margin: 25px auto;
+    padding: 0 15px;
+}
+
+.hero {
+    background: linear-gradient(120deg, #172554, #2563eb);
+    color: white;
+    padding: 45px 25px;
+    border-radius: 12px;
+    margin-bottom: 22px;
+}
+
+.hero h2 {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.hero button {
+    background: #38bdf8;
+    color: #172554;
+    font-weight: bold;
+}
+
+.card {
+    background: white;
+    padding: 22px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0 3px 12px #0000000d;
+}
+
+h2, h3 {
+    margin-bottom: 12px;
+}
+
+h2 {
+    color: #172554;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin: 10px 0 5px;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #cbd5e1;
+    border-radius: 5px;
+    font: inherit;
+    margin-bottom: 8px;
+}
+
+textarea {
+    min-height: 80px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+}
+
+.categories {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 12px;
+    margin: 15px 0;
+}
+
+.category {
+    background: #eff6ff;
+    border: 1px solid #dbeafe;
+    padding: 18px 10px;
+    border-radius: 9px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.category:hover {
+    background: #dbeafe;
+}
+
+.product {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    overflow: hidden;
+    padding-bottom: 12px;
+}
+
+.product-image {
+    height: 145px;
+    background: #eff6ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 65px;
+}
+
+.product-info {
+    padding: 14px;
+}
+
+.price {
+    font-size: 20px;
+    font-weight: bold;
+    color: #1d4ed8;
+    margin: 8px 0;
+}
+
+.muted {
+    color: #64748b;
+    font-size: 14px;
+}
+
+.badge {
+    display: inline-block;
+    background: #dcfce7;
+    color: #166534;
+    padding: 4px 9px;
+    border-radius: 15px;
+    font-size: 12px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.notice {
+    padding: 12px;
+    background: #eff6ff;
+    border-left: 4px solid #2563eb;
+    border-radius: 4px;
+    margin: 12px 0;
+}
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+}
+
+th, td {
+    border: 1px solid #dbe2ea;
+    padding: 9px;
+    text-align: left;
+    font-size: 14px;
+}
+
+th {
+    background: #eff6ff;
+}
+
+footer {
+    background: #172554;
+    color: white;
+    text-align: center;
+    padding: 22px;
+    margin-top: 30px;
+}
+
+@media(max-width: 600px) {
+    header {
+        padding: 14px;
+    }
+
+    header h1 {
+        font-size: 23px;
+    }
+
+    .hero {
+        padding: 28px 18px;
+    }
+
+    .hero h2 {
+        font-size: 25px;
+    }
+
+    .card {
+        padding: 15px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>⚡ TechSavvy</h1>
+    <nav>
+        <button onclick="showPage('home')">Home</button>
+        <button onclick="showPage('products')">Products</button>
+        <button onclick="showPage('register')">Register</button>
+        <button onclick="showPage('login')">Login</button>
+        <button onclick="showPage('cart')">Cart 🛒 (<span id="cartCount">0</span>)</button>
+        <button onclick="showPage('wishlist')">Wishlist ♥</button>
+        <button onclick="showPage('orders')">My Orders</button>
+        <button onclick="showPage('admin')">Admin</button>
+        <button onclick="logout()">Logout</button>
+    </nav>
+</header>
+
+<main>
+
+<!-- HOME -->
+<section id="home">
+    <div class="hero">
+        <h2>Welcome to TechSavvy</h2>
+        <p>Discover the latest smartphones, laptops, tablets, and electronic accessories.</p>
+        <p>Explore gadgets, compare prices, and shop from one convenient place.</p>
+        <br>
+        <button onclick="showPage('products')">Shop Now</button>
+    </div>
+
+    <div class="card">
+        <h2>Shop by Category</h2>
+        <p class="muted">Select a category to explore available products.</p>
+        <div id="homeCategories" class="categories"></div>
+    </div>
+
+    <div class="card">
+        <h2>Popular Products</h2>
+        <div id="popularProducts" class="grid"></div>
+    </div>
+</section>
+
+<!-- PRODUCTS -->
+<section id="products" class="card hidden">
+    <h2>Product Catalogue</h2>
+
+    <div class="grid">
+        <div>
+            <label>Search Products</label>
+            <input id="searchProduct" placeholder="Search phones, laptops..." oninput="renderProducts()">
+        </div>
+
+        <div>
+            <label>Category</label>
+            <select id="categoryFilter" onchange="renderProducts()">
+                <option value="">All Categories</option>
+            </select>
+        </div>
+
+        <div>
+            <label>Subcategory</label>
+            <select id="subcategoryFilter" onchange="renderProducts()">
+                <option value="">All Subcategories</option>
+            </select>
+        </div>
+
+        <div>
+            <label>Maximum Price (₹)</label>
+            <input type="number" id="maxPrice" placeholder="Example: 50000" oninput="renderProducts()">
+        </div>
+
+        <div>
+            <label>Availability</label>
+            <select id="availabilityFilter" onchange="renderProducts()">
+                <option value="">All Products</option>
+                <option value="available">In Stock</option>
+                <option value="unavailable">Out of Stock</option>
+            </select>
+        </div>
+    </div>
+
+    <button onclick="clearFilters()">Clear Filters</button>
+    <div id="productList" class="grid" style="margin-top:18px"></div>
+</section>
+
+<!-- REGISTER -->
+<section id="register" class="card hidden">
+    <h2>Create Customer Account</h2>
+
+    <form onsubmit="registerUser(event)">
+        <label>Full Name</label>
+        <input id="regName" required>
+
+        <label>Email Address</label>
+        <input type="email" id="regEmail" required>
+
+        <label>Phone Number</label>
+        <input type="tel" id="regPhone" required>
+
+        <label>Password</label>
+        <input type="password" id="regPassword" minlength="6" required>
+
+        <label>Delivery Address</label>
+        <textarea id="regAddress" required></textarea>
+
+        <button type="submit">Register</button>
+    </form>
+</section>
+
+<!-- LOGIN -->
+<section id="login" class="card hidden">
+    <h2>Customer / Admin Login</h2>
+
+    <form onsubmit="loginUser(event)">
+        <label>Email Address</label>
+        <input type="email" id="loginEmail" required>
+
+        <label>Password</label>
+        <input type="password" id="loginPassword" required>
+
+        <label>Account Type</label>
+        <select id="loginRole">
+            <option value="customer">Customer</option>
+            <option value="admin">Administrator</option>
+        </select>
+
+        <button type="submit">Login</button>
+    </form>
+
+    <div class="notice">
+        Demo admin credentials:<br>
+        Email: admin@techsavvy.com<br>
+        Password: admin123
+    </div>
+</section>
+
+<!-- CART -->
+<section id="cart" class="card hidden">
+    <h2>Shopping Cart</h2>
+    <div id="cartItems"></div>
+    <h3 id="cartTotal">Total: ₹0</h3>
+    <button onclick="showPage('products')">Continue Shopping</button>
+    <button onclick="showPage('checkout')">Proceed to Checkout</button>
+</section>
+
+<!-- CHECKOUT -->
+<section id="checkout" class="card hidden">
+    <h2>Checkout</h2>
+    <div id="checkoutSummary"></div>
+
+    <form onsubmit="placeOrder(event)">
+        <label>Customer Name</label>
+        <input id="checkoutName" required>
+
+        <label>Email</label>
+        <input type="email" id="checkoutEmail" required>
+
+        <label>Phone Number</label>
+        <input id="checkoutPhone" required>
+
+        <label>Delivery Address</label>
+        <textarea id="checkoutAddress" required></textarea>
+
+        <label>Payment Method</label>
+        <select id="paymentMethod">
+            <option>Cash on Delivery</option>
+            <option>Online Payment Demo</option>
+        </select>
+
+        <div class="notice">
+            This is a demo checkout. No real payment is processed.
+        </div>
+
+        <button type="submit">Place Order</button>
+    </form>
+</section>
+
+<!-- ORDERS -->
+<section id="orders" class="card hidden">
+    <h2>My Orders and Order History</h2>
+    <div id="myOrders"></div>
+</section>
+
+<!-- WISHLIST -->
+<section id="wishlist" class="card hidden">
+    <h2>My Wishlist</h2>
+    <div id="wishlistItems" class="grid"></div>
+</section>
+
+<!-- PRODUCT DETAILS -->
+<section id="details" class="card hidden">
+    <div id="productDetails"></div>
+</section>
+
+<!-- ADMIN -->
+<section id="admin" class="card hidden">
+    <h2>Administrator Dashboard</h2>
+    <div id="adminContent"></div>
+</section>
+
+<!-- ORDER CONFIRMATION -->
+<section id="confirmation" class="card hidden">
+    <h2>Order Confirmation</h2>
+    <div id="confirmationDetails"></div>
+    <button onclick="window.print()">Print Order</button>
+    <button onclick="showPage('orders')">View My Orders</button>
+</section>
+
+</main>
+
+<footer>
+    <p>TechSavvy Online Gadget Shopping System</p>
+    <p>College Project Demonstration</p>
+</footer>
+
+<script>
+const ADMIN_EMAIL = "admin@techsavvy.com";
+const ADMIN_PASSWORD = "admin123";
+
+const defaultProducts = [
+    {id:1,name:"Samsung Galaxy Smartphone",category:"Smartphones",subcategory:"Android Phones",price:24999,stock:15,icon:"📱",description:"Android smartphone with a high-quality display, modern camera and long-lasting battery.",popular:true},
+    {id:2,name:"iPhone",category:"Smartphones",subcategory:"Premium Phones",price:69999,stock:10,icon:"📱",description:"Premium smartphone with advanced photography and smooth performance.",popular:true},
+    {id:3,name:"HP Laptop",category:"Laptops",subcategory:"Student Laptops",price:45999,stock:8,icon:"💻",description:"Laptop suitable for students, office tasks, programming and everyday computing.",popular:true},
+    {id:4,name:"Gaming Laptop",category:"Laptops",subcategory:"Gaming Laptops",price:84999,stock:5,icon:"🎮",description:"High-performance laptop designed for gaming and demanding applications.",popular:true},
+    {id:5,name:"Android Tablet",category:"Tablets",subcategory:"Android Tablets",price:18999,stock:12,icon:"📟",description:"Portable tablet suitable for reading, streaming and online learning.",popular:false},
+    {id:6,name:"Wireless Headphones",category:"Accessories",subcategory:"Audio",price:2499,stock:25,icon:"🎧",description:"Wireless headphones for music, video calls and everyday entertainment.",popular:true},
+    {id:7,name:"Bluetooth Speaker",category:"Accessories",subcategory:"Audio",price:1999,stock:18,icon:"🔊",description:"Portable speaker with wireless connectivity.",popular:false},
+    {id:8,name:"Smart Watch",category:"Accessories",subcategory:"Wearables",price:3999,stock:20,icon:"⌚",description:"Smart watch with activity tracking and mobile notifications.",popular:false},
+    {id:9,name:"USB-C Charger",category:"Accessories",subcategory:"Chargers",price:999,stock:30,icon:"🔌",description:"Compact charger for compatible electronic devices.",popular:false},
+    {id:10,name:"Wireless Mouse",category:"Accessories",subcategory:"Computer Accessories",price:799,stock:22,icon:"🖱️",description:"Wireless mouse for laptops and desktop computers.",popular:false}
+];
+
+function getData(key, fallback) {
+    try {
+        const value = localStorage.getItem(key);
+        return value === null ? fallback : JSON.parse(value);
+    } catch {
+        return fallback;
+    }
+}
+
+function saveData(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
+}
+
+function products() { return getData("ts_products", defaultProducts); }
+function users() { return getData("ts_users", []); }
+function orders() { return getData("ts_orders", []); }
+function cart() { return getData("ts_cart", {}); }
+function wishlists() { return getData("ts_wishlists", {}); }
+function reviews() { return getData("ts_reviews", []); }
+
+function currentUser() {
+    return sessionStorage.getItem("ts_user");
+}
+
+function currentRole() {
+    return sessionStorage.getItem("ts_role");
+}
+
+function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, c => ({
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#39;"
+    }[c]));
+}
+
+function formatPrice(price) {
+    return "₹" + Number(price).toLocaleString("en-IN");
+}
+
+function showPage(id) {
+    const protectedPages = ["cart","checkout","orders","wishlist"];
+
+    if (protectedPages.includes(id) &&
+        (!currentUser() || currentRole() !== "customer")) {
+        alert("Please log in as a customer first.");
+        id = "login";
+    }
+
+    document.querySelectorAll("main > section").forEach(section =>
+        section.classList.add("hidden")
+    );
+
+    document.getElementById(id).classList.remove("hidden");
+
+    if (id === "home") renderHome();
+    if (id === "products") renderProducts();
+    if (id === "cart") renderCart();
+    if (id === "checkout") prepareCheckout();
+    if (id === "orders") renderOrders();
+    if (id === "wishlist") renderWishlist();
+    if (id === "admin") renderAdmin();
+
+    updateCartCount();
+    window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function categories() {
+    return [...new Set(products().map(p => p.category))];
+}
+
+function renderHome() {
+    const icons = {
+        "Smartphones":"📱",
+        "Laptops":"💻",
+        "Tablets":"📟",
+        "Accessories":"🎧"
+    };
+
+    document.getElementById("homeCategories").innerHTML =
+        categories().map(category => `
+            <div class="category" onclick="selectCategory('${category}')">
+                <div style="font-size:30px">${icons[category] || "🛍️"}</div>
+                <strong>${escapeHTML(category)}</strong>
+            </div>
+        `).join("");
+
+    document.getElementById("popularProducts").innerHTML =
+        products().filter(p => p.popular).map(productCard).join("") ||
+        "<p>No popular products available.</p>";
+
+    populateFilters();
+}
+
+function populateFilters() {
+    const categoryFilter = document.getElementById("categoryFilter");
+    const selectedCategory = categoryFilter.value;
+
+    categoryFilter.innerHTML = '<option value="">All Categories</option>' +
+        categories().map(c => `<option>${escapeHTML(c)}</option>`).join("");
+
+    if (categories().includes(selectedCategory)) {
+        categoryFilter.value = selectedCategory;
+    }
+
+    updateSubcategoryFilter();
+}
+
+function updateSubcategoryFilter() {
+    const category = document.getElementById("categoryFilter").value;
+    const subcategoryFilter = document.getElementById("subcategoryFilter");
+    const selected = subcategoryFilter.value;
+
+    const subs = [...new Set(products()
+        .filter(p => !category || p.category === category)
+        .map(p => p.subcategory))];
+
+    subcategoryFilter.innerHTML = '<option value="">All Subcategories</option>' +
+        subs.map(s => `<option>${escapeHTML(s)}</option>`).join("");
+
+    if (subs.includes(selected)) subcategoryFilter.value = selected;
+}
+
+function selectCategory(category) {
+    showPage("products");
+    document.getElementById("categoryFilter").value = category;
+    updateSubcategoryFilter();
+    renderProducts();
+}
+
+function productCard(p) {
+    return `
+        <div class="product">
+            <div class="product-image">${escapeHTML(p.icon || "📦")}</div>
+            <div class="product-info">
+                <span class="badge">${escapeHTML(p.category)}</span>
+                <h3 style="margin-top:8px">${escapeHTML(p.name)}</h3>
+                <p class="muted">${escapeHTML(p.subcategory)}</p>
+                <p class="price">${formatPrice(p.price)}</p>
+                <p>${p.stock > 0 ? "In stock: " + p.stock : "Out of stock"}</p>
+                <button onclick="viewDetails(${p.id})">Details</button>
+                <button onclick="addToCart(${p.id})" ${p.stock <= 0 ? "disabled" : ""}>Add to Cart</button>
+                <button onclick="addToWishlist(${p.id})">♥ Wishlist</button>
+            </div>
+        </div>`;
+}
+
+function renderProducts() {
+    populateFilters();
+
+    const query = document.getElementById("searchProduct").value.trim().toLowerCase();
+    const category = document.getElementById("categoryFilter").value;
+    const subcategory = document.getElementById("subcategoryFilter").value;
+    const maxPriceValue = document.getElementById("maxPrice").value;
+    const maxPrice = maxPriceValue === "" ? Infinity : Number(maxPriceValue);
+    const availability = document.getElementById("availabilityFilter").value;
+
+    const list = products().filter(p => {
+        const matchesText = (p.name + " " + p.description + " " +
+            p.category + " " + p.subcategory).toLowerCase().includes(query);
+
+        const matchesCategory = !category || p.category === category;
+        const matchesSubcategory = !subcategory || p.subcategory === subcategory;
+        const matchesPrice = p.price <= maxPrice;
+        const matchesStock = availability === "" ||
+            (availability === "available" && p.stock > 0) ||
+            (availability === "unavailable" && p.stock <= 0);
+
+        return matchesText && matchesCategory && matchesSubcategory &&
+            matchesPrice && matchesStock;
+    });
+
+    document.getElementById("productList").innerHTML =
+        list.map(productCard).join("") || "<p>No products match your search.</p>";
+}
+
+function clearFilters() {
+    document.getElementById("searchProduct").value = "";
+    document.getElementById("categoryFilter").value = "";
+    document.getElementById("subcategoryFilter").value = "";
+    document.getElementById("maxPrice").value = "";
+    document.getElementById("availabilityFilter").value = "";
+    renderProducts();
+}
+
+function viewDetails(id) {
+    const p = products().find(x => x.id === id);
+    if (!p) return;
+
+    const productReviews = reviews().filter(r => r.productId === id);
+
+    document.getElementById("productDetails").innerHTML = `
+        <div style="font-size:70px">${escapeHTML(p.icon || "📦")}</div>
+        <h2>${escapeHTML(p.name)}</h2>
+        <p>Category: ${escapeHTML(p.category)}</p>
+        <p>Subcategory: ${escapeHTML(p.subcategory)}</p>
+        <p class="price">${formatPrice(p.price)}</p>
+        <p>${escapeHTML(p.description)}</p>
+        <p>Availability: ${p.stock > 0 ? "In Stock (" + p.stock + ")" : "Out of Stock"}</p>
+        <button onclick="addToCart(${p.id})" ${p.stock <= 0 ? "disabled" : ""}>Add to Cart</button>
+        <button onclick="addToWishlist(${p.id})">Add to Wishlist</button>
+
+        <hr style="margin:20px 0">
+
+        <h3>Customer Reviews</h3>
+        ${productReviews.map(r => `
+            <div class="notice">
+                <p>${"⭐".repeat(r.rating)}</p>
+                <p>${escapeHTML(r.comment)}</p>
+                <small>${escapeHTML(r.email)}</small>
+            </div>
+        `).join("") || "<p>No reviews yet.</p>"}
+
+        <h3>Write a Review</h3>
+        <form onsubmit="submitReview(event,${p.id})">
+            <label>Rating</label>
+            <select id="reviewRating">
+                <option value="5">5 - Excellent</option>
+                <option value="4">4 - Very Good</option>
+                <option value="3">3 - Good</option>
+                <option value="2">2 - Fair</option>
+                <option value="1">1 - Poor</option>
+            </select>
+            <label>Your Review</label>
+            <textarea id="reviewComment" required></textarea>
+            <button type="submit">Submit Review</button>
+        </form>
+        <button class="secondary" onclick="showPage('products')">Back to Products</button>
+    `;
+
+    showPage("details");
+}
+
+function registerUser(event) {
+    event.preventDefault();
+
+    const email = document.getElementById("regEmail").value.trim().toLowerCase();
+
+    if (email === ADMIN_EMAIL || users().some(u => u.email === email)) {
+        alert("This email is already registered.");
+        return;
+    }
+
+    const list = users();
+    list.push({
+        name: document.getElementById("regName").value.trim(),
+        email,
+        phone: document.getElementById("regPhone").value.trim(),
+        password: document.getElementById("regPassword").value,
+        address: document.getElementById("regAddress").value.trim()
+    });
+
+    saveData("ts_users", list);
+    event.target.reset();
+    alert("Registration successful. Please log in.");
+    showPage("login");
+}
+
+function loginUser(event) {
+    event.preventDefault();
+
+    const email = document.getElementById("loginEmail").value.trim().toLowerCase();
+    const password = document.getElementById("loginPassword").value;
+    const role = document.getElementById("loginRole").value;
+
+    if (role === "admin" && email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+        sessionStorage.setItem("ts_user", email);
+        sessionStorage.setItem("ts_role", "admin");
+        alert("Admin login successful.");
+        showPage("admin");
+        return;
+    }
+
+    if (role === "customer") {
+        const user = users().find(u => u.email === email && u.password === password);
+
+        if (user) {
+            sessionStorage.setItem("ts_user", email);
+            sessionStorage.setItem("ts_role", "customer");
+            alert("Welcome, " + user.name);
+            showPage("home");
+            return;
+        }
+    }
+
+    alert("Invalid login details.");
+}
+
+function logout() {
+    sessionStorage.removeItem("ts_user");
+    sessionStorage.removeItem("ts_role");
+    alert("You have logged out.");
+    showPage("home");
+}
+
+function addToCart(id) {
+    if (currentRole() !== "customer") {
+        alert("Please log in as a customer to add products to your cart.");
+        showPage("login");
+        return;
+    }
+
+    const p = products().find(x => x.id === id);
+    if (!p || p.stock <= 0) {
+        alert("This product is currently unavailable.");
+        return;
+    }
+
+    const allCarts = cart();
+    const email = currentUser();
+    const userCart = allCarts[email] || {};
+    const quantity = Number(userCart[id] || 0);
+
+    if (quantity >= p.stock) {
+        alert("You cannot add more than the available stock.");
+        return;
+    }
+
+    userCart[id] = quantity + 1;
+    allCarts[email] = userCart;
+    saveData("ts_cart", allCarts);
+
+    updateCartCount();
+    alert("Product added to your cart.");
+}
+
+function updateCartCount() {
+    const userCart = cart()[currentUser()] || {};
+    const count = Object.values(userCart).reduce((sum, quantity) => sum + quantity, 0);
+    document.getElementById("cartCount").textContent = count;
+}
+
+function renderCart() {
+    const userCart = cart()[currentUser()] || {};
+    const allProducts = products();
+    let total = 0;
+
+    const html = Object.entries(userCart).map(([id, quantity]) => {
+        const p = allProducts.find(x => x.id === Number(id));
+        if (!p) return "";
+
+        total += p.price * quantity;
+
+        return `
+            <div class="notice">
+                <h3>${escapeHTML(p.name)}</h3>
+                <p>Price: ${formatPrice(p.price)}</p>
+                <p>Quantity: ${quantity}</p>
+                <p>Subtotal: ${formatPrice(p.price * quantity)}</p>
+                <button onclick="changeQuantity(${p.id},-1)">−</button>
+                <button onclick="changeQuantity(${p.id},1)">+</button>
+                <button class="danger" onclick="removeFromCart(${p.id})">Remove</button>
+            </div>`;
+    }).join("");
+
+    document.getElementById("cartItems").innerHTML = html || "<p>Your cart is empty.</p>";
+    document.getElementById("cartTotal").textContent = "Total: " + formatPrice(total);
+}
+
+function changeQuantity(id, change) {
+    const allCarts = cart();
+    const email = currentUser();
+    const userCart = allCarts[email] || {};
+    const p = products().find(x => x.id === id);
+    if (!p) return;
+
+    const quantity = Number(userCart[id] || 0) + change;
+
+    if (quantity <= 0) {
+        delete userCart[id];
+    } else if (quantity <= p.stock) {
+        userCart[id] = quantity;
+    } else {
+        alert("Available stock is only " + p.stock);
+        return;
+    }
+
+    allCarts[email] = userCart;
+    saveData("ts_cart", allCarts);
+    renderCart();
+    updateCartCount();
+}
+
+function removeFromCart(id) {
+    const allCarts = cart();
+    const email = currentUser();
+    const userCart = allCarts[email] || {};
+
+    delete userCart[id];
+    allCarts[email] = userCart;
+    saveData("ts_cart", allCarts);
+
+    renderCart();
+    updateCartCount();
+}
+
+function prepareCheckout() {
+    const user = users().find(u => u.email === currentUser());
+    const userCart = cart()[currentUser()] || {};
+
+    if (!Object.keys(userCart).length) {
+        alert("Your shopping cart is empty.");
+        showPage("products");
+        return;
+    }
+
+    document.getElementById("checkoutName").value = user?.name || "";
+    document.getElementById("checkoutEmail").value = user?.email || "";
+    document.getElementById("checkoutPhone").value = user?.phone || "";
+    document.getElementById("checkoutAddress").value = user?.address || "";
+
+    let total = 0;
+    const summary = Object.entries(userCart).map(([id, quantity]) => {
+        const p = products().find(x => x.id === Number(id));
+        if (!p) return "";
+        total += p.price * quantity;
+        return `<p>${escapeHTML(p.name)} × ${quantity} = ${formatPrice(p.price * quantity)}</p>`;
+    }).join("");
+
+    document.getElementById("checkoutSummary").innerHTML =
+        summary + `<h3>Order Total: ${formatPrice(total)}</h3>`;
+}
+
+function placeOrder(event) {
+    event.preventDefault();
+
+    if (currentRole() !== "customer") {
+        alert("Please log in first.");
+        showPage("login");
+        return;
+    }
+
+    const email = currentUser();
+    const allCarts = cart();
+    const userCart = allCarts[email] || {};
+    const allProducts = products();
+
+    if (!Object.keys(userCart).length) {
+        alert("Your cart is empty.");
+        showPage("products");
+        return;
+    }
+
+    const items = [];
+    let total = 0;
+
+    for (const [id, quantity] of Object.entries(userCart)) {
+        const p = allProducts.find(x => x.id === Number(id));
+
+        if (!p || quantity <= 0 || p.stock < quantity) {
+            alert("Some items are no longer available in the requested quantity. Please review your cart.");
+            showPage("cart");
+            return;
+        }
+
+        items.push({
+            productId: p.id,
+            name: p.name,
+            price: p.price,
+            quantity
+        });
+
+        total += p.price * quantity;
+    }
+
+    // Reduce stock for this browser's demo data.
+    items.forEach(item => {
+        const p = allProducts.find(x => x.id === item.productId);
+        p.stock -= item.quantity;
+    });
+    saveData("ts_products", allProducts);
+
+    const order = {
+        id: "TS" + Date.now().toString().slice(-9),
+        email,
+        customerName: document.getElementById("checkoutName").value.trim(),
+        phone: document.getElementById("checkoutPhone").value.trim(),
+        address: document.getElementById("checkoutAddress").value.trim(),
+        items,
+        total,
+        payment: document.getElementById("paymentMethod").value,
+        status: "Processing",
+        date: new Date().toLocaleString()
+    };
+
+    const list = orders();
+    list.push(order);
+    saveData("ts_orders", list);
+
+    delete allCarts[email];
+    saveData("ts_cart", allCarts);
+    updateCartCount();
+
+    document.getElementById("confirmationDetails").innerHTML = `
+        <div class="notice">
+            <h3>Thank you for shopping with TechSavvy!</h3>
+            <p>Order ID: <strong>${escapeHTML(order.id)}</strong></p>
+            <p>Customer: ${escapeHTML(order.customerName)}</p>
+            <p>Order Total: ${formatPrice(order.total)}</p>
+            <p>Payment Method: ${escapeHTML(order.payment)}</p>
+            <p>Order Status: ${escapeHTML(order.status)}</p>
+            <p>Order Date: ${escapeHTML(order.date)}</p>
+        </div>
+        <p>Demo only: no real payment, email, or SMS was processed.</p>`;
+
+    event.target.reset();
+    showPage("confirmation");
+}
+
+function renderOrders() {
+    const list = orders().filter(o => o.email === currentUser()).reverse();
+
+    document.getElementById("myOrders").innerHTML = list.map(o => `
+        <div class="card">
+            <h3>Order ID: ${escapeHTML(o.id)}</h3>
+            <p>Date: ${escapeHTML(o.date)}</p>
+            <p>Total: ${formatPrice(o.total)}</p>
+            <p>Status: <span class="badge">${escapeHTML(o.status)}</span></p>
+            <p>Payment: ${escapeHTML(o.payment)}</p>
+            <h3>Products</h3>
+            ${o.items.map(item => `
+                <p>${escapeHTML(item.name)} × ${item.quantity} — ${formatPrice(item.price * item.quantity)}</p>
+            `).join("")}
+            <p>Delivery Address: ${escapeHTML(o.address)}</p>
+            <button onclick="printOrder('${o.id}')">View / Print Order</button>
+        </div>
+    `).join("") || "<p>You have not placed any orders yet.</p>";
+}
+
+function printOrder(id) {
+    const o = orders().find(x => x.id === id && x.email === currentUser());
+    if (!o) return;
+
+    document.getElementById("confirmationDetails").innerHTML = `
+        <h2>TechSavvy Order Details</h2>
+        <p>Order ID: ${escapeHTML(o.id)}</p>
+        <p>Customer: ${escapeHTML(o.customerName)}</p>
+        <p>Email: ${escapeHTML(o.email)}</p>
+        <p>Phone: ${escapeHTML(o.phone)}</p>
+        <p>Date: ${escapeHTML(o.date)}</p>
+        ${o.items.map(item => `<p>${escapeHTML(item.name)} × ${item.quantity}</p>`).join("")}
+        <h3>Total: ${formatPrice(o.total)}</h3>
+        <p>Status: ${escapeHTML(o.status)}</p>
+        <p>Address: ${escapeHTML(o.address)}</p>`;
+    showPage("confirmation");
+}
+
+function addToWishlist(id) {
+    if (currentRole() !== "customer") {
+        alert("Please log in as a customer first.");
+        showPage("login");
+        return;
+    }
+
+    const all = wishlists();
+    const email = currentUser();
+    all[email] = all[email] || [];
+
+    if (!all[email].includes(id)) all[email].push(id);
+
+    saveData("ts_wishlists", all);
+    alert("Product added to your wishlist.");
+}
+
+function renderWishlist() {
+    const ids = wishlists()[currentUser()] || [];
+    const list = products().filter(p => ids.includes(p.id));
+
+    document.getElementById("wishlistItems").innerHTML =
+        list.map(productCard).join("") || "<p>Your wishlist is empty.</p>";
+}
+
+function submitReview(event, productId) {
+    event.preventDefault();
+
+    if (currentRole() !== "customer") {
+        alert("Please log in as a customer to write a review.");
+        showPage("login");
+        return;
+    }
+
+    const list = reviews();
+    list.push({
+        productId,
+        email: currentUser(),
+        rating: Number(document.getElementById("reviewRating").value),
+        comment: document.getElementById("reviewComment").value.trim(),
+        date: new Date().toLocaleDateString()
+    });
+
+    saveData("ts_reviews", list);
+    alert("Review submitted.");
+    viewDetails(productId);
+}
+
+function renderAdmin() {
+    const output = document.getElementById("adminContent");
+
+    if (currentRole() !== "admin") {
+        output.innerHTML = `
+            <p>Administrator login is required.</p>
+            <button onclick="showPage('login')">Admin Login</button>`;
+        return;
+    }
+
+    const list = orders();
+
+    output.innerHTML = `
+        <div class="grid">
+            <div class="notice"><strong>Products</strong><h2>${products().length}</h2></div>
+            <div class="notice"><strong>Customers</strong><h2>${users().length}</h2></div>
+            <div class="notice"><strong>Orders</strong><h2>${list.length}</h2></div>
+            <div class="notice"><strong>Sales Total</strong><h2>${formatPrice(list.reduce((sum,o) => sum + o.total,0))}</h2></div>
+        </div>
+
+        <h3>Add New Product</h3>
+        <form onsubmit="addProduct(event)">
+            <label>Product Name</label><input id="newName" required>
+            <label>Category</label>
+            <select id="newCategory">
+                <option>Smartphones</option><option>Laptops</option>
+                <option>Tablets</option><option>Accessories</option>
+            </select>
+            <label>Subcategory</label><input id="newSubcategory" required>
+            <label>Price (₹)</label><input type="number" id="newPrice" min="1" required>
+            <label>Stock Quantity</label><input type="number" id="newStock" min="0" required>
+            <label>Product Icon / Emoji</label><input id="newIcon" value="📦">
+            <label>Description</label><textarea id="newDescription" required></textarea>
+            <button type="submit">Add Product</button>
+        </form>
+
+        <h3>Manage Products</h3>
+        <div class="table-wrap">
+        <table>
+            <tr><th>ID</th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Actions</th></tr>
+            ${products().map(p => `
+                <tr>
+                    <td>${p.id}</td>
+                    <td>${escapeHTML(p.name)}</td>
+                    <td>${escapeHTML(p.category)}</td>
+                    <td>${formatPrice(p.price)}</td>
+                    <td>${p.stock}</td>
+                    <td>
+                        <button onclick="editProduct(${p.id})">Edit</button>
+                        <button class="danger" onclick="deleteProduct(${p.id})">Delete</button>
+                    </td>
+                </tr>
+            `).join("")}
+        </table>
+        </div>
+
+        <h3>Customer and Order Information</h3>
+        <div class="table-wrap">
+        <table>
+            <tr><th>Order ID</th><th>Customer</th><th>Email</th><th>Phone</th><th>Total</th><th>Status</th><th>Update</th></tr>
+            ${list.map(o => `
+                <tr>
+                    <td>${escapeHTML(o.id)}</td>
+                    <td>${escapeHTML(o.customerName)}</td>
+                    <td>${escapeHTML(o.email)}</td>
+                    <td>${escapeHTML(o.phone)}</td>
+                    <td>${formatPrice(o.total)}</td>
+                    <td>${escapeHTML(o.status)}</td>
+                    <td>
+                        <select id="status_${o.id}">
+                            ${["Processing","Shipped","Delivered","Cancelled"].map(s =>
+                                `<option ${o.status===s?"selected":""}>${s}</option>`
+                            ).join("")}
+                        </select>
+                        <button onclick="updateOrderStatus('${o.id}')">Save</button>
+                    </td>
+                </tr>
+            `).join("")}
+        </table>
+        </div>
+
+        <h3>Registered Customers</h3>
+        <div class="table-wrap">
+        <table>
+            <tr><th>Name</th><th>Email</th><th>Phone</th><th>Address</th></tr>
+            ${users().map(u => `
+                <tr>
+                    <td>${escapeHTML(u.name)}</td>
+                    <td>${escapeHTML(u.email)}</td>
+                    <td>${escapeHTML(u.phone)}</td>
+                    <td>${escapeHTML(u.address)}</td>
+                </tr>
+            `).join("")}
+        </table>
+        </div>
+
+        <button onclick="downloadReport()">Download Orders CSV</button>`;
+}
+
+function addProduct(event) {
+    event.preventDefault();
+    if (currentRole() !== "admin") return;
+
+    const list = products();
+    const nextId = Math.max(0, ...list.map(p => p.id)) + 1;
+
+    list.push({
+        id: nextId,
+        name: document.getElementById("newName").value.trim(),
+        category: document.getElementById("newCategory").value,
+        subcategory: document.getElementById("newSubcategory").value.trim(),
+        price: Number(document.getElementById("newPrice").value),
+        stock: Number(document.getElementById("newStock").value),
+        icon: document.getElementById("newIcon").value.trim() || "📦",
+        description: document.getElementById("newDescription").value.trim(),
+        popular: false
+    });
+
+    saveData("ts_products", list);
+    alert("Product added successfully.");
+    renderAdmin();
+}
+
+function editProduct(id) {
+    if (currentRole() !== "admin") return;
+
+    const list = products();
+    const p = list.find(x => x.id === id);
+    if (!p) return;
+
+    const name = prompt("Product name:", p.name);
+    if (name === null) return;
+
+    const price = prompt("Product price:", p.price);
+    if (price === null) return;
+
+    const stock = prompt("Available stock:", p.stock);
+    if (stock === null) return;
+
+    const description = prompt("Product description:", p.description);
+    if (description === null) return;
+
+    const newPrice = Number(price);
+    const newStock = Number(stock);
+
+    if (!name.trim() || !Number.isFinite(newPrice) || newPrice <= 0 ||
+        !Number.isInteger(newStock) || newStock < 0) {
+        alert("Please enter a valid name, positive price and non-negative whole-number stock.");
+        return;
+    }
+
+    p.name = name.trim();
+    p.price = newPrice;
+    p.stock = newStock;
+    p.description = description.trim();
+
+    saveData("ts_products", list);
+    alert("Product updated successfully.");
+    renderAdmin();
+}
+
+function deleteProduct(id) {
+    if (currentRole() !== "admin") return;
+    if (!confirm("Are you sure you want to delete this product?")) return;
+
+    saveData("ts_products", products().filter(p => p.id !== id));
+    alert("Product deleted.");
+    renderAdmin();
+}
+
+function updateOrderStatus(id) {
+    if (currentRole() !== "admin") return;
+
+    const list = orders();
+    const order = list.find(o => o.id === id);
+    const select = document.getElementById("status_" + id);
+
+    if (!order || !select) return;
+
+    order.status = select.value;
+    saveData("ts_orders", list);
+    alert("Order status updated.");
+    renderAdmin();
+}
+
+function downloadReport() {
+    if (currentRole() !== "admin") {
+        alert("Admin login required.");
+        return;
+    }
+
+    const rows = [
+        ["Order ID","Customer","Email","Phone","Address","Total","Payment","Status","Date"],
+        ...orders().map(o => [
+            o.id,o.customerName,o.email,o.phone,o.address,o.total,o.payment,o.status,o.date
+        ])
+    ];
+
+    const csv = rows.map(row => row.map(v =>
+        '"' + String(v ?? "").replace(/"/g,'""') + '"'
+    ).join(",")).join("\r\n");
+
+    const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "techsavvy-orders.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+// Initialize demo product data on first use.
+if (!localStorage.getItem("ts_products")) {
+    saveData("ts_products", defaultProducts);
+}
+
+showPage("home");
+</script>
+
+</body>
+</html>

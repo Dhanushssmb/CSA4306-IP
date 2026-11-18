@@ -1,0 +1,442 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VetCure - Veterinary Care</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f3f8f5;color:#26352d}
+header{background:#176b45;color:white;padding:20px;text-align:center}
+nav{display:flex;justify-content:center;flex-wrap:wrap;background:#104b30}
+nav button{border:0;background:transparent;color:white;padding:14px;cursor:pointer}
+nav button:hover{background:#27865b}
+.container{max-width:1100px;width:94%;margin:24px auto}
+.page{display:none}.page.active{display:block}
+.card{background:white;padding:20px;border-radius:12px;margin-bottom:18px;box-shadow:0 3px 12px #00000010}
+h2,h3{color:#176b45}
+input,select,textarea{width:100%;padding:11px;margin:7px 0 14px;border:1px solid #cbd5d1;border-radius:6px;font:inherit}
+.action{background:#197348;color:white;padding:11px 16px;border:0;border-radius:6px;cursor:pointer;margin:4px 2px}
+.action:hover{background:#104b30}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.notice{padding:12px;background:#fff3d4;border-radius:7px;line-height:1.5}
+.item{padding:14px;border:1px solid #dce7df;border-radius:8px;margin:10px 0}
+.tag{background:#e1f5e7;color:#176b45;border-radius:20px;padding:5px 9px;font-size:12px}
+table{width:100%;border-collapse:collapse}
+th,td{border:1px solid #ddd;padding:10px;text-align:left}
+th{background:#e6f1e9}
+.hidden{display:none!important}
+footer{text-align:center;background:#104b30;color:white;padding:18px}
+@media(max-width:600px){nav button{padding:11px 8px}th,td{font-size:12px;padding:6px}}
+</style>
+</head>
+<body>
+
+<header>
+<h1>🐾 VetCure</h1>
+<p>Online Veterinary Consultation & Animal Healthcare</p>
+</header>
+
+<nav>
+<button onclick="showPage('home')">Home</button>
+<button onclick="showPage('auth')">Register / Login</button>
+<button onclick="showPage('user')">Farmer Dashboard</button>
+<button onclick="showPage('doctor')">Doctor Dashboard</button>
+<button onclick="showPage('news')">News</button>
+<button onclick="showPage('reports')">Disease Reports</button>
+</nav>
+
+<main class="container">
+<p class="notice"><b>Educational demo:</b> This website stores data only in browser memory. OTP, subscriptions, and payments are simulated. It is not connected to real doctors or a database. For serious animal illness, contact a qualified veterinarian.</p>
+
+<!-- HOME -->
+<section id="home" class="page active">
+<div class="card">
+<h2>Welcome to VetCure</h2>
+<p>Connect farmers with veterinary doctors to discuss animal health concerns through text and media attachments.</p>
+<button class="action" onclick="showPage('auth')">Get Started</button>
+<button class="action" onclick="showPage('user')">Farmer Dashboard</button>
+</div>
+<div class="grid">
+<div class="card"><h3>🐄 Animal Care</h3><p>Share animal symptoms with a veterinary doctor.</p></div>
+<div class="card"><h3>👨‍⚕️ Online Consultation</h3><p>Doctors can review complaints and provide responses.</p></div>
+<div class="card"><h3>📊 Disease Reports</h3><p>Explore sample animal disease information.</p></div>
+</div>
+</section>
+
+<!-- REGISTER / LOGIN -->
+<section id="auth" class="page">
+<div class="grid">
+<div class="card">
+<h2>Register</h2>
+<label>Full Name</label><input id="regName" placeholder="Enter your name">
+<label>Email or Mobile</label><input id="regContact" placeholder="Email or mobile">
+<label>Password</label><input id="regPassword" type="password" placeholder="Create password">
+<label>Account Type</label>
+<select id="regRole"><option value="Farmer">Farmer</option><option value="Doctor">Doctor</option></select>
+<label>Clinic Type (Doctors)</label>
+<select id="clinicType"><option>Government CVH</option><option>Private Clinic</option></select>
+<label>Consultation Fee (₹)</label><input id="doctorFee" type="number" min="0" value="300">
+<label>Bank / EasyPaisa details (demo only)</label><input id="paymentDetails" placeholder="Enter placeholder details; never use real details here">
+<button class="action" onclick="register()">Register & Generate OTP</button>
+</div>
+
+<div class="card">
+<h2>Login</h2>
+<label>Email or Mobile</label><input id="loginContact" placeholder="Registered contact">
+<label>Password</label><input id="loginPassword" type="password" placeholder="Password">
+<button class="action" onclick="login()">Login & Verify</button>
+<p id="loginMessage"></p>
+</div>
+
+<div class="card hidden" id="otpCard">
+<h2>OTP Verification</h2>
+<p id="otpText"></p>
+<input id="otpInput" maxlength="6" placeholder="Enter demo OTP">
+<button class="action" onclick="verifyOTP()">Verify OTP</button>
+</div>
+</div>
+</section>
+
+<!-- FARMER -->
+<section id="user" class="page">
+<div class="card">
+<h2>Farmer Dashboard</h2>
+<p id="farmerWelcome">Register or log in to use the demo features.</p>
+<h3>Post Animal Health Complaint</h3>
+<label>Animal Type</label>
+<select id="animalType">
+<option>Cow</option><option>Buffalo</option><option>Goat</option><option>Sheep</option><option>Dog</option><option>Cat</option><option>Poultry</option><option>Other</option>
+</select>
+<label>Area / Village</label><input id="animalArea" placeholder="Enter village or area">
+<label>Symptoms and Description</label>
+<textarea id="complaintText" rows="4" placeholder="Describe signs, symptoms and how long they have been present"></textarea>
+<label>Upload image, audio, video or document</label>
+<input id="complaintFile" type="file" accept="image/*,audio/*,video/*,.pdf" multiple>
+<button class="action" onclick="postComplaint()">Submit Complaint</button>
+</div>
+
+<div class="card">
+<h2>My Complaint Status</h2>
+<div id="myComplaints">No complaints submitted yet.</div>
+</div>
+
+<div class="card">
+<h2>View VetCure / Doctor Details</h2>
+<div id="doctorDirectory">Register a doctor to display a demo profile here.</div>
+</div>
+
+<div class="card">
+<h2>Subscription & Payment</h2>
+<label>Select Doctor</label><select id="payDoctor"></select>
+<label>Payment Method</label>
+<select id="payMethod"><option>Bank Transfer</option><option>EasyPaisa</option></select>
+<p class="notice">Government CVH consultations are shown as free in this demo. Private clinic fees depend on the selected doctor's profile.</p>
+<button class="action" onclick="subscribe()">Subscribe / Make Demo Payment</button>
+<p id="paymentMessage"></p>
+</div>
+
+<div class="card">
+<h2>Post Feedback</h2>
+<textarea id="feedbackText" placeholder="Write your feedback"></textarea>
+<button class="action" onclick="submitFeedback()">Submit Feedback</button>
+<div id="feedbackMessage"></div>
+</div>
+
+<div class="card">
+<h2>My Profile</h2>
+<div id="profileDetails">Not logged in.</div>
+<button class="action" onclick="logout()">Logout</button>
+</div>
+</section>
+
+<!-- DOCTOR -->
+<section id="doctor" class="page">
+<div class="card">
+<h2>Doctor Dashboard</h2>
+<p id="doctorWelcome">Register or log in using a Doctor account.</p>
+<h3>View Farmer Complaints</h3>
+<div id="doctorComplaints">No complaints available.</div>
+</div>
+
+<div class="card">
+<h2>Post Solution / Prescription Notes</h2>
+<label>Complaint ID</label><input id="solutionComplaintId" type="number" placeholder="Enter complaint ID">
+<label>Doctor Response</label><textarea id="solutionText" rows="4" placeholder="Enter professional advice or recommended next steps"></textarea>
+<label>Attach educational image / document</label><input id="solutionFile" type="file" accept="image/*,.pdf">
+<button class="action" onclick="postSolution()">Send Response</button>
+</div>
+
+<div class="card">
+<h2>Manage Cure Information</h2>
+<label>Disease / Condition</label><input id="cureName" placeholder="Condition name">
+<label>Animal and common signs</label><textarea id="cureSigns" placeholder="Describe common signs"></textarea>
+<label>General care information</label><textarea id="cureAdvice" placeholder="General educational care information"></textarea>
+<button class="action" onclick="addCure()">Add Cure Information</button>
+<div id="cureList"></div>
+</div>
+
+<div class="card">
+<h2>Manage Veterinary News</h2>
+<input id="newsTitle" placeholder="News title">
+<textarea id="newsBody" placeholder="Write a veterinary news update"></textarea>
+<button class="action" onclick="addNews()">Publish Demo News</button>
+</div>
+
+<div class="card">
+<h2>View User Details</h2>
+<div id="userDetails">No registered users.</div>
+</div>
+
+<div class="card">
+<h2>Payment Details & Feedback</h2>
+<div id="doctorPayments"></div>
+<div id="doctorFeedback"></div>
+</div>
+</section>
+
+<!-- NEWS -->
+<section id="news" class="page">
+<div class="card">
+<h2>Veterinary News</h2>
+<div id="newsList">No news published yet.</div>
+</div>
+</section>
+
+<!-- REPORTS -->
+<section id="reports" class="page">
+<div class="card">
+<h2>Animal Disease Information & Reports</h2>
+<p>These are sample educational entries, not diagnoses or prescriptions.</p>
+<div class="grid">
+<div class="item"><h3>Foot-and-Mouth Disease</h3><p>May involve fever, mouth lesions and lameness in susceptible livestock. Contact a veterinarian promptly.</p></div>
+<div class="item"><h3>Mastitis</h3><p>Possible signs include a swollen udder, abnormal milk or pain. A veterinarian should assess the animal.</p></div>
+<div class="item"><h3>Parasitic Conditions</h3><p>Possible signs vary and may include weight loss, poor condition or digestive problems. Seek professional diagnosis.</p></div>
+<div class="item"><h3>Respiratory Illness</h3><p>Coughing, nasal discharge or breathing difficulty require veterinary assessment; severe breathing difficulty is urgent.</p></div>
+</div>
+<h3>Area-wise Complaint Summary (Demo)</h3>
+<div id="areaReport"></div>
+</div>
+</section>
+</main>
+
+<footer><p>VetCure | Veterinary Care Student Project</p></footer>
+
+<script>
+let users = [];
+let complaints = [];
+let feedbacks = [];
+let cures = [];
+let news = [];
+let payments = [];
+let currentUser = null;
+let pendingUser = null;
+let generatedOTP = "";
+let nextComplaintId = 1;
+
+function showPage(id) {
+ document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+ refresh();
+}
+
+function register() {
+ const name=document.getElementById("regName").value.trim();
+ const contact=document.getElementById("regContact").value.trim().toLowerCase();
+ const password=document.getElementById("regPassword").value;
+ const role=document.getElementById("regRole").value;
+ if(!name||!contact||!password){alert("Complete all required fields.");return}
+ if(users.some(u=>u.contact===contact)){alert("This account already exists.");return}
+ pendingUser={
+  name,contact,password,role,
+  clinic:document.getElementById("clinicType").value,
+  fee:Number(document.getElementById("doctorFee").value)||0,
+  paymentDetails:document.getElementById("paymentDetails").value.trim()
+ };
+ generateOTP();
+}
+
+function login() {
+ const contact=document.getElementById("loginContact").value.trim().toLowerCase();
+ const password=document.getElementById("loginPassword").value;
+ const user=users.find(u=>u.contact===contact&&u.password===password);
+ if(!user){document.getElementById("loginMessage").textContent="Account not found. Register first in this demo.";return}
+ pendingUser=user;
+ generateOTP();
+}
+
+function generateOTP() {
+ generatedOTP=String(Math.floor(100000+Math.random()*900000));
+ document.getElementById("otpCard").classList.remove("hidden");
+ document.getElementById("otpText").textContent="Demo OTP: "+generatedOTP+" (shown on screen; no SMS is sent).";
+}
+
+function verifyOTP() {
+ if(document.getElementById("otpInput").value.trim()!==generatedOTP||!pendingUser){
+  alert("Incorrect OTP.");return;
+ }
+ if(!users.some(u=>u.contact===pendingUser.contact))users.push(pendingUser);
+ currentUser=pendingUser;
+ generatedOTP="";
+ pendingUser=null;
+ document.getElementById("otpCard").classList.add("hidden");
+ alert("Demo verification successful.");
+ showPage(currentUser.role==="Doctor"?"doctor":"user");
+}
+
+function postComplaint() {
+ if(!currentUser||currentUser.role!=="Farmer"){alert("Please register or log in as a Farmer first.");showPage("auth");return}
+ const text=document.getElementById("complaintText").value.trim();
+ if(!text){alert("Describe the animal's symptoms first.");return}
+ const files=[...document.getElementById("complaintFile").files].map(f=>f.name);
+ complaints.push({
+  id:nextComplaintId++,owner:currentUser.contact,name:currentUser.name,
+  animal:document.getElementById("animalType").value,
+  area:document.getElementById("animalArea").value.trim()||"Not provided",
+  text,files,status:"Pending",solution:""
+ });
+ document.getElementById("complaintText").value="";
+ document.getElementById("complaintFile").value="";
+ refresh();alert("Complaint submitted in the demo.");
+}
+
+function postSolution() {
+ if(!currentUser||currentUser.role!=="Doctor"){alert("Log in as a Doctor first.");showPage("auth");return}
+ const id=Number(document.getElementById("solutionComplaintId").value);
+ const solution=document.getElementById("solutionText").value.trim();
+ const c=complaints.find(x=>x.id===id);
+ if(!c||!solution){alert("Enter a valid complaint ID and response.");return}
+ c.solution=solution;c.status="Doctor Responded";
+ document.getElementById("solutionText").value="";
+ refresh();alert("Demo response sent.");
+}
+
+function subscribe() {
+ if(!currentUser||currentUser.role!=="Farmer"){alert("Log in as a Farmer first.");showPage("auth");return}
+ const doctor=users.find(u=>u.contact===document.getElementById("payDoctor").value);
+ if(!doctor){alert("Please select a registered doctor.");return}
+ const method=document.getElementById("payMethod").value;
+ const amount=doctor.clinic==="Government CVH"?0:doctor.fee;
+ payments.push({farmer:currentUser.name,doctor:doctor.name,method,amount,status:amount===0?"Free government subscription":"Demo payment pending"});
+ document.getElementById("paymentMessage").textContent=
+  amount===0?"Government CVH demo subscription is free.":"Demo fee: ₹"+amount+". No money was transferred.";
+ refresh();
+}
+
+function addCure() {
+ if(!currentUser||currentUser.role!=="Doctor"){alert("Log in as a Doctor first.");return}
+ const name=document.getElementById("cureName").value.trim();
+ const signs=document.getElementById("cureSigns").value.trim();
+ const advice=document.getElementById("cureAdvice").value.trim();
+ if(!name||!signs||!advice){alert("Complete all cure information fields.");return}
+ cures.push({name,signs,advice,doctor:currentUser.name});
+ document.getElementById("cureName").value="";
+ document.getElementById("cureSigns").value="";
+ document.getElementById("cureAdvice").value="";
+ refresh();
+}
+
+function addNews() {
+ if(!currentUser||currentUser.role!=="Doctor"){alert("Log in as a Doctor first.");return}
+ const title=document.getElementById("newsTitle").value.trim();
+ const body=document.getElementById("newsBody").value.trim();
+ if(!title||!body){alert("Enter a title and news content.");return}
+ news.unshift({title,body,author:currentUser.name});
+ document.getElementById("newsTitle").value="";
+ document.getElementById("newsBody").value="";
+ refresh();alert("Demo news published.");
+}
+
+function submitFeedback() {
+ if(!currentUser){alert("Please log in first.");showPage("auth");return}
+ const text=document.getElementById("feedbackText").value.trim();
+ if(!text){alert("Enter feedback.");return}
+ feedbacks.push({name:currentUser.name,text});
+ document.getElementById("feedbackText").value="";
+ document.getElementById("feedbackMessage").textContent="Feedback submitted.";
+ refresh();
+}
+
+function logout() {
+ currentUser=null;
+ alert("Logged out of demo session.");
+ showPage("home");
+}
+
+function addText(parent,tag,text) {
+ const el=document.createElement(tag);el.textContent=text;parent.appendChild(el);return el;
+}
+
+function refresh() {
+ const myComplaints=document.getElementById("myComplaints");
+ myComplaints.innerHTML="";
+ const mine=currentUser?complaints.filter(c=>c.owner===currentUser.contact):[];
+ if(!mine.length)myComplaints.textContent="No complaints submitted yet.";
+ mine.forEach(c=>{
+  const box=document.createElement("div");box.className="item";
+  addText(box,"h3","Complaint #"+c.id+" · "+c.animal);
+  addText(box,"p","Area: "+c.area+" | Status: "+c.status);
+  addText(box,"p","Symptoms: "+c.text);
+  if(c.files.length)addText(box,"p","Attachments selected: "+c.files.join(", "));
+  if(c.solution)addText(box,"p","Doctor response: "+c.solution);
+  myComplaints.appendChild(box);
+ });
+
+ const directory=document.getElementById("doctorDirectory");
+ directory.innerHTML="";
+ const doctors=users.filter(u=>u.role==="Doctor");
+ if(!doctors.length)directory.textContent="No registered doctors in this demo.";
+ doctors.forEach(d=>addText(directory,"p",d.name+" · "+d.clinic+" · Fee: ₹"+(d.clinic==="Government CVH"?0:d.fee)));
+
+ const paySelect=document.getElementById("payDoctor");
+ const old=paySelect.value;paySelect.innerHTML="";
+ doctors.forEach(d=>{const op=document.createElement("option");op.value=d.contact;op.textContent=d.name+" — "+d.clinic+" — ₹"+(d.clinic==="Government CVH"?0:d.fee);paySelect.appendChild(op)});
+ if(doctors.some(d=>d.contact===old))paySelect.value=old;
+
+ document.getElementById("farmerWelcome").textContent=currentUser&&currentUser.role==="Farmer"?"Welcome, "+currentUser.name:"Log in as a Farmer to submit complaints.";
+ document.getElementById("doctorWelcome").textContent=currentUser&&currentUser.role==="Doctor"?"Welcome, Dr. "+currentUser.name:"Log in as a Doctor to manage complaints.";
+
+ const dc=document.getElementById("doctorComplaints");dc.innerHTML="";
+ if(!complaints.length)dc.textContent="No complaints available.";
+ complaints.forEach(c=>{
+  const box=document.createElement("div");box.className="item";
+  addText(box,"h3","Complaint #"+c.id+" · "+c.animal);
+  addText(box,"p","Farmer: "+c.name+" · Area: "+c.area);
+  addText(box,"p","Symptoms: "+c.text);
+  if(c.files.length)addText(box,"p","Selected files: "+c.files.join(", "));
+  addText(box,"p","Status: "+c.status);
+  dc.appendChild(box);
+ });
+
+ const ud=document.getElementById("userDetails");ud.innerHTML="";
+ users.forEach(u=>addText(ud,"p",u.name+" · "+u.role+" · "+u.contact));
+
+ const pay=document.getElementById("doctorPayments");pay.innerHTML="<h3>Payment Details</h3>";
+ if(!payments.length)addText(pay,"p","No payments recorded.");
+ payments.forEach(p=>addText(pay,"p",p.farmer+" → "+p.doctor+" · "+p.method+" · ₹"+p.amount+" · "+p.status));
+
+ const fb=document.getElementById("doctorFeedback");fb.innerHTML="<h3>Feedback Details</h3>";
+ if(!feedbacks.length)addText(fb,"p","No feedback submitted.");
+ feedbacks.forEach(f=>addText(fb,"p",f.name+": "+f.text));
+
+ const cl=document.getElementById("cureList");cl.innerHTML="";
+ cures.forEach(c=>{const box=document.createElement("div");box.className="item";addText(box,"h3",c.name);addText(box,"p","Signs: "+c.signs);addText(box,"p","General information: "+c.advice);addText(box,"small","Added by "+c.doctor);cl.appendChild(box)});
+
+ const nl=document.getElementById("newsList");nl.innerHTML="";
+ if(!news.length)nl.textContent="No news published yet.";
+ news.forEach(n=>{const box=document.createElement("div");box.className="item";addText(box,"h3",n.title);addText(box,"p",n.body);addText(box,"small","Published by "+n.author);nl.appendChild(box)});
+
+ const report=document.getElementById("areaReport");report.innerHTML="";
+ const counts={};complaints.forEach(c=>counts[c.area]=(counts[c.area]||0)+1);
+ if(!Object.keys(counts).length)report.textContent="No complaint data yet.";
+ Object.entries(counts).forEach(([area,count])=>addText(report,"p",area+": "+count+" complaint(s)"));
+
+ document.getElementById("profileDetails").textContent=currentUser?
+ currentUser.name+" · "+currentUser.role+" · "+currentUser.contact:"Not logged in.";
+}
+
+refresh();
+</script>
+</body>
+</html>
