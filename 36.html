@@ -1,0 +1,902 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EduConnect - Online Learning Platform</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f3f6fc;
+    color: #263449;
+}
+
+/* HEADER */
+header {
+    background: linear-gradient(120deg,#172554,#4338ca);
+    color: white;
+    padding: 22px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.logo {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.logo span {
+    color: #facc15;
+}
+
+header p {
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+/* NAVIGATION */
+nav {
+    background: white;
+    padding: 17px;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 3px 12px #00000010;
+}
+
+nav a {
+    text-decoration: none;
+    color: #263449;
+    margin: 8px 13px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+nav a:hover {
+    color: #4338ca;
+}
+
+/* HERO */
+.hero {
+    background: linear-gradient(120deg,#172554dd,#4338cadd),
+    url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=1600')
+    center/cover;
+    color: white;
+    text-align: center;
+    padding: 100px 20px;
+}
+
+.hero h1 {
+    font-size: 43px;
+    margin-bottom: 15px;
+}
+
+.hero p {
+    font-size: 18px;
+    margin-bottom: 25px;
+}
+
+.btn {
+    display: inline-block;
+    background: #facc15;
+    color: #172554;
+    padding: 13px 25px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: white;
+}
+
+/* SECTIONS */
+section {
+    padding: 60px 7%;
+    scroll-margin-top: 65px;
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.title h2 {
+    color: #3730a3;
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.title p {
+    color: #64748b;
+}
+
+/* CARDS */
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+    gap: 22px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 18px #0000000c;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 22px #00000015;
+}
+
+.card h3 {
+    color: #3730a3;
+    margin: 12px 0;
+}
+
+.card p {
+    color: #64748b;
+    line-height: 1.8;
+}
+
+.icon {
+    font-size: 35px;
+}
+
+.price {
+    color: #15803d !important;
+    font-size: 22px;
+    font-weight: bold;
+    margin-top: 12px;
+}
+
+/* FORMS */
+.form-box {
+    background: white;
+    max-width: 650px;
+    padding: 30px;
+    margin: auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px #00000010;
+}
+
+.form-box h3 {
+    color: #3730a3;
+    margin-bottom: 20px;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 13px;
+    margin: 8px 0 16px;
+    border: 1px solid #d4dce8;
+    border-radius: 6px;
+    background: #fbfdff;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #4338ca;
+}
+
+label {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.submit {
+    width: 100%;
+    background: #4338ca;
+    color: white;
+    padding: 14px;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.submit:hover {
+    background: #172554;
+}
+
+/* TABLE */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+th {
+    background: #3730a3;
+    color: white;
+}
+
+.status {
+    color: #15803d;
+    font-weight: bold;
+}
+
+/* STATS */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
+    gap: 18px;
+    margin-bottom: 30px;
+}
+
+.stat {
+    background: white;
+    padding: 22px;
+    border-radius: 10px;
+    border-bottom: 4px solid #4338ca;
+}
+
+.stat h2 {
+    color: #3730a3;
+    font-size: 28px;
+}
+
+.stat p {
+    color: #64748b;
+    margin-top: 8px;
+}
+
+/* ABOUT */
+.about {
+    background: #e9edff;
+}
+
+/* FOOTER */
+footer {
+    background: #172554;
+    color: white;
+    text-align: center;
+    padding: 35px;
+    line-height: 2;
+}
+
+@media(max-width:650px) {
+    .hero h1 {
+        font-size: 30px;
+    }
+
+    nav a {
+        display: inline-block;
+        margin: 8px;
+    }
+
+    section {
+        padding: 40px 5%;
+    }
+
+    table {
+        font-size: 12px;
+    }
+
+    th, td {
+        padding: 8px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header>
+    <div>
+        <div class="logo">Edu<span>Connect</span></div>
+        <p>Online Teaching & Learning Management Platform</p>
+    </div>
+    <div>📞 +91 98765 43210</div>
+</header>
+
+<!-- NAVIGATION -->
+<nav>
+    <a href="#home">Home</a>
+    <a href="#student">Students</a>
+    <a href="#teacher">Teachers</a>
+    <a href="#subjects">Subjects</a>
+    <a href="#allocation">Allocation</a>
+    <a href="#time">Time Management</a>
+    <a href="#courses">Courses</a>
+    <a href="#support">Support</a>
+</nav>
+
+<!-- HOME -->
+<div class="hero" id="home">
+    <h1>Welcome to EduConnect</h1>
+    <p>Learn Anytime, Anywhere with Expert Teachers</p>
+    <p>Online Classes | Study Materials | Live Sessions | Interactive Learning</p>
+    <a href="#student" class="btn">Join Now</a>
+</div>
+
+<!-- FEATURES -->
+<section>
+    <div class="title">
+        <h2>Our Learning Features</h2>
+        <p>Everything you need for a better learning experience</p>
+    </div>
+
+    <div class="cards">
+        <div class="card">
+            <div class="icon">🎥</div>
+            <h3>Live Classes</h3>
+            <p>Attend interactive online classes with experienced teachers.</p>
+        </div>
+
+        <div class="card">
+            <div class="icon">📹</div>
+            <h3>Recorded Lectures</h3>
+            <p>Watch recorded lessons anytime and learn at your own pace.</p>
+        </div>
+
+        <div class="card">
+            <div class="icon">📚</div>
+            <h3>Study Materials</h3>
+            <p>Access notes, PDF files and downloadable learning materials.</p>
+        </div>
+
+        <div class="card">
+            <div class="icon">📝</div>
+            <h3>Online Assignments</h3>
+            <p>Complete quizzes, assignments and practice tests.</p>
+        </div>
+    </div>
+</section>
+
+<!-- STUDENT REGISTRATION -->
+<section id="student">
+    <div class="title">
+        <h2>1. Student Registration</h2>
+        <p>Create your student account and start learning online</p>
+    </div>
+
+    <div class="form-box">
+        <h3>Student Registration Form</h3>
+
+        <form onsubmit="return demo(event,'Student Registration')">
+
+            <label>Student Name</label>
+            <input type="text" placeholder="Enter full name" required>
+
+            <label>Date of Birth</label>
+            <input type="date" required>
+
+            <label>Email Address</label>
+            <input type="email" placeholder="Enter email" required>
+
+            <label>Mobile Number</label>
+            <input type="tel" placeholder="Enter mobile number" required>
+
+            <label>Gender</label>
+            <select required>
+                <option value="">Select Gender</option>
+                <option>Male</option>
+                <option>Female</option>
+                <option>Other</option>
+            </select>
+
+            <label>Education Qualification</label>
+            <select required>
+                <option value="">Select Qualification</option>
+                <option>School Student</option>
+                <option>Diploma</option>
+                <option>Undergraduate</option>
+                <option>Postgraduate</option>
+            </select>
+
+            <label>Address</label>
+            <textarea rows="3" placeholder="Enter your address"></textarea>
+
+            <label>Create Password</label>
+            <input type="password" placeholder="Create password" required>
+
+            <button class="submit">Register as Student</button>
+        </form>
+
+        <br><hr><br>
+
+        <h3>Student Login</h3>
+
+        <form onsubmit="return demo(event,'Student Login')">
+            <input type="email" placeholder="Student Email" required>
+            <input type="password" placeholder="Password" required>
+            <button class="submit">Login</button>
+        </form>
+    </div>
+</section>
+
+<!-- TEACHER REGISTRATION -->
+<section id="teacher">
+    <div class="title">
+        <h2>2. Teacher Registration</h2>
+        <p>Join our teaching team and share your knowledge</p>
+    </div>
+
+    <div class="form-box">
+        <h3>Teacher Registration Form</h3>
+
+        <form onsubmit="return demo(event,'Teacher Registration')">
+
+            <label>Teacher Name</label>
+            <input type="text" placeholder="Enter teacher name" required>
+
+            <label>Email Address</label>
+            <input type="email" placeholder="Enter email" required>
+
+            <label>Mobile Number</label>
+            <input type="tel" placeholder="Enter mobile number" required>
+
+            <label>Qualification</label>
+            <input type="text" placeholder="Enter qualification" required>
+
+            <label>Teaching Experience</label>
+            <input type="number" placeholder="Experience in years" min="0">
+
+            <label>Specialization</label>
+            <select required>
+                <option value="">Select Subject</option>
+                <option>Mathematics</option>
+                <option>Physics</option>
+                <option>Chemistry</option>
+                <option>Computer Science</option>
+                <option>English</option>
+            </select>
+
+            <label>Upload Resume</label>
+            <input type="file" accept=".pdf,.doc,.docx">
+
+            <label>Create Password</label>
+            <input type="password" placeholder="Create password" required>
+
+            <button class="submit">Register as Teacher</button>
+        </form>
+
+        <br><hr><br>
+
+        <h3>Teacher Login</h3>
+
+        <form onsubmit="return demo(event,'Teacher Login')">
+            <input type="email" placeholder="Teacher Email" required>
+            <input type="password" placeholder="Password" required>
+            <button class="submit">Login as Teacher</button>
+        </form>
+    </div>
+</section>
+
+<!-- SUBJECTS -->
+<section id="subjects">
+    <div class="title">
+        <h2>3. Subject Registration</h2>
+        <p>Explore and select your favourite subjects</p>
+    </div>
+
+    <div class="cards">
+
+        <div class="card">
+            <div class="icon">📐</div>
+            <h3>Mathematics</h3>
+            <p>Algebra, Geometry and Calculus</p>
+            <p>Duration: 3 Months</p>
+            <p class="price">₹2,000</p>
+        </div>
+
+        <div class="card">
+            <div class="icon">⚛️</div>
+            <h3>Physics</h3>
+            <p>Mechanics, Electricity and Optics</p>
+            <p>Duration: 3 Months</p>
+            <p class="price">₹2,500</p>
+        </div>
+
+        <div class="card">
+            <div class="icon">🧪</div>
+            <h3>Chemistry</h3>
+            <p>Organic and Inorganic Chemistry</p>
+            <p>Duration: 3 Months</p>
+            <p class="price">₹2,500</p>
+        </div>
+
+        <div class="card">
+            <div class="icon">💻</div>
+            <h3>Computer Science</h3>
+            <p>Programming, Java and Python</p>
+            <p>Duration: 4 Months</p>
+            <p class="price">₹3,000</p>
+        </div>
+
+        <div class="card">
+            <div class="icon">📖</div>
+            <h3>English</h3>
+            <p>Grammar, Communication and Writing</p>
+            <p>Duration: 2 Months</p>
+            <p class="price">₹1,500</p>
+        </div>
+
+        <div class="card">
+            <div class="icon">📊</div>
+            <h3>Data Science</h3>
+            <p>Python, Statistics and Data Analysis</p>
+            <p>Duration: 4 Months</p>
+            <p class="price">₹4,000</p>
+        </div>
+
+    </div>
+</section>
+
+<!-- SUBJECT ALLOCATION -->
+<section id="allocation">
+    <div class="title">
+        <h2>4. Subject Allocation / Registration</h2>
+        <p>Register subjects and allocate teachers to students</p>
+    </div>
+
+    <div class="form-box">
+        <h3>Subject Allocation Form</h3>
+
+        <form onsubmit="return allocateSubject(event)">
+
+            <label>Student Name</label>
+            <input type="text" id="studentName" placeholder="Enter student name" required>
+
+            <label>Student Email</label>
+            <input type="email" placeholder="Enter student email" required>
+
+            <label>Select Subject</label>
+            <select id="subject" required>
+                <option value="">Choose Subject</option>
+                <option>Mathematics</option>
+                <option>Physics</option>
+                <option>Chemistry</option>
+                <option>Computer Science</option>
+                <option>English</option>
+                <option>Data Science</option>
+            </select>
+
+            <label>Allocate Teacher</label>
+            <select id="teacherName" required>
+                <option value="">Select Teacher</option>
+                <option>Arun Kumar</option>
+                <option>Priya Sharma</option>
+                <option>Rahul Kumar</option>
+                <option>Divya</option>
+            </select>
+
+            <label>Learning Mode</label>
+            <select required>
+                <option>Online</option>
+                <option>Offline</option>
+            </select>
+
+            <button class="submit">Allocate Subject</button>
+        </form>
+
+        <h3 id="allocationResult" style="margin-top:20px"></h3>
+    </div>
+</section>
+
+<!-- TIME MANAGEMENT -->
+<section id="time">
+    <div class="title">
+        <h2>5. Time Management</h2>
+        <p>Schedule classes and manage learning sessions</p>
+    </div>
+
+    <div class="cards">
+        <div class="card">
+            <div class="icon">🌅</div>
+            <h3>Morning Session</h3>
+            <p>08:00 AM - 10:00 AM</p>
+            <p>Mathematics and Physics</p>
+        </div>
+
+        <div class="card">
+            <div class="icon">☀️</div>
+            <h3>Afternoon Session</h3>
+            <p>12:00 PM - 02:00 PM</p>
+            <p>Chemistry and English</p>
+        </div>
+
+        <div class="card">
+            <div class="icon">🌙</div>
+            <h3>Evening Session</h3>
+            <p>05:00 PM - 07:00 PM</p>
+            <p>Computer Science and Data Science</p>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="form-box">
+        <h3>Class Schedule Registration</h3>
+
+        <form onsubmit="return addSchedule(event)">
+
+            <label>Teacher Name</label>
+            <input type="text" placeholder="Enter teacher name" required>
+
+            <label>Subject</label>
+            <select id="scheduleSubject">
+                <option>Mathematics</option>
+                <option>Physics</option>
+                <option>Chemistry</option>
+                <option>Computer Science</option>
+                <option>English</option>
+            </select>
+
+            <label>Class Date</label>
+            <input type="date" id="classDate" required>
+
+            <label>Start Time</label>
+            <input type="time" id="startTime" required>
+
+            <label>End Time</label>
+            <input type="time" id="endTime" required>
+
+            <label>Class Type</label>
+            <select>
+                <option>Live Online Class</option>
+                <option>Offline Classroom</option>
+            </select>
+
+            <button class="submit">Schedule Class</button>
+        </form>
+    </div>
+
+    <br><br>
+
+    <h3>Class Timetable</h3>
+
+    <table id="timetable">
+        <tr>
+            <th>Subject</th>
+            <th>Teacher</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Type</th>
+        </tr>
+
+        <tr>
+            <td>Mathematics</td>
+            <td>Arun Kumar</td>
+            <td>20-11-2026</td>
+            <td>08 AM - 09 AM</td>
+            <td>Online</td>
+        </tr>
+
+        <tr>
+            <td>Physics</td>
+            <td>Priya Sharma</td>
+            <td>21-11-2026</td>
+            <td>10 AM - 11 AM</td>
+            <td>Offline</td>
+        </tr>
+    </table>
+</section>
+
+<!-- COURSE CATALOG -->
+<section id="courses">
+    <div class="title">
+        <h2>Course Catalog</h2>
+        <p>Explore our popular online learning programs</p>
+    </div>
+
+    <div class="cards">
+        <div class="card">
+            <h3>Web Development</h3>
+            <p>HTML, CSS, JavaScript and PHP</p>
+            <p>Duration: 3 Months</p>
+            <p class="price">₹3,500</p>
+            <button class="btn" onclick="alert('Course selected!')">Enroll Now</button>
+        </div>
+
+        <div class="card">
+            <h3>Python Programming</h3>
+            <p>Python Basics and Advanced Programming</p>
+            <p>Duration: 2 Months</p>
+            <p class="price">₹2,500</p>
+            <button class="btn" onclick="alert('Course selected!')">Enroll Now</button>
+        </div>
+
+        <div class="card">
+            <h3>Java Programming</h3>
+            <p>Core Java and Object-Oriented Programming</p>
+            <p>Duration: 3 Months</p>
+            <p class="price">₹3,000</p>
+            <button class="btn" onclick="alert('Course selected!')">Enroll Now</button>
+        </div>
+    </div>
+</section>
+
+<!-- LEARNING TOOLS -->
+<section>
+    <div class="title">
+        <h2>Interactive Learning Tools</h2>
+        <p>Improve your skills through interactive activities</p>
+    </div>
+
+    <div class="cards">
+        <div class="card">
+            <div class="icon">💬</div>
+            <h3>Discussion Forum</h3>
+            <p>Discuss topics and share knowledge with other students.</p>
+            <button class="btn" onclick="alert('Discussion forum demo')">Open Forum</button>
+        </div>
+
+        <div class="card">
+            <div class="icon">📝</div>
+            <h3>Online Quiz</h3>
+            <p>Test your knowledge through online quizzes.</p>
+            <button class="btn" onclick="alert('Quiz section demo')">Start Quiz</button>
+        </div>
+
+        <div class="card">
+            <div class="icon">📂</div>
+            <h3>Assignments</h3>
+            <p>Submit assignments and receive teacher feedback.</p>
+            <button class="btn" onclick="alert('Assignment section demo')">View Assignments</button>
+        </div>
+
+        <div class="card">
+            <div class="icon">🎬</div>
+            <h3>Video Classes</h3>
+            <p>Access live and recorded video lessons.</p>
+            <button class="btn" onclick="alert('Video class demo')">Watch Classes</button>
+        </div>
+    </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about">
+    <div class="title">
+        <h2>About EduConnect</h2>
+        <p>Our Mission and Vision</p>
+    </div>
+
+    <div class="cards">
+        <div class="card">
+            <h3>Our Mission</h3>
+            <p>To provide accessible and affordable quality education through digital learning technology.</p>
+        </div>
+
+        <div class="card">
+            <h3>Our Vision</h3>
+            <p>To create an interactive learning environment connecting students and teachers worldwide.</p>
+        </div>
+
+        <div class="card">
+            <h3>Our Teachers</h3>
+            <p>Experienced instructors guide students through live classes, assignments and assessments.</p>
+        </div>
+    </div>
+</section>
+
+<!-- SUPPORT -->
+<section id="support">
+    <div class="title">
+        <h2>Support & Contact</h2>
+        <p>We are here to help students and teachers</p>
+    </div>
+
+    <div class="form-box">
+        <form onsubmit="return demo(event,'Support Request')">
+            <label>Name</label>
+            <input type="text" placeholder="Enter your name" required>
+
+            <label>Email</label>
+            <input type="email" placeholder="Enter email address" required>
+
+            <label>Issue Type</label>
+            <select>
+                <option>Technical Support</option>
+                <option>Course Information</option>
+                <option>Payment Issue</option>
+                <option>Class Schedule</option>
+            </select>
+
+            <label>Message</label>
+            <textarea rows="4" placeholder="Describe your issue" required></textarea>
+
+            <button class="submit">Submit Request</button>
+        </form>
+
+        <br>
+        <p>📧 Email: support@educonnect.com</p>
+        <p>📞 Phone: +91 9876543210</p>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <h2>EduConnect</h2>
+    <p>Learn Anytime, Anywhere.</p>
+    <p>Online Education | Live Classes | Digital Learning</p>
+    <p>© 2026 EduConnect. All Rights Reserved.</p>
+</footer>
+
+<!-- JAVASCRIPT -->
+<script>
+
+function demo(event,name) {
+    event.preventDefault();
+    alert(name + " submitted successfully!");
+    event.target.reset();
+    return false;
+}
+
+// SUBJECT ALLOCATION
+function allocateSubject(event) {
+    event.preventDefault();
+
+    let student = document.getElementById("studentName").value;
+    let subject = document.getElementById("subject").value;
+    let teacher = document.getElementById("teacherName").value;
+
+    document.getElementById("allocationResult").innerHTML =
+        "Subject Allocation Successful!<br>" +
+        "Student: " + student + "<br>" +
+        "Subject: " + subject + "<br>" +
+        "Teacher: " + teacher;
+
+    return false;
+}
+
+// CLASS SCHEDULE
+function addSchedule(event) {
+    event.preventDefault();
+
+    let subject = document.getElementById("scheduleSubject").value;
+    let date = document.getElementById("classDate").value;
+    let start = document.getElementById("startTime").value;
+    let end = document.getElementById("endTime").value;
+
+    if(start >= end) {
+        alert("End time must be later than start time.");
+        return false;
+    }
+
+    let table = document.getElementById("timetable");
+
+    let row = table.insertRow(-1);
+
+    row.innerHTML =
+        "<td>" + subject + "</td>" +
+        "<td>New Teacher</td>" +
+        "<td>" + date + "</td>" +
+        "<td>" + start + " - " + end + "</td>" +
+        "<td>Scheduled</td>";
+
+    alert("Class scheduled successfully!");
+
+    event.target.reset();
+    return false;
+}
+
+</script>
+
+</body>
+</html>

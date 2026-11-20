@@ -1,0 +1,428 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ko-Matha Dairy Farm</title>
+<style>
+:root{--green:#245b35;--dark:#173e27;--gold:#e6b84b;--cream:#fffaf0;--light:#f2f7f0}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;color:#26352a;background:white;line-height:1.6}
+header{background:var(--dark);color:white;padding:20px 6%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px}
+.logo{font-size:27px;font-weight:bold;color:#f5d47a}
+.logo small{display:block;font-size:12px;color:white;font-weight:normal}
+nav{background:white;position:sticky;top:0;z-index:10;display:flex;justify-content:center;flex-wrap:wrap;box-shadow:0 2px 8px #0002}
+nav a{padding:14px 12px;text-decoration:none;color:var(--dark);font-weight:bold;font-size:14px}
+nav a:hover{background:var(--green);color:white}
+.hero{background:linear-gradient(#173e27b9,#173e27b9),url('https://images.unsplash.com/photo-1527153857715-3908f2bae5e8?auto=format&fit=crop&w=1600&q=80') center/cover;text-align:center;color:white;padding:90px 20px}
+.hero h1{font-size:42px;margin:0}
+.hero p{font-size:18px}
+.btn,button{background:var(--green);color:white;padding:10px 17px;border:0;border-radius:5px;cursor:pointer;text-decoration:none;font-size:14px;display:inline-block}
+.btn:hover,button:hover{background:var(--dark)}
+.gold{background:var(--gold);color:#233b27}
+.container{width:90%;max-width:1150px;margin:35px auto}
+.section{padding:30px 0;border-bottom:1px solid #e7eee6;scroll-margin-top:65px}
+h2{color:var(--dark);margin-top:0}
+h3{color:var(--green)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.card{border:1px solid #e2eadf;border-radius:9px;padding:20px;background:white;box-shadow:0 3px 12px #0000000c}
+.product{background:var(--cream)}
+.product img{width:100%;height:145px;object-fit:cover;border-radius:7px}
+.price{color:var(--green);font-weight:bold;font-size:18px}
+form{max-width:650px;background:var(--light);padding:20px;border-radius:8px;margin:15px 0}
+input,select,textarea{width:100%;padding:11px;margin:6px 0 14px;border:1px solid #cbd9c8;border-radius:5px;font-size:14px}
+label{font-weight:bold;font-size:14px}
+table{width:100%;border-collapse:collapse;margin:15px 0}
+th,td{padding:11px;border:1px solid #dce5d9;text-align:left;font-size:13px}
+th{background:var(--dark);color:white}
+.notice{background:#fff7df;border-left:4px solid var(--gold);padding:13px;margin:15px 0}
+.hidden{display:none}
+footer{background:var(--dark);color:white;text-align:center;padding:30px}
+footer a{color:#f5d47a}
+@media(max-width:600px){.hero h1{font-size:29px}nav a{padding:10px 7px;font-size:12px}.container{width:94%}}
+</style>
+</head>
+<body>
+
+<header>
+<div class="logo">🐄 Ko-Matha Dairy Farm
+<small>Freshness, Purity and Quality Every Day</small></div>
+<div>Fresh Dairy Products | Farm Fresh Delivery</div>
+</header>
+
+<nav>
+<a href="#home">Home</a>
+<a href="#about">About Us</a>
+<a href="#products">Products</a>
+<a href="#farm">Our Farm</a>
+<a href="#order">Order Online</a>
+<a href="#contact">Contact Us</a>
+<a href="#admin">Admin</a>
+</nav>
+
+<section class="hero" id="home">
+<h1>Welcome to Ko-Matha Dairy Farm</h1>
+<p>Fresh and quality dairy products delivered to your home.</p>
+<p>Milk | Curd | Cova Sweet | Butter | Ghee</p>
+<a href="#products" class="btn gold">Explore Products</a>
+<a href="#order" class="btn">Order Now</a>
+</section>
+
+<main class="container">
+
+<section class="section" id="about">
+<h2>About Us</h2>
+<p>Ko-Matha Dairy Farm is focused on providing fresh dairy products to customers. Our aim is to maintain product quality, hygiene, and customer satisfaction through responsible dairy farming and proper handling practices.</p>
+<div class="cards">
+<div class="card"><h3>Our Mission</h3><p>To provide fresh and quality dairy products to every customer.</p></div>
+<div class="card"><h3>Our Vision</h3><p>To develop a trusted dairy brand through transparency and good service.</p></div>
+<div class="card"><h3>Our Values</h3><p>Quality, cleanliness, customer satisfaction, and responsible farming.</p></div>
+</div>
+</section>
+
+<section class="section" id="products">
+<h2>Our Dairy Products</h2>
+<div class="cards" id="productList"></div>
+</section>
+
+<section class="section" id="farm">
+<h2>Our Farm</h2>
+<p>Our farm focuses on animal care, clean surroundings, quality feed, and hygienic milk handling. The farm can maintain cow details and daily milk production through the management system.</p>
+<div class="cards">
+<div class="card"><h3>A1 Cow Milk</h3><p>Information about A1 milk and its characteristics should be provided accurately and transparently.</p></div>
+<div class="card"><h3>Farm Hygiene</h3><p>Clean milking equipment, safe storage, and regular cleanliness checks.</p></div>
+<div class="card"><h3>Technology</h3><p>Digital stock records, customer orders, vendor records, and daily reports.</p></div>
+</div>
+</section>
+
+<section class="section" id="order">
+<h2>Order Online</h2>
+<p>Select a product and enter your delivery details.</p>
+<form onsubmit="placeOrder(event)">
+<label>Customer Name</label><input id="orderName" required>
+<label>Mobile Number</label><input id="orderMobile" required>
+<label>Email Address</label><input type="email" id="orderEmail">
+<label>Select Product</label><select id="orderProduct" onchange="updatePrice()" required></select>
+<label>Quantity</label><input type="number" id="orderQty" min="1" value="1" onchange="updatePrice()" required>
+<label>Delivery Address</label><textarea id="orderAddress" required></textarea>
+<label>Delivery Date</label><input type="date" id="deliveryDate" required>
+<p>Estimated Total: <b id="orderTotal">₹0</b></p>
+<button type="submit">Place Order</button>
+</form>
+<div id="orderConfirmation"></div>
+</section>
+
+<section class="section" id="contact">
+<h2>Contact Us</h2>
+<p>For product enquiries, delivery support, and other information, contact Ko-Matha Dairy Farm.</p>
+<form onsubmit="sendMessage(event)">
+<label>Name</label><input id="contactName" required>
+<label>Email</label><input type="email" id="contactEmail" required>
+<label>Mobile Number</label><input id="contactMobile">
+<label>Message</label><textarea id="contactMessage" required></textarea>
+<button type="submit">Send Message</button>
+</form>
+</section>
+
+<section class="section" id="admin">
+<h2>Administrator Management</h2>
+<div class="cards">
+<div class="card"><h3>Admin Registration</h3><p>Create an administrator account.</p><button onclick="showAdminAuth('register')">Register</button></div>
+<div class="card"><h3>Admin Login</h3><p>Login to manage the dairy farm.</p><button onclick="showAdminAuth('login')">Login</button></div>
+</div>
+<div id="adminAuth"></div>
+</section>
+
+<section class="section hidden" id="dashboard">
+<h2>Admin Dashboard</h2>
+<div class="cards">
+<div class="card"><h3>Total Products</h3><h2 id="totalProducts">0</h2></div>
+<div class="card"><h3>Total Orders</h3><h2 id="totalOrders">0</h2></div>
+<div class="card"><h3>Total Vendors</h3><h2 id="totalVendors">0</h2></div>
+<div class="card"><h3>Total Cows</h3><h2 id="totalCows">0</h2></div>
+</div>
+
+<div class="section">
+<h3>1. Stock Entry Form</h3>
+<form onsubmit="addStock(event)">
+<label>Product</label><select id="stockProduct"></select>
+<label>Quantity to Add</label><input type="number" id="stockQty" min="1" required>
+<label>Entry Date</label><input type="date" id="stockDate" required>
+<button type="submit">Add Stock</button>
+</form>
+<div id="stockTable"></div>
+</div>
+
+<div class="section">
+<h3>2. Daily / Monthly / Yearly Reports</h3>
+<label>Select Report Type</label>
+<select id="reportType" onchange="generateReport()">
+<option value="daily">Daily Report</option>
+<option value="monthly">Monthly Report</option>
+<option value="yearly">Yearly Report</option>
+</select>
+<label>Select Date</label><input type="date" id="reportDate" onchange="generateReport()">
+<div id="reportResult"></div>
+</div>
+
+<div class="section">
+<h3>3. Customer Purchase Details</h3>
+<div id="customerTable"></div>
+</div>
+
+<div class="section">
+<h3>4. Customer Online Purchase Orders</h3>
+<div id="ordersTable"></div>
+</div>
+
+<div class="section">
+<h3>5. Milk Vendor Details</h3>
+<form onsubmit="addVendor(event)">
+<label>Vendor Name</label><input id="vendorName" required>
+<label>Mobile Number</label><input id="vendorMobile" required>
+<label>Village / Address</label><input id="vendorAddress" required>
+<label>Milk Supply Per Day (Litres)</label><input type="number" id="vendorMilk" min="0" required>
+<button type="submit">Add Vendor</button>
+</form>
+<div id="vendorTable"></div>
+</div>
+
+<div class="section">
+<h3>6. Cow Detail Maintenance</h3>
+<form onsubmit="addCow(event)">
+<label>Cow ID</label><input id="cowId" required>
+<label>Breed</label><input id="cowBreed" required>
+<label>Age (Years)</label><input type="number" id="cowAge" min="0" required>
+<label>Milk Production Per Day (Litres)</label><input type="number" id="cowMilk" min="0" step="0.1" required>
+<label>Health Status</label>
+<select id="cowHealth"><option>Healthy</option><option>Under Treatment</option><option>Needs Checkup</option></select>
+<button type="submit">Save Cow Details</button>
+</form>
+<div id="cowTable"></div>
+</div>
+
+<button onclick="adminLogout()">Logout</button>
+</section>
+
+</main>
+
+<footer>
+<h3>🐄 Ko-Matha Dairy Farm</h3>
+<p>Fresh Dairy Products for a Healthy Lifestyle</p>
+<p>© 2026 Ko-Matha Dairy Farm. All Rights Reserved.</p>
+<a href="#home">Back to Home</a>
+</footer>
+
+<script>
+const products=[
+ {name:"Fresh Milk",price:60,unit:"Litre",image:"https://images.unsplash.com/photo-1563636619-e9143da7973b?auto=format&fit=crop&w=600&q=80",desc:"Fresh dairy milk."},
+ {name:"Curd",price:40,unit:"500 g",image:"https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=600&q=80",desc:"Fresh and creamy curd."},
+ {name:"Cova Sweet",price:120,unit:"250 g",image:"https://images.unsplash.com/photo-1605197161470-5d1e6c4b4f0c?auto=format&fit=crop&w=600&q=80",desc:"Traditional dairy sweet."},
+ {name:"Butter",price:100,unit:"200 g",image:"https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?auto=format&fit=crop&w=600&q=80",desc:"Creamy dairy butter."},
+ {name:"Ghee",price:250,unit:"500 ml",image:"https://images.unsplash.com/photo-1631452180519-c014fe946bc7?auto=format&fit=crop&w=600&q=80",desc:"Traditional clarified butter."}
+];
+
+const read=key=>JSON.parse(localStorage.getItem("komatha_"+key)||"[]");
+const save=(key,data)=>localStorage.setItem("komatha_"+key,JSON.stringify(data));
+let admin=JSON.parse(sessionStorage.getItem("komathaAdmin")||"null");
+
+function renderProducts(){
+ document.getElementById("productList").innerHTML=products.map((p,i)=>`
+ <div class="card product">
+ <img src="${p.image}" alt="${p.name}">
+ <h3>${p.name}</h3><p>${p.desc}</p>
+ <p class="price">₹${p.price} / ${p.unit}</p>
+ <button onclick="selectProduct(${i})">Order Now</button>
+ </div>`).join("");
+
+ const options=products.map(p=>`<option value="${p.name}">${p.name} - ₹${p.price}</option>`).join("");
+ document.getElementById("orderProduct").innerHTML=options;
+ document.getElementById("stockProduct").innerHTML=options;
+}
+function selectProduct(i){
+ document.getElementById("orderProduct").value=products[i].name;
+ updatePrice();
+ document.getElementById("order").scrollIntoView({behavior:"smooth"});
+}
+function updatePrice(){
+ const p=products.find(x=>x.name===document.getElementById("orderProduct").value);
+ const q=Number(document.getElementById("orderQty").value)||1;
+ document.getElementById("orderTotal").textContent="₹"+(p?p.price*q:0);
+}
+
+function placeOrder(event){
+ event.preventDefault();
+ const name=document.getElementById("orderName").value;
+ const product=document.getElementById("orderProduct").value;
+ const qty=Number(document.getElementById("orderQty").value);
+ const p=products.find(x=>x.name===product);
+ const orders=read("orders");
+ const id="KM"+Date.now().toString().slice(-7);
+ orders.push({
+  id,name,mobile:document.getElementById("orderMobile").value,
+  email:document.getElementById("orderEmail").value,
+  product,qty,total:p.price*qty,
+  address:document.getElementById("orderAddress").value,
+  date:document.getElementById("deliveryDate").value,
+  orderDate:new Date().toISOString().slice(0,10),
+  status:"Pending"
+ });
+ save("orders",orders);
+ const stock=read("stock");
+ let item=stock.find(s=>s.product===product);
+ if(item){item.quantity=Math.max(0,item.quantity-qty);save("stock",stock);}
+ document.getElementById("orderConfirmation").innerHTML=
+ `<div class="notice">Thank you, ${name}! Your order ID is <b>${id}</b>. Total: ₹${p.price*qty}. Order status: Pending.</div>`;
+ event.target.reset();updatePrice();
+ if(admin)renderDashboard();
+}
+
+function showAdminAuth(mode){
+ document.getElementById("adminAuth").innerHTML=`
+ <h3>Administrator ${mode==="register"?"Registration":"Login"}</h3>
+ <form onsubmit="adminAuth(event,'${mode}')">
+ ${mode==="register"?'<label>Administrator Name</label><input id="adminName" required>':""}
+ <label>Email</label><input type="email" id="adminEmail" required>
+ <label>Password</label><input type="password" id="adminPassword" required minlength="4">
+ <button type="submit">${mode==="register"?"Register":"Login"}</button>
+ </form>`;
+}
+function adminAuth(event,mode){
+ event.preventDefault();
+ const email=document.getElementById("adminEmail").value.toLowerCase();
+ const password=document.getElementById("adminPassword").value;
+ let users=read("admins");
+ if(mode==="register"){
+  if(users.some(u=>u.email===email)){alert("Admin already exists.");return;}
+  users.push({name:document.getElementById("adminName").value,email,password});
+  save("admins",users);alert("Registration successful. Login now.");
+  showAdminAuth("login");
+ }else{
+  const user=users.find(u=>u.email===email&&u.password===password);
+  if(!user){alert("Invalid login details.");return;}
+  admin=user;sessionStorage.setItem("komathaAdmin",JSON.stringify(admin));
+  renderDashboard();
+ }
+}
+
+function adminLogout(){
+ admin=null;sessionStorage.removeItem("komathaAdmin");
+ document.getElementById("dashboard").classList.add("hidden");
+ alert("Logged out.");
+}
+
+function addStock(event){
+ event.preventDefault();
+ let stock=read("stock");
+ const product=document.getElementById("stockProduct").value;
+ const qty=Number(document.getElementById("stockQty").value);
+ let item=stock.find(s=>s.product===product);
+ if(item)item.quantity+=qty;
+ else stock.push({product,quantity:qty});
+ save("stock",stock);
+ let entries=read("stockEntries");
+ entries.push({product,qty,date:document.getElementById("stockDate").value});
+ save("stockEntries",entries);
+ event.target.reset();renderDashboard();
+}
+
+function addVendor(event){
+ event.preventDefault();
+ let vendors=read("vendors");
+ vendors.push({
+  name:document.getElementById("vendorName").value,
+  mobile:document.getElementById("vendorMobile").value,
+  address:document.getElementById("vendorAddress").value,
+  milk:document.getElementById("vendorMilk").value
+ });
+ save("vendors",vendors);event.target.reset();renderDashboard();
+}
+
+function addCow(event){
+ event.preventDefault();
+ let cows=read("cows");
+ const id=document.getElementById("cowId").value;
+ if(cows.some(c=>c.id===id)){alert("Cow ID already exists.");return;}
+ cows.push({
+  id,breed:document.getElementById("cowBreed").value,
+  age:document.getElementById("cowAge").value,
+  milk:document.getElementById("cowMilk").value,
+  health:document.getElementById("cowHealth").value
+ });
+ save("cows",cows);event.target.reset();renderDashboard();
+}
+
+function table(headers,rows){
+ return `<table><tr>${headers.map(h=>`<th>${h}</th>`).join("")}</tr>
+ ${rows.length?rows.map(r=>`<tr>${r.map(v=>`<td>${v??""}</td>`).join("")}</tr>`).join(""):`<tr><td colspan="${headers.length}">No records found.</td></tr>`}</table>`;
+}
+
+function generateReport(){
+ const type=document.getElementById("reportType").value;
+ const date=document.getElementById("reportDate").value||new Date().toISOString().slice(0,10);
+ const orders=read("orders").filter(o=>{
+  if(type==="daily")return o.orderDate===date;
+  if(type==="monthly")return o.orderDate.slice(0,7)===date.slice(0,7);
+  return o.orderDate.slice(0,4)===date.slice(0,4);
+ });
+ const revenue=orders.reduce((sum,o)=>sum+o.total,0);
+ document.getElementById("reportResult").innerHTML=`
+ <div class="notice"><b>${type.toUpperCase()} REPORT</b><br>
+ Period: ${type==="daily"?date:type==="monthly"?date.slice(0,7):date.slice(0,4)}<br>
+ Total Orders: ${orders.length}<br>
+ Total Sales: ₹${revenue}</div>`+
+ table(["Order ID","Customer","Product","Quantity","Amount","Date"],
+ orders.map(o=>[o.id,o.name,o.product,o.qty,"₹"+o.total,o.orderDate]));
+}
+
+function updateOrderStatus(id,status){
+ let orders=read("orders");
+ const order=orders.find(o=>o.id===id);
+ if(order){order.status=status;save("orders",orders);renderDashboard();}
+}
+
+function renderDashboard(){
+ if(!admin)return;
+ document.getElementById("dashboard").classList.remove("hidden");
+ const stock=read("stock"),orders=read("orders"),vendors=read("vendors"),cows=read("cows");
+ document.getElementById("totalProducts").textContent=stock.length;
+ document.getElementById("totalOrders").textContent=orders.length;
+ document.getElementById("totalVendors").textContent=vendors.length;
+ document.getElementById("totalCows").textContent=cows.length;
+
+ document.getElementById("stockTable").innerHTML=table(["Product","Available Quantity"],stock.map(s=>[s.product,s.quantity]));
+ document.getElementById("customerTable").innerHTML=table(["Customer","Mobile","Product","Quantity","Amount","Order Date"],
+ orders.map(o=>[o.name,o.mobile,o.product,o.qty,"₹"+o.total,o.orderDate]));
+ document.getElementById("ordersTable").innerHTML=orders.length?orders.map(o=>`
+ <div class="card"><b>${o.id}</b> - ${o.name}<p>${o.product} × ${o.qty} | ₹${o.total}</p>
+ <p>Delivery: ${o.date} | ${o.address}</p>
+ <p>Status: <b>${o.status}</b></p>
+ <select onchange="updateOrderStatus('${o.id}',this.value)">
+ ${["Pending","Confirmed","Out for Delivery","Delivered","Cancelled"].map(s=>`<option ${o.status===s?"selected":""}>${s}</option>`).join("")}
+ </select></div>`).join(""):"<p>No online orders.</p>";
+ document.getElementById("vendorTable").innerHTML=table(["Name","Mobile","Address","Daily Milk (L)"],vendors.map(v=>[v.name,v.mobile,v.address,v.milk]));
+ document.getElementById("cowTable").innerHTML=table(["Cow ID","Breed","Age","Milk / Day","Health"],cows.map(c=>[c.id,c.breed,c.age,c.milk,c.health]));
+ document.getElementById("reportDate").value=new Date().toISOString().slice(0,10);
+ generateReport();
+ document.getElementById("dashboard").scrollIntoView({behavior:"smooth"});
+}
+
+function sendMessage(event){
+ event.preventDefault();
+ let messages=read("messages");
+ messages.push({
+  name:document.getElementById("contactName").value,
+  email:document.getElementById("contactEmail").value,
+  mobile:document.getElementById("contactMobile").value,
+  message:document.getElementById("contactMessage").value
+ });
+ save("messages",messages);alert("Your message has been saved.");event.target.reset();
+}
+
+renderProducts();
+updatePrice();
+if(admin)renderDashboard();
+</script>
+</body>
+</html>

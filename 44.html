@@ -1,0 +1,474 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Placement Examination System</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial}
+body{background:#f1f5f9;color:#1e293b}
+header{background:#142d4e;color:white;padding:20px 7%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+header h2{font-size:23px}
+nav button{background:transparent;color:white;border:1px solid #64748b;padding:9px 15px;border-radius:6px;cursor:pointer;margin:3px}
+nav button:hover{background:#2563eb}
+.container{max-width:1050px;margin:30px auto;padding:15px}
+.card{background:white;padding:25px;border-radius:12px;box-shadow:0 3px 12px #0001;margin-bottom:20px}
+h2,h3{margin-bottom:15px;color:#17365d}
+p{line-height:1.6}
+input,select,textarea{width:100%;padding:11px;margin:8px 0 15px;border:1px solid #cbd5e1;border-radius:6px}
+button,.btn{background:#2563eb;color:white;border:0;padding:11px 18px;border-radius:6px;cursor:pointer;margin:4px}
+button:hover{background:#1d4ed8}
+.secondary{background:#475569}
+.danger{background:#dc2626}
+.success{color:#15803d;font-weight:bold}
+.hidden{display:none}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:15px}
+.stat{background:#eff6ff;padding:20px;border-radius:9px;text-align:center}
+.stat h2{color:#2563eb}
+table{width:100%;border-collapse:collapse;margin-top:15px}
+th,td{padding:12px;border:1px solid #ddd;text-align:left}
+th{background:#eaf1fb}
+.question{padding:15px;background:#f8fafc;border-radius:8px;margin:15px 0}
+.question label{display:block;margin:10px 0;cursor:pointer}
+footer{text-align:center;background:#142d4e;color:white;padding:18px;margin-top:40px}
+#timer{font-size:20px;color:#dc2626;font-weight:bold}
+</style>
+</head>
+<body>
+
+<header>
+<h2>🎓 Placement Examination Portal</h2>
+<nav>
+<button onclick="showPage('home')">Home</button>
+<button onclick="showPage('adminLogin')">Admin</button>
+<button onclick="showPage('candidateLogin')">Candidate</button>
+</nav>
+</header>
+
+<div class="container">
+
+<!-- HOME -->
+<section id="home" class="page">
+<div class="card" style="text-align:center;padding:55px 25px">
+<h1 style="color:#17365d;margin-bottom:15px">Online Placement Examination System</h1>
+<p>Welcome to the online placement examination portal. Attend scheduled examinations, check your results, view rankings and download your scorecard.</p>
+<br>
+<button onclick="showPage('candidateLogin')">Candidate Login</button>
+<button onclick="showPage('adminLogin')">Admin Login</button>
+</div>
+<div class="grid">
+<div class="stat"><h2>01</h2><p>Secure Login</p></div>
+<div class="stat"><h2>02</h2><p>Online Examination</p></div>
+<div class="stat"><h2>03</h2><p>Automatic Evaluation</p></div>
+<div class="stat"><h2>04</h2><p>Result & Ranking</p></div>
+</div>
+</section>
+
+<!-- ADMIN LOGIN -->
+<section id="adminLogin" class="page hidden">
+<div class="card">
+<h2>Admin Login</h2>
+<label>Username</label>
+<input id="adminUser" placeholder="Enter admin username">
+<label>Password</label>
+<input id="adminPass" type="password" placeholder="Enter password">
+<button onclick="adminLogin()">Login</button>
+<p id="adminMsg"></p>
+<p><small>Demo login: admin / admin123</small></p>
+</div>
+</section>
+
+<!-- CANDIDATE LOGIN -->
+<section id="candidateLogin" class="page hidden">
+<div class="card">
+<h2>Candidate Login</h2>
+<label>Candidate ID</label>
+<input id="candidateId" placeholder="Enter candidate ID">
+<label>Password</label>
+<input id="candidatePass" type="password" placeholder="Enter password">
+<button onclick="candidateLogin()">Login</button>
+<p id="candidateMsg"></p>
+<p><small>Demo login: C101 / 1234</small></p>
+</div>
+</section>
+
+<!-- ADMIN DASHBOARD -->
+<section id="adminDashboard" class="page hidden">
+<div class="card">
+<h2>Admin Dashboard</h2>
+<p>Manage candidates, examination schedules, questions and results.</p>
+<div class="grid">
+<div class="stat"><h2 id="totalCandidates">0</h2>Registered Candidates</div>
+<div class="stat"><h2 id="totalQuestions">0</h2>Exam Questions</div>
+<div class="stat"><h2 id="totalResults">0</h2>Results Published</div>
+</div>
+</div>
+
+<div class="card">
+<h3>Provide Candidate Login Rights</h3>
+<label>Candidate ID</label>
+<input id="newId" placeholder="Example: C102">
+<label>Candidate Name</label>
+<input id="newName" placeholder="Candidate name">
+<label>Password</label>
+<input id="newPassword" placeholder="Create password">
+<button onclick="addCandidate()">Create Candidate Login</button>
+<p id="candidateCreateMsg"></p>
+</div>
+
+<div class="card">
+<h3>Schedule Examination</h3>
+<label>Exam Name</label>
+<input id="examName" value="Placement Aptitude Test">
+<label>Exam Date and Time</label>
+<input type="datetime-local" id="examDate">
+<label>Duration (minutes)</label>
+<input type="number" id="examDuration" value="30">
+<button onclick="scheduleExam()">Schedule Exam</button>
+<p id="scheduleMsg"></p>
+</div>
+
+<div class="card">
+<h3>Load Examination Questions</h3>
+<label>Question</label>
+<textarea id="questionText" placeholder="Enter question"></textarea>
+<label>Option A</label><input id="optA" placeholder="Option A">
+<label>Option B</label><input id="optB" placeholder="Option B">
+<label>Option C</label><input id="optC" placeholder="Option C">
+<label>Option D</label><input id="optD" placeholder="Option D">
+<label>Correct Answer</label>
+<select id="correct">
+<option value="A">Option A</option>
+<option value="B">Option B</option>
+<option value="C">Option C</option>
+<option value="D">Option D</option>
+</select>
+<button onclick="addQuestion()">Add Question</button>
+<div id="questionList"></div>
+</div>
+
+<div class="card">
+<h3>Publish Results</h3>
+<p>After candidates submit the examination, publish their evaluated scores.</p>
+<button onclick="publishResults()">Publish Results</button>
+<p id="publishMsg"></p>
+</div>
+
+<div class="card">
+<h3>Candidate Results and Rankings</h3>
+<div id="adminResults"></div>
+<button class="secondary" onclick="adminLogout()">Logout</button>
+</div>
+</section>
+
+<!-- CANDIDATE DASHBOARD -->
+<section id="candidateDashboard" class="page hidden">
+<div class="card">
+<h2>Candidate Dashboard</h2>
+<p>Welcome, <b id="welcomeName"></b></p>
+<div class="grid">
+<div class="stat"><h2 id="candidateExamStatus">Upcoming</h2>Exam Status</div>
+<div class="stat"><h2 id="candidateScore">--</h2>Your Score</div>
+<div class="stat"><h2 id="candidateRank">--</h2>Your Rank</div>
+</div>
+</div>
+
+<div class="card">
+<h3>Allotted Examination Schedule</h3>
+<div id="examSchedule">No examination scheduled yet.</div>
+<button onclick="startExam()">Start Examination</button>
+<p id="examMsg"></p>
+</div>
+
+<div class="card hidden" id="examArea">
+<div style="display:flex;justify-content:space-between;flex-wrap:wrap">
+<h3>Online Placement Test</h3>
+<p id="timer">Time: 30:00</p>
+</div>
+<div id="examQuestions"></div>
+<button onclick="submitExam()">Submit Examination</button>
+</div>
+
+<div class="card">
+<h3>Examination Result</h3>
+<div id="candidateResult">Results will appear after the admin publishes them.</div>
+</div>
+
+<div class="card">
+<h3>Re-evaluation Request</h3>
+<textarea id="reevalReason" placeholder="Enter reason for re-evaluation"></textarea>
+<button onclick="requestReevaluation()">Submit Request</button>
+<p id="reevalMsg"></p>
+</div>
+
+<div class="card">
+<h3>Performance Feedback</h3>
+<div id="feedback">Complete your examination to receive feedback.</div>
+</div>
+
+<div class="card">
+<h3>Passed Candidates and Rankings</h3>
+<div id="rankingTable"></div>
+<button class="secondary" onclick="candidateLogout()">Logout</button>
+</div>
+</section>
+
+</div>
+
+<footer>
+<p>© 2026 Online Placement Examination System | All Rights Reserved</p>
+</footer>
+
+<script>
+// Initial demo data
+let candidates = JSON.parse(localStorage.getItem("placementCandidates")) || [
+{id:"C101",name:"Dhanush",password:"1234",enabled:true}
+];
+let questions = JSON.parse(localStorage.getItem("placementQuestions")) || [
+{q:"Which language is used for Android development?",A:"HTML",B:"Java",C:"CSS",D:"SQL",correct:"B"},
+{q:"What does CPU stand for?",A:"Central Processing Unit",B:"Computer Personal Unit",C:"Control Program Unit",D:"Central Power Unit",correct:"A"},
+{q:"Which data structure follows FIFO?",A:"Stack",B:"Tree",C:"Queue",D:"Graph",correct:"C"},
+{q:"Which of the following is a database?",A:"Java",B:"MySQL",C:"HTML",D:"CSS",correct:"B"},
+{q:"Which symbol is used for comments in Java single-line code?",A:"//",B:"##",C:"<!--",D:"**",correct:"A"}
+];
+let exam = JSON.parse(localStorage.getItem("placementExam")) || null;
+let results = JSON.parse(localStorage.getItem("placementResults")) || [];
+let requests = JSON.parse(localStorage.getItem("placementRequests")) || [];
+let currentCandidate = null;
+let timerInterval = null;
+let timeLeft = 1800;
+let submitted = false;
+
+function saveData(){
+localStorage.setItem("placementCandidates",JSON.stringify(candidates));
+localStorage.setItem("placementQuestions",JSON.stringify(questions));
+localStorage.setItem("placementExam",JSON.stringify(exam));
+localStorage.setItem("placementResults",JSON.stringify(results));
+localStorage.setItem("placementRequests",JSON.stringify(requests));
+}
+
+function showPage(id){
+document.querySelectorAll(".page").forEach(p=>p.classList.add("hidden"));
+document.getElementById(id).classList.remove("hidden");
+}
+
+function adminLogin(){
+if(document.getElementById("adminUser").value==="admin" &&
+document.getElementById("adminPass").value==="admin123"){
+showPage("adminDashboard");
+updateAdmin();
+}else{
+document.getElementById("adminMsg").innerText="Invalid admin login!";
+}
+}
+
+function candidateLogin(){
+let id=document.getElementById("candidateId").value.trim();
+let pass=document.getElementById("candidatePass").value;
+let c=candidates.find(x=>x.id===id && x.password===pass && x.enabled);
+if(!c){
+document.getElementById("candidateMsg").innerText="Invalid login or access not provided.";
+return;
+}
+currentCandidate=c;
+showPage("candidateDashboard");
+updateCandidate();
+}
+
+function addCandidate(){
+let id=document.getElementById("newId").value.trim();
+let name=document.getElementById("newName").value.trim();
+let password=document.getElementById("newPassword").value;
+if(!id||!name||!password){alert("Fill all candidate details");return;}
+if(candidates.some(c=>c.id===id)){alert("Candidate ID already exists");return;}
+candidates.push({id,name,password,enabled:true});
+saveData();
+document.getElementById("candidateCreateMsg").innerText="Candidate login created successfully.";
+updateAdmin();
+}
+
+function scheduleExam(){
+let name=document.getElementById("examName").value.trim();
+let date=document.getElementById("examDate").value;
+let duration=Number(document.getElementById("examDuration").value);
+if(!name||!date||!duration||duration<1){alert("Enter valid examination details");return;}
+exam={name,date,duration};
+saveData();
+document.getElementById("scheduleMsg").innerText="Examination scheduled successfully.";
+updateAdmin();
+}
+
+function addQuestion(){
+let q=document.getElementById("questionText").value.trim();
+let A=document.getElementById("optA").value.trim();
+let B=document.getElementById("optB").value.trim();
+let C=document.getElementById("optC").value.trim();
+let D=document.getElementById("optD").value.trim();
+let correct=document.getElementById("correct").value;
+if(!q||!A||!B||!C||!D){alert("Fill all question fields");return;}
+questions.push({q,A,B,C,D,correct});
+saveData();
+document.getElementById("questionText").value="";
+["optA","optB","optC","optD"].forEach(id=>document.getElementById(id).value="");
+updateAdmin();
+}
+
+function updateAdmin(){
+document.getElementById("totalCandidates").innerText=candidates.length;
+document.getElementById("totalQuestions").innerText=questions.length;
+document.getElementById("totalResults").innerText=results.filter(r=>r.published).length;
+document.getElementById("questionList").innerHTML="<p>Total loaded questions: "+questions.length+"</p>";
+document.getElementById("adminResults").innerHTML=results.length?
+"<table><tr><th>Candidate</th><th>Score</th><th>Status</th><th>Rank</th></tr>"+
+results.map(r=>"<tr><td>"+r.name+"</td><td>"+r.score+"/"+r.total+"</td><td>"+(r.passed?"Passed":"Failed")+"</td><td>"+(r.rank||"Pending")+"</td></tr>").join("")+"</table>":"No results available.";
+}
+
+function startExam(){
+if(!exam){document.getElementById("examMsg").innerText="No examination has been scheduled.";return;}
+if(new Date(exam.date)>new Date()){
+document.getElementById("examMsg").innerText="Exam has not started. Please attend at the scheduled time.";
+return;
+}
+if(new Date()>new Date(new Date(exam.date).getTime()+exam.duration*60000)){
+document.getElementById("examMsg").innerText="The scheduled examination time has expired.";
+return;
+}
+if(results.some(r=>r.id===currentCandidate.id)){
+document.getElementById("examMsg").innerText="You have already submitted this examination.";
+return;
+}
+if(questions.length===0){alert("Admin has not loaded questions");return;}
+submitted=false;
+timeLeft=exam.duration*60;
+document.getElementById("examArea").classList.remove("hidden");
+document.getElementById("examQuestions").innerHTML=questions.map((q,i)=>`
+<div class="question">
+<b>${i+1}. ${escapeHTML(q.q)}</b>
+${["A","B","C","D"].map(o=>`
+<label><input type="radio" name="q${i}" value="${o}" style="width:auto;margin:5px">
+${o}. ${escapeHTML(q[o])}</label>`).join("")}
+</div>`).join("");
+document.getElementById("examArea").scrollIntoView({behavior:"smooth"});
+clearInterval(timerInterval);
+updateTimer();
+timerInterval=setInterval(()=>{
+timeLeft--;
+updateTimer();
+if(timeLeft<=0){clearInterval(timerInterval);submitExam();}
+},1000);
+}
+
+function updateTimer(){
+let m=Math.floor(timeLeft/60),s=timeLeft%60;
+document.getElementById("timer").innerText=
+"Time: "+String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
+}
+
+function submitExam(){
+if(submitted)return;
+if(!currentCandidate)return;
+submitted=true;
+clearInterval(timerInterval);
+let score=0;
+questions.forEach((q,i)=>{
+let selected=document.querySelector(`input[name="q${i}"]:checked`);
+if(selected&&selected.value===q.correct)score++;
+});
+let passed=score>=Math.ceil(questions.length*0.5);
+let result={id:currentCandidate.id,name:currentCandidate.name,score,total:questions.length,passed,published:false,rank:null};
+results.push(result);
+saveData();
+document.getElementById("examArea").classList.add("hidden");
+document.getElementById("examMsg").innerText="Examination submitted successfully. Wait for the admin to publish the result.";
+updateCandidate();
+}
+
+function publishResults(){
+if(results.length===0){alert("No candidate has submitted the exam yet.");return;}
+let sorted=[...results].sort((a,b)=>b.score-a.score);
+sorted.forEach((r,i)=>{
+let original=results.find(x=>x.id===r.id);
+original.rank=i+1;
+original.published=true;
+});
+saveData();
+document.getElementById("publishMsg").innerText="Results published successfully!";
+updateAdmin();
+if(currentCandidate)updateCandidate();
+}
+
+function updateCandidate(){
+document.getElementById("welcomeName").innerText=currentCandidate.name;
+document.getElementById("examSchedule").innerText=exam?
+exam.name+" | "+new Date(exam.date).toLocaleString()+" | Duration: "+exam.duration+" minutes":
+"No examination scheduled yet.";
+let r=results.find(x=>x.id===currentCandidate.id);
+document.getElementById("candidateExamStatus").innerText=r?"Submitted":"Upcoming";
+document.getElementById("candidateScore").innerText=r&&r.published?r.score+"/"+r.total:"--";
+document.getElementById("candidateRank").innerText=r&&r.published?"#"+r.rank:"--";
+if(r&&r.published){
+document.getElementById("candidateResult").innerHTML=`
+<p><b>Score:</b> ${r.score}/${r.total}</p>
+<p><b>Result:</b> <span class="${r.passed?"success":""}">${r.passed?"PASSED":"NOT PASSED"}</span></p>
+<p><b>Rank:</b> ${r.rank}</p>
+<button onclick="downloadScorecard()">Download Scorecard</button>`;
+document.getElementById("feedback").innerText=
+r.score/r.total>=0.8?"Excellent performance! Keep improving your skills.":
+r.score/r.total>=0.5?"Good effort. Practice more to improve your score.":
+"More preparation is needed. Revise the topics and practice regularly.";
+}else{
+document.getElementById("candidateResult").innerText=
+r?"Your result is awaiting publication.":"Results will appear after the admin publishes them.";
+document.getElementById("feedback").innerText="Complete your examination and wait for result publication.";
+}
+let passed=results.filter(x=>x.published&&x.passed).sort((a,b)=>a.rank-b.rank);
+document.getElementById("rankingTable").innerHTML=passed.length?
+"<table><tr><th>Rank</th><th>Candidate</th><th>Score</th></tr>"+
+passed.map(x=>`<tr><td>${x.rank}</td><td>${escapeHTML(x.name)}</td><td>${x.score}/${x.total}</td></tr>`).join("")+"</table>":
+"No published passed candidates yet.";
+}
+
+function downloadScorecard(){
+let r=results.find(x=>x.id===currentCandidate.id&&x.published);
+if(!r)return;
+let content=`PLACEMENT EXAMINATION SCORECARD
+Candidate: ${r.name}
+Candidate ID: ${r.id}
+Exam: ${exam?exam.name:"Placement Test"}
+Score: ${r.score}/${r.total}
+Result: ${r.passed?"PASSED":"NOT PASSED"}
+Rank: ${r.rank}
+`;
+let blob=new Blob([content],{type:"text/plain"});
+let a=document.createElement("a");
+a.href=URL.createObjectURL(blob);
+a.download="Scorecard_"+r.id+".txt";
+a.click();
+URL.revokeObjectURL(a.href);
+}
+
+function requestReevaluation(){
+let reason=document.getElementById("reevalReason").value.trim();
+if(!reason){alert("Please enter a reason");return;}
+requests.push({id:currentCandidate.id,reason,date:new Date().toLocaleString()});
+saveData();
+document.getElementById("reevalMsg").innerText="Re-evaluation request submitted successfully.";
+document.getElementById("reevalReason").value="";
+}
+
+function escapeHTML(str){
+return String(str).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+function adminLogout(){showPage("home");}
+function candidateLogout(){
+clearInterval(timerInterval);
+currentCandidate=null;
+showPage("home");
+}
+
+updateAdmin();
+</script>
+</body>
+</html>

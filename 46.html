@@ -1,0 +1,558 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TaxEase - Income Tax Calculator</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+body{background:#f3f6fb;color:#243247}
+header{background:#142e50;color:white;padding:18px 6%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.logo{font-size:24px;font-weight:bold}
+.logo span{color:#60c6a2}
+nav{display:flex;gap:7px;flex-wrap:wrap}
+button{background:#1769aa;color:white;border:0;padding:11px 17px;border-radius:6px;cursor:pointer;font-weight:bold;margin:4px}
+button:hover{background:#104c7d}
+nav button{background:transparent;color:white}
+nav button:hover{background:#28496d}
+.container{max-width:1100px;margin:30px auto;padding:0 17px}
+.hero{background:linear-gradient(120deg,#142e50,#247b94);color:white;padding:65px 25px;text-align:center;border-radius:14px}
+.hero h1{font-size:38px;margin-bottom:15px}
+.hero p{line-height:1.7;max-width:700px;margin:auto}
+.hero button{background:#60c6a2;color:#142e50;margin-top:20px}
+.card{background:white;padding:24px;border-radius:11px;box-shadow:0 3px 14px #0000000d;margin-bottom:20px}
+h2,h3{color:#17476f;margin-bottom:16px}
+p{line-height:1.6}
+label{font-weight:bold;font-size:14px}
+input,select,textarea{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:6px;margin:8px 0 16px;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px}
+.stat{background:#eaf4fa;padding:20px;border-radius:9px;text-align:center}
+.stat h2{font-size:28px;color:#1769aa}
+.hidden{display:none!important}
+table{width:100%;border-collapse:collapse;margin:15px 0}
+td,th{padding:12px;border:1px solid #e0e5ed;text-align:left}
+th{background:#eaf2f8}
+.result{background:#e9f8f1;padding:20px;border-radius:10px;margin:15px 0}
+.green{color:#16854c;font-weight:bold}
+.note{background:#fff5dd;padding:15px;border-radius:8px;margin:12px 0;color:#765315}
+.small{font-size:13px;color:#718096}
+footer{background:#142e50;color:white;text-align:center;padding:25px;margin-top:45px}
+</style>
+</head>
+<body>
+
+<header>
+<div class="logo">💰 Tax<span>Ease</span></div>
+<nav>
+<button onclick="showPage('home')">Home</button>
+<button onclick="showPage('calculator')">Tax Calculator</button>
+<button onclick="showPage('employeeLogin')">Employee</button>
+<button onclick="showPage('adminLogin')">Admin</button>
+</nav>
+</header>
+
+<div class="container">
+
+<!-- HOME -->
+<section id="home" class="page">
+<div class="hero">
+<h1>Smart Income Tax Calculator</h1>
+<p>Calculate your annual taxable income, understand your tax liability and view a detailed tax report using the tax slabs provided by the administrator.</p>
+<button onclick="showPage('employeeLogin')">Get Started</button>
+</div>
+<br>
+<div class="grid">
+<div class="card"><h3>📊 Tax Calculation</h3><p>Calculate tax automatically based on your financial information.</p></div>
+<div class="card"><h3>🛡️ Deduction Management</h3><p>Include HRA, pension and health insurance deductions.</p></div>
+<div class="card"><h3>📄 Tax Report</h3><p>Download your detailed income tax calculation report.</p></div>
+</div>
+<div class="card">
+<h2>Income Tax Slabs</h2>
+<div id="homeSlabs"></div>
+<p class="small">These are the assignment-specific tax slabs configured for this demonstration.</p>
+</div>
+</section>
+
+<!-- EMPLOYEE LOGIN -->
+<section id="employeeLogin" class="page hidden">
+<div class="card">
+<h2>Employee Login</h2>
+<label>Email Address</label>
+<input id="loginEmail" type="email" placeholder="Enter registered email">
+<label>Password</label>
+<input id="loginPassword" type="password" placeholder="Enter password">
+<button onclick="employeeLogin()">Login</button>
+<button onclick="showPage('employeeRegister')" style="background:#475569">Create Account</button>
+<p id="loginMsg"></p>
+<hr style="margin:18px 0">
+<h3>Social Login</h3>
+<button onclick="socialLogin('Google')">Continue with Google</button>
+<button onclick="socialLogin('Microsoft')" style="background:#475569">Continue with Microsoft</button>
+<p class="small">Social login buttons are demo placeholders. Real OAuth authentication requires provider configuration.</p>
+</div>
+</section>
+
+<!-- EMPLOYEE REGISTER -->
+<section id="employeeRegister" class="page hidden">
+<div class="card">
+<h2>Employee Registration</h2>
+<label>Full Name</label>
+<input id="regName" placeholder="Enter full name">
+<label>Email Address</label>
+<input id="regEmail" type="email" placeholder="Enter email">
+<label>Password</label>
+<input id="regPassword" type="password" placeholder="Create password">
+<button onclick="registerEmployee()">Register</button>
+<p id="registerMsg"></p>
+</div>
+</section>
+
+<!-- EMPLOYEE DASHBOARD -->
+<section id="employeeDashboard" class="page hidden">
+<div class="card">
+<h2>Employee Dashboard</h2>
+<p>Welcome, <b id="employeeWelcome"></b></p>
+<div class="grid">
+<div class="stat"><h2>01</h2>Tax Calculator</div>
+<div class="stat"><h2>02</h2>Tax Report</div>
+<div class="stat"><h2>03</h2>Financial Summary</div>
+</div>
+<br>
+<button onclick="showPage('calculator')">Calculate Income Tax</button>
+<button onclick="showPage('home')" style="background:#475569">Home</button>
+</div>
+<div class="card">
+<h3>Latest Tax Calculation</h3>
+<div id="lastCalculation">No calculation completed yet.</div>
+</div>
+<button onclick="employeeLogout()" style="background:#475569">Logout</button>
+</section>
+
+<!-- TAX CALCULATOR -->
+<section id="calculator" class="page hidden">
+<div class="card">
+<h2>Income Tax Calculation</h2>
+<p>Enter your monthly salary and deduction details below.</p>
+<div class="note">All salary and deduction values must be entered as monthly amounts. The system converts them into annual values automatically.</div>
+
+<label>Monthly Gross Pay (₹)</label>
+<input type="number" id="grossPay" min="0" placeholder="Example: 60000">
+
+<label>Monthly House Rent Allowance - HRA (₹)</label>
+<input type="number" id="hra" min="0" placeholder="Example: 10000">
+
+<label>Monthly Pension Contribution (₹)</label>
+<input type="number" id="pension" min="0" placeholder="Example: 5000">
+
+<label>Monthly Health Insurance Premium (₹)</label>
+<input type="number" id="health" min="0" placeholder="Example: 1000">
+
+<label>Annual Bonus / Other Taxable Income (₹)</label>
+<input type="number" id="otherIncome" min="0" placeholder="Example: 20000">
+
+<button onclick="calculateTax()">Calculate Tax</button>
+<button onclick="clearForm()" style="background:#64748b">Clear</button>
+<p id="calcMsg"></p>
+</div>
+
+<div id="taxResult" class="card hidden">
+<h2>Income Tax Calculation Result</h2>
+<div class="grid">
+<div class="stat"><h2 id="grossAnnual">₹0</h2>Annual Gross Income</div>
+<div class="stat"><h2 id="taxableIncome">₹0</h2>Taxable Income</div>
+<div class="stat"><h2 id="taxAmount">₹0</h2>Income Tax</div>
+<div class="stat"><h2 id="netIncome">₹0</h2>Net Income After Tax</div>
+</div>
+<br>
+<h3>Detailed Tax Breakdown</h3>
+<div id="breakdown"></div>
+<div class="result">
+<h3>Final Tax Liability</h3>
+<h2 id="finalTax" class="green">₹0</h2>
+<p id="taxFeedback"></p>
+</div>
+<h3>Tax Saving Tips</h3>
+<div id="taxTips"></div>
+<button onclick="downloadReport()">Download Tax Report</button>
+<button onclick="window.print()" style="background:#475569">Print Report</button>
+</div>
+<button onclick="showPage('employeeDashboard')" style="background:#475569">Back to Dashboard</button>
+</section>
+
+<!-- ADMIN LOGIN -->
+<section id="adminLogin" class="page hidden">
+<div class="card">
+<h2>Admin Login</h2>
+<label>Username</label>
+<input id="adminUsername" placeholder="Username">
+<label>Password</label>
+<input id="adminPassword" type="password" placeholder="Password">
+<button onclick="adminLogin()">Login</button>
+<p id="adminMsg"></p>
+<p class="small">Demo: admin / admin123</p>
+</div>
+</section>
+
+<!-- ADMIN DASHBOARD -->
+<section id="adminDashboard" class="page hidden">
+<div class="card">
+<h2>Admin Dashboard</h2>
+<p>Manage tax calculation fields, deductions and tax slab rules.</p>
+<div class="grid">
+<div class="stat"><h2 id="employeeCount">0</h2>Employees</div>
+<div class="stat"><h2 id="calculationCount">0</h2>Tax Calculations</div>
+</div>
+</div>
+
+<div class="card">
+<h3>Manage Employee Input Fields</h3>
+<p>Enable or disable input fields in the employee calculator.</p>
+<label><input type="checkbox" id="fieldHRA" style="width:auto"> House Rent Allowance</label><br>
+<label><input type="checkbox" id="fieldPension" style="width:auto"> Pension Contribution</label><br>
+<label><input type="checkbox" id="fieldHealth" style="width:auto"> Health Insurance</label><br>
+<label><input type="checkbox" id="fieldOther" style="width:auto"> Bonus / Other Taxable Income</label><br><br>
+<button onclick="saveFields()">Update Input Fields</button>
+<p id="fieldMsg"></p>
+</div>
+
+<div class="card">
+<h3>Update Deduction Rules</h3>
+<label>Standard Deduction (₹ per year)</label>
+<input type="number" id="standardDeduction" min="0">
+<label>Maximum Annual Pension Deduction (₹)</label>
+<input type="number" id="maxPension" min="0">
+<button onclick="saveRules()">Update Deduction Rules</button>
+<p id="ruleMsg"></p>
+</div>
+
+<div class="card">
+<h3>Modify Tax Slabs</h3>
+<label>First Slab Limit (₹)</label>
+<input type="number" id="slab1" min="0">
+<label>Second Slab Limit (₹)</label>
+<input type="number" id="slab2" min="0">
+<label>Third Slab Limit (₹)</label>
+<input type="number" id="slab3" min="0">
+<label>Second Slab Rate (%)</label>
+<input type="number" id="rate2" min="0" max="100">
+<label>Third Slab Rate (%)</label>
+<input type="number" id="rate3" min="0" max="100">
+<label>Fourth Slab Rate (%)</label>
+<input type="number" id="rate4" min="0" max="100">
+<button onclick="saveSlabs()">Save Tax Slabs</button>
+<p id="slabMsg"></p>
+</div>
+
+<div class="card">
+<h3>Tax Calculation Records</h3>
+<div id="adminRecords"></div>
+</div>
+<button onclick="adminLogout()" style="background:#475569">Logout</button>
+</section>
+
+</div>
+
+<footer>
+<h3>TaxEase - Online Income Tax Calculator</h3>
+<p>Simple | Smart | Transparent Tax Calculation</p>
+<p>© 2026 TaxEase. All Rights Reserved.</p>
+</footer>
+
+<script>
+let employees=JSON.parse(localStorage.getItem("teEmployees"))||[];
+let records=JSON.parse(localStorage.getItem("teRecords"))||[];
+let currentEmployee=null;
+let latestReport=null;
+
+let rules=JSON.parse(localStorage.getItem("teRules"))||{
+standard:50000,
+pension:150000,
+hra:true,
+pensionField:true,
+health:true,
+other:true,
+slab1:250000,
+slab2:500000,
+slab3:1000000,
+rate2:5,
+rate3:20,
+rate4:30
+};
+
+function save(){
+localStorage.setItem("teEmployees",JSON.stringify(employees));
+localStorage.setItem("teRecords",JSON.stringify(records));
+localStorage.setItem("teRules",JSON.stringify(rules));
+}
+
+function showPage(id){
+document.querySelectorAll(".page").forEach(x=>x.classList.add("hidden"));
+document.getElementById(id).classList.remove("hidden");
+if(id==="adminDashboard")updateAdmin();
+if(id==="home")renderSlabs();
+if(id==="calculator")applyFields();
+if(id==="employeeDashboard"&&currentEmployee)updateEmployee();
+}
+
+function money(n){
+return "₹"+Number(n).toLocaleString("en-IN",{maximumFractionDigits:2});
+}
+
+function registerEmployee(){
+let name=regName.value.trim();
+let email=regEmail.value.trim().toLowerCase();
+let pass=regPassword.value;
+if(!name||!email||!pass){alert("Fill all fields");return;}
+if(employees.some(e=>e.email===email)){alert("Email already registered");return;}
+employees.push({name,email,pass});
+save();
+registerMsg.innerText="Registration successful. Please login.";
+}
+
+function employeeLogin(){
+let email=loginEmail.value.trim().toLowerCase();
+let pass=loginPassword.value;
+let e=employees.find(x=>x.email===email&&x.pass===pass);
+if(!e){loginMsg.innerText="Invalid email or password.";return;}
+currentEmployee=e;
+showPage("employeeDashboard");
+}
+
+function socialLogin(provider){
+alert(provider+" login requires OAuth setup. Please use email registration and login in this demo.");
+}
+
+function employeeLogout(){
+currentEmployee=null;
+showPage("home");
+}
+
+function updateEmployee(){
+employeeWelcome.innerText=currentEmployee.name;
+let r=records.filter(x=>x.email===currentEmployee.email);
+lastCalculation.innerHTML=r.length?
+`<p>Last taxable income: ${money(r[r.length-1].taxable)}</p>
+<p>Last tax liability: ${money(r[r.length-1].tax)}</p>`:
+"No calculation completed yet.";
+}
+
+function applyFields(){
+hra.disabled=!rules.hra;
+pension.disabled=!rules.pensionField;
+health.disabled=!rules.health;
+otherIncome.disabled=!rules.other;
+}
+
+function calculateTax(){
+let gross=Number(grossPay.value);
+let h=rules.hra?Number(hra.value):0;
+let p=rules.pensionField?Number(pension.value):0;
+let hi=rules.health?Number(health.value):0;
+let other=rules.other?Number(otherIncome.value):0;
+
+let inputs=[gross,h,p,hi,other];
+if(inputs.some(x=>!Number.isFinite(x)||x<0)){
+calcMsg.innerText="Please enter valid non-negative amounts.";
+return;
+}
+if(gross===0&&other===0){
+calcMsg.innerText="Please enter gross salary or other income.";
+return;
+}
+
+let annualGross=gross*12+other;
+let annualHRA=h*12;
+let annualPension=Math.min(p*12,rules.pension);
+let annualHealth=hi*12;
+let standard=rules.standard;
+
+// Other taxable income is added to annual gross income.
+let taxable=Math.max(0,annualGross-annualHRA-standard-annualPension-annualHealth);
+
+let tax=0,slabDetails="";
+if(taxable<=rules.slab1){
+tax=0;
+slabDetails="No tax for this income range.";
+}else if(taxable<=rules.slab2){
+tax=(taxable-rules.slab1)*rules.rate2/100;
+slabDetails=`${rules.rate2}% × (${money(taxable)} - ${money(rules.slab1)})`;
+}else if(taxable<=rules.slab3){
+let base=(rules.slab2-rules.slab1)*rules.rate2/100;
+tax=base+(taxable-rules.slab2)*rules.rate3/100;
+slabDetails=`${money(base)} + ${rules.rate3}% × (${money(taxable)} - ${money(rules.slab2)})`;
+}else{
+let base=(rules.slab2-rules.slab1)*rules.rate2/100+
+(rules.slab3-rules.slab2)*rules.rate3/100;
+tax=base+(taxable-rules.slab3)*rules.rate4/100;
+slabDetails=`${money(base)} + ${rules.rate4}% × (${money(taxable)} - ${money(rules.slab3)})`;
+}
+
+let net=annualGross-tax;
+latestReport={
+name:currentEmployee?currentEmployee.name:"Guest Employee",
+email:currentEmployee?currentEmployee.email:"Not logged in",
+annualGross,annualHRA,standard,annualPension,annualHealth,
+other,taxable,tax,net,slabDetails,
+date:new Date().toLocaleDateString("en-IN")
+};
+
+if(currentEmployee){
+records.push({...latestReport});
+save();
+updateEmployee();
+}
+
+document.getElementById("grossAnnual").innerText=money(annualGross);
+document.getElementById("taxableIncome").innerText=money(taxable);
+document.getElementById("taxAmount").innerText=money(tax);
+document.getElementById("netIncome").innerText=money(net);
+document.getElementById("finalTax").innerText=money(tax);
+document.getElementById("taxFeedback").innerText=
+tax===0?"No income tax is payable under the configured assignment slabs.":"Tax calculated according to the configured assignment slabs.";
+
+document.getElementById("breakdown").innerHTML=`
+<table>
+<tr><th>Description</th><th>Annual Amount</th></tr>
+<tr><td>Annual Gross Salary + Other Income</td><td>${money(annualGross)}</td></tr>
+<tr><td>Less: Annual HRA</td><td>- ${money(annualHRA)}</td></tr>
+<tr><td>Less: Standard Deduction</td><td>- ${money(standard)}</td></tr>
+<tr><td>Less: Pension Deduction (limited)</td><td>- ${money(annualPension)}</td></tr>
+<tr><td>Less: Health Insurance</td><td>- ${money(annualHealth)}</td></tr>
+<tr><th>Net Taxable Income</th><th>${money(taxable)}</th></tr>
+<tr><td>Tax Calculation</td><td>${slabDetails}</td></tr>
+<tr><th>Total Tax Liability</th><th>${money(tax)}</th></tr>
+<tr><th>Net Income After Tax</th><th>${money(net)}</th></tr>
+</table>`;
+
+document.getElementById("taxTips").innerHTML=`
+<ul style="padding-left:22px;line-height:2">
+<li>Keep proof of eligible pension and insurance contributions.</li>
+<li>Check your salary components and HRA details carefully.</li>
+<li>Maintain records of bonuses and other taxable income.</li>
+<li>Check the applicable tax regime and current government rules before filing.</li>
+</ul>`;
+
+document.getElementById("taxResult").classList.remove("hidden");
+calcMsg.innerText="Tax calculated successfully.";
+document.getElementById("taxResult").scrollIntoView({behavior:"smooth"});
+}
+
+function clearForm(){
+["grossPay","hra","pension","health","otherIncome"].forEach(id=>document.getElementById(id).value="");
+taxResult.classList.add("hidden");
+calcMsg.innerText="";
+latestReport=null;
+}
+
+function downloadReport(){
+if(!latestReport){alert("Calculate tax first");return;}
+let r=latestReport;
+let text=`INCOME TAX CALCULATION REPORT
+TaxEase
+Employee: ${r.name}
+Email: ${r.email}
+Date: ${r.date}
+
+Annual Gross Income: ${money(r.annualGross)}
+Annual HRA: ${money(r.annualHRA)}
+Standard Deduction: ${money(r.standard)}
+Pension Deduction: ${money(r.annualPension)}
+Health Insurance: ${money(r.annualHealth)}
+
+Net Taxable Income: ${money(r.taxable)}
+Tax Calculation: ${r.slabDetails}
+Total Tax Liability: ${money(r.tax)}
+Net Income After Tax: ${money(r.net)}
+
+This is a demonstration report based on the assignment's tax rules.
+Verify current applicable government rules before filing a tax return.`;
+
+let blob=new Blob([text],{type:"text/plain"});
+let url=URL.createObjectURL(blob);
+let a=document.createElement("a");
+a.href=url;
+a.download="Income_Tax_Report.txt";
+a.click();
+URL.revokeObjectURL(url);
+}
+
+function adminLogin(){
+if(adminUsername.value==="admin"&&adminPassword.value==="admin123"){
+showPage("adminDashboard");
+}else adminMsg.innerText="Invalid admin credentials.";
+}
+
+function adminLogout(){showPage("home");}
+
+function saveFields(){
+rules.hra=fieldHRA.checked;
+rules.pensionField=fieldPension.checked;
+rules.health=fieldHealth.checked;
+rules.other=fieldOther.checked;
+save();
+fieldMsg.innerText="Employee input fields updated successfully.";
+}
+
+function saveRules(){
+let standard=Number(standardDeduction.value);
+let pensionMax=Number(maxPension.value);
+if(standard<0||pensionMax<0){alert("Enter valid deduction limits");return;}
+rules.standard=standard;
+rules.pension=pensionMax;
+save();
+ruleMsg.innerText="Deduction rules updated.";
+}
+
+function saveSlabs(){
+let s1=Number(slab1.value),s2=Number(slab2.value),s3=Number(slab3.value);
+let r2=Number(rate2.value),r3=Number(rate3.value),r4=Number(rate4.value);
+if(!(s1>0&&s2>s1&&s3>s2)||[r2,r3,r4].some(x=>x<0||x>100)){
+alert("Enter valid increasing slab limits and tax rates.");
+return;
+}
+Object.assign(rules,{slab1:s1,slab2:s2,slab3:s3,rate2:r2,rate3:r3,rate4:r4});
+save();
+slabMsg.innerText="Tax slabs updated successfully.";
+renderSlabs();
+}
+
+function updateAdmin(){
+employeeCount.innerText=employees.length;
+calculationCount.innerText=records.length;
+fieldHRA.checked=rules.hra;
+fieldPension.checked=rules.pensionField;
+fieldHealth.checked=rules.health;
+fieldOther.checked=rules.other;
+standardDeduction.value=rules.standard;
+maxPension.value=rules.pension;
+slab1.value=rules.slab1;
+slab2.value=rules.slab2;
+slab3.value=rules.slab3;
+rate2.value=rules.rate2;
+rate3.value=rules.rate3;
+rate4.value=rules.rate4;
+
+adminRecords.innerHTML=records.length?
+`<table><tr><th>Employee</th><th>Taxable Income</th><th>Tax</th><th>Net Income</th></tr>
+${records.map(r=>`<tr><td>${escapeHTML(r.name)}</td><td>${money(r.taxable)}</td><td>${money(r.tax)}</td><td>${money(r.net)}</td></tr>`).join("")}</table>`:
+"No employee calculations yet.";
+}
+
+function escapeHTML(s){
+return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+function renderSlabs(){
+homeSlabs.innerHTML=`
+<table><tr><th>Annual Taxable Income</th><th>Tax Rate</th></tr>
+<tr><td>Up to ${money(rules.slab1)}</td><td>Nil</td></tr>
+<tr><td>${money(rules.slab1)} to ${money(rules.slab2)}</td><td>${rules.rate2}%</td></tr>
+<tr><td>${money(rules.slab2)} to ${money(rules.slab3)}</td><td>${rules.rate3}% (plus previous slab tax)</td></tr>
+<tr><td>Above ${money(rules.slab3)}</td><td>${rules.rate4}% (plus previous slab tax)</td></tr></table>`;
+}
+
+renderSlabs();
+</script>
+</body>
+</html>

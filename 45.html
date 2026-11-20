@@ -1,0 +1,569 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ArtVista - Painting Exhibition & Reviews</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#f7f5f2;color:#292524}
+header{background:#211c1a;color:white;padding:18px 6%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.logo{font-size:25px;font-weight:bold;color:#e9bd83}
+nav{display:flex;gap:8px;flex-wrap:wrap}
+button{border:0;padding:11px 17px;border-radius:6px;background:#9b5d36;color:white;cursor:pointer;font-weight:bold}
+button:hover{background:#754329}
+nav button{background:transparent;color:white}
+nav button:hover{background:#49372e}
+.container{max-width:1150px;margin:30px auto;padding:0 18px}
+.hero{background:linear-gradient(120deg,#211c1a,#70503b);color:white;padding:75px 35px;border-radius:15px;text-align:center}
+.hero h1{font-size:42px;margin-bottom:15px}
+.hero p{font-size:17px;line-height:1.7;max-width:700px;margin:auto}
+.hero button{margin-top:25px;background:#d49b65;color:#211c1a}
+.section-title{text-align:center;margin:40px 0 22px}
+.section-title h2{font-size:28px;color:#593a29}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:22px}
+.card{background:white;border-radius:12px;overflow:hidden;box-shadow:0 4px 15px #00000012;margin-bottom:20px}
+.card-content{padding:19px}
+.card h3{margin-bottom:10px;color:#593a29}
+.card p{line-height:1.6;color:#665c55;margin-bottom:10px}
+.art{height:210px;display:flex;align-items:center;justify-content:center;font-size:75px;background:linear-gradient(135deg,#e9c6a4,#a56c50)}
+.art2{background:linear-gradient(135deg,#a9c8b5,#476b59)}
+.art3{background:linear-gradient(135deg,#c7b5dc,#745b8d)}
+.art4{background:linear-gradient(135deg,#e9c5c2,#ad6864)}
+.rating{color:#e6a12e;font-size:21px}
+.price{font-size:19px;font-weight:bold;color:#8b4c29}
+.panel{background:white;padding:25px;border-radius:12px;box-shadow:0 3px 15px #0001;margin-bottom:22px}
+.panel h2,.panel h3{color:#593a29;margin-bottom:18px}
+input,select,textarea{width:100%;padding:12px;border:1px solid #d6c9be;border-radius:6px;margin:8px 0 16px;font-size:14px}
+textarea{min-height:90px;resize:vertical}
+label{font-weight:bold;font-size:14px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.tabs button{background:#eee5dc;color:#49372e}
+.tabs button.active{background:#9b5d36;color:white}
+.hidden{display:none!important}
+.stat{padding:22px;background:#f3e9df;border-radius:9px;text-align:center}
+.stat h2{font-size:30px;color:#985b35}
+table{width:100%;border-collapse:collapse;margin:15px 0}
+th,td{padding:12px;border:1px solid #e6ded7;text-align:left}
+th{background:#f1e8df}
+.review{padding:15px;border-left:4px solid #bd8b5c;background:#faf7f4;margin:12px 0;border-radius:5px}
+.positive{color:#16834a;font-weight:bold}
+.negative{color:#cf3939;font-weight:bold}
+footer{background:#211c1a;color:white;text-align:center;padding:28px;margin-top:50px}
+.small{font-size:13px;color:#81746b}
+.danger{background:#bd3434}
+.green{background:#237a4b}
+</style>
+</head>
+<body>
+
+<header>
+<div class="logo">🎨 ArtVista</div>
+<nav>
+<button onclick="showPage('home')">Home</button>
+<button onclick="showPage('gallery')">Gallery</button>
+<button onclick="showPage('packages')">Packages</button>
+<button onclick="showPage('customerLogin')">Customer</button>
+<button onclick="showPage('ownerLogin')">Owner</button>
+<button onclick="showPage('adminLogin')">Admin</button>
+</nav>
+</header>
+
+<div class="container">
+
+<!-- HOME -->
+<section id="home" class="page">
+<div class="hero">
+<h1>Discover Art. Share Your Opinion.</h1>
+<p>Explore beautiful paintings, express your thoughts, rate your favourite artwork and support talented artists through our online painting exhibition platform.</p>
+<button onclick="showPage('gallery')">Explore Paintings</button>
+</div>
+
+<div class="section-title">
+<h2>Explore Our Art Collection</h2>
+<p>Discover creative artwork from talented artists.</p>
+</div>
+<div class="grid" id="homeGallery"></div>
+
+<div class="section-title">
+<h2>How ArtVista Works</h2>
+</div>
+<div class="grid">
+<div class="panel"><h3>🎨 1. Upload Artwork</h3><p>Owners register and submit paintings by choosing an exhibition package.</p></div>
+<div class="panel"><h3>⭐ 2. Customer Reviews</h3><p>Customers view paintings and submit ratings and written feedback.</p></div>
+<div class="panel"><h3>📊 3. Review Analysis</h3><p>Admins monitor feedback, average ratings and customer opinions.</p></div>
+</div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery" class="page hidden">
+<div class="section-title"><h2>Painting Gallery</h2><p>View artwork and share your feedback.</p></div>
+<input id="searchPainting" placeholder="Search painting or artist..." oninput="renderGallery()">
+<div class="grid" id="galleryList"></div>
+</section>
+
+<!-- PAINTING DETAILS -->
+<section id="details" class="page hidden">
+<button class="secondary" onclick="showPage('gallery')">← Back to Gallery</button>
+<div class="panel" id="paintingDetails"></div>
+<div class="panel">
+<h3>Customer Reviews</h3>
+<div id="paintingReviews"></div>
+</div>
+<div class="panel">
+<h3>Submit Your Review</h3>
+<p>Login as a customer to rate this painting.</p>
+<label>Rating</label>
+<select id="reviewRating">
+<option value="5">★★★★★ - Excellent</option>
+<option value="4">★★★★ - Very Good</option>
+<option value="3">★★★ - Good</option>
+<option value="2">★★ - Average</option>
+<option value="1">★ - Poor</option>
+</select>
+<label>Your Feedback</label>
+<textarea id="reviewText" placeholder="Write your opinion about this painting..."></textarea>
+<button onclick="submitReview()">Submit Review</button>
+<p id="reviewMsg"></p>
+</div>
+</section>
+
+<!-- PACKAGES -->
+<section id="packages" class="page hidden">
+<div class="section-title"><h2>Painting Exhibition Packages</h2><p>Choose a package to display your painting.</p></div>
+<div class="grid">
+<div class="panel"><h3>Basic Package</h3><h2>₹499</h2><p>Display for 3 days</p><p>Customer ratings and reviews</p><p>Basic feedback report</p></div>
+<div class="panel"><h3>Standard Package</h3><h2>₹999</h2><p>Display for 7 days</p><p>Customer ratings and reviews</p><p>Detailed feedback report</p></div>
+<div class="panel"><h3>Premium Package</h3><h2>₹1,999</h2><p>Display for 15 days</p><p>Priority painting display</p><p>Complete feedback report</p></div>
+</div>
+</section>
+
+<!-- ADMIN LOGIN -->
+<section id="adminLogin" class="page hidden">
+<div class="panel">
+<h2>Admin Login</h2>
+<label>Username</label><input id="adminUser" placeholder="Admin username">
+<label>Password</label><input id="adminPass" type="password" placeholder="Password">
+<button onclick="adminLogin()">Login</button>
+<p id="adminMsg"></p>
+<p class="small">Demo: admin / admin123</p>
+</div>
+</section>
+
+<!-- OWNER REGISTRATION -->
+<section id="ownerRegister" class="page hidden">
+<div class="panel">
+<h2>Painting Owner Registration</h2>
+<label>Owner Name</label><input id="regOwnerName" placeholder="Full name">
+<label>Email</label><input id="regOwnerEmail" type="email" placeholder="Email address">
+<label>Password</label><input id="regOwnerPass" type="password" placeholder="Create password">
+<button onclick="registerOwner()">Register</button>
+<p id="ownerRegMsg"></p>
+</div>
+</section>
+
+<!-- OWNER LOGIN -->
+<section id="ownerLogin" class="page hidden">
+<div class="panel">
+<h2>Painting Owner Login</h2>
+<label>Email</label><input id="ownerEmail" type="email" placeholder="Registered email">
+<label>Password</label><input id="ownerPass" type="password" placeholder="Password">
+<button onclick="ownerLogin()">Login</button>
+<button class="secondary" onclick="showPage('ownerRegister')">New Owner? Register</button>
+<p id="ownerMsg"></p>
+</div>
+</section>
+
+<!-- OWNER DASHBOARD -->
+<section id="ownerDashboard" class="page hidden">
+<div class="panel">
+<h2>Owner Dashboard</h2>
+<p>Welcome, <b id="ownerWelcome"></b></p>
+</div>
+<div class="panel">
+<h3>Submit New Painting</h3>
+<label>Painting Title</label><input id="paintingTitle" placeholder="Enter painting title">
+<label>Painting Description</label><textarea id="paintingDescription" placeholder="Describe your painting"></textarea>
+<label>Painting Category</label>
+<select id="paintingCategory"><option>Nature</option><option>Abstract</option><option>Portrait</option><option>Traditional</option><option>Modern Art</option></select>
+<label>Painting Image URL</label><input id="paintingImage" placeholder="Paste an image URL (optional)">
+<label>Select Package</label>
+<select id="ownerPackage" onchange="updatePackagePrice()">
+<option value="Basic">Basic - 3 Days - ₹499</option>
+<option value="Standard">Standard - 7 Days - ₹999</option>
+<option value="Premium">Premium - 15 Days - ₹1999</option>
+</select>
+<p id="packagePrice" class="price">Package Amount: ₹499</p>
+<h3>Mode of Transaction</h3>
+<select id="paymentMode">
+<option>UPI</option><option>Debit Card</option><option>Credit Card</option><option>Net Banking</option>
+</select>
+<label>Demo Transaction Reference</label>
+<input id="transactionRef" placeholder="Enter demo transaction reference">
+<button onclick="submitPainting()">Pay & Submit Painting</button>
+<p id="ownerSubmitMsg"></p>
+<p class="small">Demo payment only. No real money is transferred.</p>
+</div>
+<div class="panel">
+<h3>My Paintings and Reviews</h3>
+<div id="ownerPaintings"></div>
+</div>
+<button class="secondary" onclick="ownerLogout()">Logout</button>
+</section>
+
+<!-- CUSTOMER REGISTRATION -->
+<section id="customerRegister" class="page hidden">
+<div class="panel">
+<h2>Customer Registration</h2>
+<label>Name</label><input id="customerName" placeholder="Your name">
+<label>Email</label><input id="customerEmail" type="email" placeholder="Email address">
+<label>Password</label><input id="customerPassword" type="password" placeholder="Create password">
+<button onclick="registerCustomer()">Create Account</button>
+<p id="customerRegMsg"></p>
+</div>
+</section>
+
+<!-- CUSTOMER LOGIN -->
+<section id="customerLogin" class="page hidden">
+<div class="panel">
+<h2>Customer Login</h2>
+<label>Email</label><input id="loginCustomerEmail" type="email" placeholder="Email address">
+<label>Password</label><input id="loginCustomerPass" type="password" placeholder="Password">
+<button onclick="customerLogin()">Login</button>
+<hr style="margin:18px 0;border:0;border-top:1px solid #ddd">
+<p>Or use a social login option:</p><br>
+<button onclick="socialLogin('Google')">Continue with Google</button>
+<button class="secondary" onclick="socialLogin('Facebook')">Continue with Facebook</button>
+<br><br>
+<button class="secondary" onclick="showPage('customerRegister')">Create New Account</button>
+<p id="customerMsg"></p>
+<p class="small">Social login buttons are demonstration placeholders, not live authentication.</p>
+</div>
+</section>
+
+<!-- CUSTOMER DASHBOARD -->
+<section id="customerDashboard" class="page hidden">
+<div class="panel">
+<h2>Customer Dashboard</h2>
+<p>Welcome, <b id="customerWelcome"></b></p>
+<p>Explore available paintings and share your valuable feedback.</p>
+</div>
+<div class="panel">
+<h3>Available Paintings</h3>
+<div class="grid" id="customerGallery"></div>
+</div>
+<button class="secondary" onclick="customerLogout()">Logout</button>
+</section>
+
+<!-- ADMIN DASHBOARD -->
+<section id="adminDashboard" class="page hidden">
+<div class="panel">
+<h2>Admin Dashboard</h2>
+<p>Manage paintings, schedules, payments and customer reviews.</p>
+<div class="grid">
+<div class="stat"><h2 id="paintingCount">0</h2>Paintings</div>
+<div class="stat"><h2 id="reviewCount">0</h2>Reviews</div>
+<div class="stat"><h2 id="ownerCount">0</h2>Owners</div>
+<div class="stat"><h2 id="paymentCount">0</h2>Payments</div>
+</div>
+</div>
+
+<div class="panel">
+<h3>Painting Schedule and Approval</h3>
+<p>Review owner submissions and set the display schedule.</p>
+<div id="adminPaintingList"></div>
+</div>
+
+<div class="panel">
+<h3>Customer Feedback Analysis</h3>
+<div id="adminFeedback"></div>
+</div>
+
+<div class="panel">
+<h3>Previous Painting Reviews Before Next Display</h3>
+<p>Review the feedback of the previous painting before publishing the next painting.</p>
+<div id="previousReviews"></div>
+</div>
+
+<div class="panel">
+<h3>Owner Registration Details</h3>
+<div id="adminOwners"></div>
+</div>
+
+<div class="panel">
+<h3>Payment Transactions</h3>
+<div id="adminPayments"></div>
+</div>
+<button class="secondary" onclick="adminLogout()">Logout</button>
+</section>
+
+</div>
+
+<footer>
+<h3>ArtVista - Online Painting Exhibition</h3>
+<p>Discover Art | Rate Paintings | Support Artists</p>
+<p style="margin-top:10px">© 2026 ArtVista. All Rights Reserved.</p>
+</footer>
+
+<script>
+let owners=JSON.parse(localStorage.getItem("avOwners"))||[];
+let customers=JSON.parse(localStorage.getItem("avCustomers"))||[];
+let paintings=JSON.parse(localStorage.getItem("avPaintings"))||[
+{id:1,title:"Nature Beauty",description:"A beautiful landscape painting inspired by nature.",category:"Nature",owner:"Demo Artist",ownerEmail:"demo",image:"",status:"Published",days:3,package:"Basic",startDate:"",endDate:"",reviews:[
+{customer:"Ananya",rating:5,text:"Beautiful painting and amazing colours!",reply:"Thank you for your feedback."},
+{customer:"Rahul",rating:4,text:"Very creative artwork.",reply:""}
+]},
+{id:2,title:"Abstract Dreams",description:"Creative abstract artwork with vibrant colours.",category:"Abstract",owner:"Demo Artist",ownerEmail:"demo",image:"",status:"Published",days:7,package:"Standard",startDate:"",endDate:"",reviews:[
+{customer:"Priya",rating:5,text:"Excellent artwork. Very impressive.",reply:""}
+]},
+{id:3,title:"Traditional Art",description:"Traditional artistic design and cultural beauty.",category:"Traditional",owner:"Demo Artist",ownerEmail:"demo",image:"",status:"Published",days:3,package:"Basic",startDate:"",endDate:"",reviews:[]}
+];
+let payments=JSON.parse(localStorage.getItem("avPayments"))||[];
+let activePainting=null;
+let currentOwner=null;
+let currentCustomer=null;
+
+function save(){
+localStorage.setItem("avOwners",JSON.stringify(owners));
+localStorage.setItem("avCustomers",JSON.stringify(customers));
+localStorage.setItem("avPaintings",JSON.stringify(paintings));
+localStorage.setItem("avPayments",JSON.stringify(payments));
+}
+
+function safe(s){
+return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+function showPage(id){
+document.querySelectorAll(".page").forEach(x=>x.classList.add("hidden"));
+document.getElementById(id).classList.remove("hidden");
+if(id==="home")renderHome();
+if(id==="gallery")renderGallery();
+if(id==="adminDashboard")updateAdmin();
+if(id==="ownerDashboard"&&currentOwner)updateOwner();
+if(id==="customerDashboard"&&currentCustomer)updateCustomer();
+}
+
+function stars(n){return "★".repeat(Math.round(n))+"☆".repeat(5-Math.round(n));}
+function average(p){
+return p.reviews.length?p.reviews.reduce((s,r)=>s+Number(r.rating),0)/p.reviews.length:0;
+}
+function cardHTML(p){
+let avg=average(p);
+let art=p.image?
+`<img src="${safe(p.image)}" style="width:100%;height:210px;object-fit:cover" onerror="this.style.display='none'">`:
+`<div class="art">${p.category==="Nature"?"🌄":p.category==="Abstract"?"🎨":p.category==="Portrait"?"🖼️":"🏛️"}</div>`;
+return `<div class="card">${art}<div class="card-content">
+<h3>${safe(p.title)}</h3><p>${safe(p.category)} | By ${safe(p.owner)}</p>
+<div class="rating">${stars(avg)}</div>
+<p>${p.reviews.length?avg.toFixed(1)+" / 5 ("+p.reviews.length+" reviews)":"No reviews yet"}</p>
+<button onclick="openPainting(${p.id})">View Painting & Reviews</button>
+</div></div>`;
+}
+
+function renderHome(){
+document.getElementById("homeGallery").innerHTML=paintings.filter(p=>p.status==="Published").slice(0,3).map(cardHTML).join("")||"No paintings available.";
+}
+function renderGallery(){
+let q=(document.getElementById("searchPainting")?.value||"").toLowerCase();
+document.getElementById("galleryList").innerHTML=paintings.filter(p=>p.status==="Published"&&(p.title+" "+p.owner+" "+p.category).toLowerCase().includes(q)).map(cardHTML).join("")||"No paintings found.";
+}
+function openPainting(id){
+activePainting=paintings.find(p=>p.id===id);
+if(!activePainting)return;
+let avg=average(activePainting);
+let art=activePainting.image?`<img src="${safe(activePainting.image)}" style="width:100%;max-height:400px;object-fit:contain">`:`<div class="art" style="height:300px">🎨</div>`;
+document.getElementById("paintingDetails").innerHTML=`
+${art}<br><h2>${safe(activePainting.title)}</h2>
+<p>${safe(activePainting.description)}</p>
+<p>Category: ${safe(activePainting.category)}</p>
+<p>Artist: ${safe(activePainting.owner)}</p>
+<p class="rating">${stars(avg)}</p>
+<p><b>Average Rating:</b> ${activePainting.reviews.length?avg.toFixed(1)+"/5":"Not rated yet"}</p>
+<p><b>Total Reviews:</b> ${activePainting.reviews.length}</p>`;
+renderReviews();
+showPage("details");
+}
+function renderReviews(){
+let p=activePainting;
+let positive=p.reviews.filter(r=>r.rating>=4);
+let negative=p.reviews.filter(r=>r.rating<=2);
+document.getElementById("paintingReviews").innerHTML=`
+<p class="positive">Positive reviews: ${positive.length}</p>
+<p class="negative">Negative reviews: ${negative.length}</p>`+
+(p.reviews.map(r=>`<div class="review">
+<b>${safe(r.customer)}</b> <span class="rating">${stars(r.rating)}</span>
+<p>${safe(r.text)}</p>
+${r.reply?`<p><b>Artist/Admin reply:</b> ${safe(r.reply)}</p>`:""}
+</div>`).join("")||"<p>No reviews yet.</p>");
+}
+
+function registerOwner(){
+let name=regOwnerName.value.trim(),email=regOwnerEmail.value.trim().toLowerCase(),pass=regOwnerPass.value;
+if(!name||!email||!pass){alert("Complete all fields");return;}
+if(owners.some(o=>o.email===email)){alert("Email already registered");return;}
+owners.push({name,email,pass});
+save();
+ownerRegMsg.innerText="Registration successful. Please login.";
+}
+function ownerLogin(){
+let email=ownerEmail.value.trim().toLowerCase(),pass=ownerPass.value;
+let o=owners.find(x=>x.email===email&&x.pass===pass);
+if(!o){ownerMsg.innerText="Invalid owner login.";return;}
+currentOwner=o;
+showPage("ownerDashboard");
+}
+function ownerLogout(){currentOwner=null;showPage("home");}
+
+function updatePackagePrice(){
+let p=ownerPackage.value;
+packagePrice.innerText="Package Amount: ₹"+({Basic:499,Standard:999,Premium:1999}[p]);
+}
+function submitPainting(){
+if(!currentOwner)return;
+let title=paintingTitle.value.trim(),description=paintingDescription.value.trim();
+let packageName=ownerPackage.value,ref=transactionRef.value.trim();
+if(!title||!description||!ref){alert("Enter painting details and transaction reference");return;}
+let amounts={Basic:499,Standard:999,Premium:1999};
+let days={Basic:3,Standard:7,Premium:15};
+let id=Date.now();
+paintings.push({id,title,description,category:paintingCategory.value,owner:currentOwner.name,ownerEmail:currentOwner.email,image:paintingImage.value.trim(),status:"Pending",package:packageName,days:days[packageName],amount:amounts[packageName],paymentMode:paymentMode.value,startDate:"",endDate:"",reviews:[]});
+payments.push({id,owner:currentOwner.name,amount:amounts[packageName],mode:paymentMode.value,reference:ref,status:"Demo payment recorded"});
+save();
+ownerSubmitMsg.innerText="Painting submitted. Payment recorded for demo. Waiting for admin approval.";
+paintingTitle.value="";paintingDescription.value="";paintingImage.value="";transactionRef.value="";
+updateOwner();
+}
+function updateOwner(){
+ownerWelcome.innerText=currentOwner.name;
+let list=paintings.filter(p=>p.ownerEmail===currentOwner.email);
+ownerPaintings.innerHTML=list.map(p=>`<div class="review">
+<h3>${safe(p.title)}</h3><p>Status: <b>${safe(p.status)}</b></p>
+<p>Package: ${safe(p.package)} (${p.days} days)</p>
+<p>Average rating: ${average(p).toFixed(1)}/5</p>
+<p>Total reviews: ${p.reviews.length}</p>
+${p.reviews.map(r=>`<p>${safe(r.customer)} - ${stars(r.rating)} - ${safe(r.text)}</p>`).join("")}
+</div>`).join("")||"No paintings submitted.";
+}
+
+function registerCustomer(){
+let name=customerName.value.trim(),email=customerEmail.value.trim().toLowerCase(),pass=customerPassword.value;
+if(!name||!email||!pass){alert("Complete all fields");return;}
+if(customers.some(c=>c.email===email)){alert("Email already registered");return;}
+customers.push({name,email,pass});
+save();
+customerRegMsg.innerText="Account created successfully. Please login.";
+}
+function customerLogin(){
+let email=loginCustomerEmail.value.trim().toLowerCase(),pass=loginCustomerPass.value;
+let c=customers.find(x=>x.email===email&&x.pass===pass);
+if(!c){customerMsg.innerText="Invalid login details.";return;}
+currentCustomer=c;
+showPage("customerDashboard");
+}
+function socialLogin(provider){
+alert(provider+" authentication requires a real OAuth setup. Use email registration/login in this demo.");
+}
+function customerLogout(){currentCustomer=null;showPage("home");}
+function updateCustomer(){
+customerWelcome.innerText=currentCustomer.name;
+customerGallery.innerHTML=paintings.filter(p=>p.status==="Published").map(cardHTML).join("")||"No paintings available.";
+}
+function submitReview(){
+if(!currentCustomer){reviewMsg.innerText="Please login as a customer first.";return;}
+let text=reviewText.value.trim();
+if(!text){alert("Write your feedback");return;}
+if(activePainting.reviews.some(r=>r.customer===currentCustomer.name)){reviewMsg.innerText="You have already reviewed this painting.";return;}
+activePainting.reviews.push({customer:currentCustomer.name,rating:Number(reviewRating.value),text,reply:""});
+save();
+reviewText.value="";
+reviewMsg.innerText="Your review has been submitted successfully.";
+renderReviews();
+openPainting(activePainting.id);
+}
+
+function adminLogin(){
+if(adminUser.value==="admin"&&adminPass.value==="admin123"){
+showPage("adminDashboard");
+}else adminMsg.innerText="Invalid admin credentials.";
+}
+function adminLogout(){showPage("home");}
+
+function updateAdmin(){
+paintingCount.innerText=paintings.length;
+reviewCount.innerText=paintings.reduce((s,p)=>s+p.reviews.length,0);
+ownerCount.innerText=owners.length;
+paymentCount.innerText=payments.length;
+
+adminPaintingList.innerHTML=paintings.map(p=>`
+<div class="review">
+<h3>${safe(p.title)} - ${safe(p.owner)}</h3>
+<p>Status: <b>${safe(p.status)}</b> | Package: ${safe(p.package||"Demo")}</p>
+<p>Average rating: ${average(p).toFixed(1)}/5 | Reviews: ${p.reviews.length}</p>
+${p.reviews.length?`<p class="positive">Positive: ${p.reviews.filter(r=>r.rating>=4).length}</p>
+<p class="negative">Negative: ${p.reviews.filter(r=>r.rating<=2).length}</p>`:"No reviews yet."}
+<label>Start Display Date</label>
+<input type="date" id="start${p.id}" value="${p.startDate||""}">
+<label>End Display Date</label>
+<input type="date" id="end${p.id}" value="${p.endDate||""}">
+<button onclick="publishPainting(${p.id})">Approve & Schedule</button>
+<button class="danger" onclick="removePainting(${p.id})">Remove</button>
+</div>`).join("")||"No painting submissions.";
+
+let allReviews=paintings.flatMap(p=>p.reviews.map((r,i)=>({...r,pid:p.id,title:p.title,index:i})));
+adminFeedback.innerHTML=allReviews.map(r=>`
+<div class="review">
+<h3>${safe(r.title)}</h3><b>${safe(r.customer)}</b> - ${stars(r.rating)}
+<p>${safe(r.text)}</p>
+<p>${r.rating>=4?'<span class="positive">Positive feedback</span>':r.rating<=2?'<span class="negative">Negative feedback</span>':'Neutral feedback'}</p>
+<label>Admin / Artist Response</label>
+<input id="reply${r.pid}_${r.index}" value="${safe(r.reply)}" placeholder="Write a response">
+<button onclick="replyReview(${r.pid},${r.index})">Save Reply</button>
+</div>`).join("")||"No reviews submitted yet.";
+
+let previous=paintings.filter(p=>p.status==="Completed"||p.status==="Published");
+previousReviews.innerHTML=previous.map(p=>`
+<div class="review"><h3>${safe(p.title)}</h3>
+<p>Average rating: ${average(p).toFixed(1)}/5</p>
+<p class="positive">Positive: ${p.reviews.filter(r=>r.rating>=4).length}</p>
+<p class="negative">Negative: ${p.reviews.filter(r=>r.rating<=2).length}</p>
+</div>`).join("")||"No previous painting reviews.";
+
+adminOwners.innerHTML=owners.map(o=>`<p>${safe(o.name)} - ${safe(o.email)}</p>`).join("")||"No registered owners.";
+adminPayments.innerHTML=payments.map(p=>`<p>${safe(p.owner)} | ₹${p.amount} | ${safe(p.mode)} | ${safe(p.status)}</p>`).join("")||"No payment records.";
+}
+
+function publishPainting(id){
+let p=paintings.find(x=>x.id===id);
+let start=document.getElementById("start"+id).value;
+let end=document.getElementById("end"+id).value;
+if(!start||!end||new Date(end)<new Date(start)){alert("Select valid start and end dates");return;}
+let previous=paintings.find(x=>x.status==="Published"&&x.id!==id);
+if(previous){
+let message=`Previous painting: ${previous.title}
+Average rating: ${average(previous).toFixed(1)}/5
+Positive reviews: ${previous.reviews.filter(r=>r.rating>=4).length}
+Negative reviews: ${previous.reviews.filter(r=>r.rating<=2).length}`;
+if(!confirm(message+"\n\nContinue with the new painting?"))return;
+previous.status="Completed";
+}
+p.status="Published";p.startDate=start;p.endDate=end;
+save();updateAdmin();
+alert("Painting approved and scheduled.");
+}
+function removePainting(id){
+if(!confirm("Remove this painting?"))return;
+paintings=paintings.filter(p=>p.id!==id);
+save();updateAdmin();
+}
+function replyReview(pid,index){
+let p=paintings.find(x=>x.id===pid);
+p.reviews[index].reply=document.getElementById("reply"+pid+"_"+index).value;
+save();updateAdmin();
+}
+renderHome();
+renderGallery();
+</script>
+</body>
+</html>

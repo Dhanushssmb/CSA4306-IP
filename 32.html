@@ -1,0 +1,346 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ram Infotech - Laptop Sales & Services</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f5f9;
+        }
+
+        header {
+            background: #142b4a;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        nav {
+            background: #0879bd;
+            padding: 15px;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 12px;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            color: yellow;
+        }
+
+        .banner {
+            background: #dceeff;
+            text-align: center;
+            padding: 55px 15px;
+        }
+
+        .banner h2 {
+            color: #142b4a;
+            font-size: 32px;
+        }
+
+        section {
+            padding: 30px;
+            margin: 20px;
+            background: white;
+            border-radius: 10px;
+        }
+
+        h2 {
+            color: #0879bd;
+            margin-bottom: 20px;
+        }
+
+        .cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .card {
+            background: #f0f6fc;
+            padding: 20px;
+            border-radius: 8px;
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+        }
+
+        .card h3 {
+            margin-bottom: 12px;
+        }
+
+        button {
+            background: #0879bd;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 12px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background: #142b4a;
+        }
+
+        form {
+            max-width: 500px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #aaa;
+            border-radius: 5px;
+        }
+
+        footer {
+            background: #142b4a;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        @media(max-width:600px) {
+            nav a {
+                display: inline-block;
+                margin: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>RAM INFOTECH</h1>
+    <p>Laptop Sales, Rental & Service Center</p>
+</header>
+
+<nav>
+    <a href="#home">Home</a>
+    <a href="#admin">Admin</a>
+    <a href="#sales">Sales</a>
+    <a href="#services">Services</a>
+    <a href="#customer">Customer</a>
+    <a href="#rental">Rental</a>
+    <a href="#stock">Stock</a>
+    <a href="#contact">Contact</a>
+</nav>
+
+<div class="banner" id="home">
+    <h2>Welcome to Ram Infotech</h2>
+    <p>Your Trusted Partner for Laptop Sales and Services</p>
+    <p>Quality Laptops | Best Prices | Reliable Services</p>
+    <button onclick="location.href='#sales'">Explore Laptops</button>
+</div>
+
+<!-- 1. ADMIN DETAILS -->
+<section id="admin">
+    <h2>1. Admin Login / Registration</h2>
+
+    <form>
+        <h3>Admin Login</h3>
+        <input type="text" placeholder="Admin Username" required>
+        <input type="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+    </form>
+
+    <br>
+
+    <form>
+        <h3>Admin Registration</h3>
+        <input type="text" placeholder="Admin Name" required>
+        <input type="email" placeholder="Email Address" required>
+        <input type="password" placeholder="Create Password" required>
+        <button type="submit">Register</button>
+    </form>
+</section>
+
+<!-- 2. LAPTOP SALES -->
+<section id="sales">
+    <h2>2. Laptop Sales and Configuration</h2>
+
+    <div class="cards">
+        <div class="card">
+            <h3>HP Laptop</h3>
+            <p>Model: HP Pavilion</p>
+            <p>Processor: Intel i5</p>
+            <p>RAM: 8GB</p>
+            <p>Storage: 512GB SSD</p>
+            <h3>₹55,000</h3>
+            <button onclick="alert('HP Pavilion selected!')">Buy Now</button>
+        </div>
+
+        <div class="card">
+            <h3>Dell Laptop</h3>
+            <p>Model: Dell Inspiron</p>
+            <p>Processor: Intel i7</p>
+            <p>RAM: 16GB</p>
+            <p>Storage: 512GB SSD</p>
+            <h3>₹68,000</h3>
+            <button onclick="alert('Dell Inspiron selected!')">Buy Now</button>
+        </div>
+
+        <div class="card">
+            <h3>Lenovo Laptop</h3>
+            <p>Model: Lenovo IdeaPad</p>
+            <p>Processor: Ryzen 5</p>
+            <p>RAM: 8GB</p>
+            <p>Storage: 1TB SSD</p>
+            <h3>₹52,000</h3>
+            <button onclick="alert('Lenovo IdeaPad selected!')">Buy Now</button>
+        </div>
+    </div>
+</section>
+
+<!-- 3. SERVICES -->
+<section id="services">
+    <h2>3. Laptop Services Information</h2>
+
+    <div class="cards">
+        <div class="card">
+            <h3>Screen Replacement</h3>
+            <p>Display and screen repair services.</p>
+        </div>
+
+        <div class="card">
+            <h3>Battery Replacement</h3>
+            <p>Laptop battery checking and replacement.</p>
+        </div>
+
+        <div class="card">
+            <h3>Software Installation</h3>
+            <p>Operating system and software installation.</p>
+        </div>
+
+        <div class="card">
+            <h3>Hardware Repair</h3>
+            <p>Keyboard, motherboard and hardware repair.</p>
+        </div>
+    </div>
+
+    <h3>Book a Service</h3>
+    <form>
+        <input type="text" placeholder="Customer Name" required>
+        <input type="text" placeholder="Laptop Model" required>
+
+        <select required>
+            <option value="">Select Service</option>
+            <option>Screen Repair</option>
+            <option>Battery Replacement</option>
+            <option>Software Installation</option>
+            <option>Hardware Repair</option>
+        </select>
+
+        <input type="date" required>
+        <textarea placeholder="Describe Your Problem"></textarea>
+        <button type="submit">Book Service</button>
+    </form>
+</section>
+
+<!-- 4. CUSTOMER INFORMATION -->
+<section id="customer">
+    <h2>4. Customer Information</h2>
+
+    <form>
+        <input type="text" placeholder="Customer Name" required>
+        <input type="tel" placeholder="Mobile Number" required>
+        <input type="email" placeholder="Email Address" required>
+        <textarea placeholder="Customer Address"></textarea>
+
+        <select>
+            <option>Purchase</option>
+            <option>Service</option>
+        </select>
+
+        <button type="submit">Submit Details</button>
+    </form>
+</section>
+
+<!-- 5. RENTAL AGREEMENT -->
+<section id="rental">
+    <h2>5. Laptop Rental Agreement</h2>
+
+    <form>
+        <input type="text" placeholder="Customer Name" required>
+        <input type="text" placeholder="Laptop Model" required>
+        <label>Rental Start Date</label>
+        <input type="date" required>
+
+        <label>Rental End Date</label>
+        <input type="date" required>
+
+        <input type="number" placeholder="Rental Amount (Per Day)" required>
+        <input type="number" placeholder="Security Deposit" required>
+
+        <label>
+            <input type="checkbox" required style="width:auto;">
+            I agree to the rental terms and conditions.
+        </label>
+
+        <button type="submit">Submit Agreement</button>
+    </form>
+</section>
+
+<!-- 6. STOCK MAINTENANCE -->
+<section id="stock">
+    <h2>6. Shop Stock Maintenance</h2>
+
+    <div class="cards">
+        <div class="card">
+            <h3>HP Pavilion</h3>
+            <p>Available Stock: 10</p>
+        </div>
+
+        <div class="card">
+            <h3>Dell Inspiron</h3>
+            <p>Available Stock: 8</p>
+        </div>
+
+        <div class="card">
+            <h3>Lenovo IdeaPad</h3>
+            <p>Available Stock: 5</p>
+        </div>
+    </div>
+
+    <h3>Update Stock Details</h3>
+
+    <form>
+        <input type="text" placeholder="Laptop Brand" required>
+        <input type="text" placeholder="Laptop Model" required>
+        <input type="number" placeholder="Available Quantity" required>
+        <input type="number" placeholder="Laptop Price" required>
+        <button type="submit">Update Stock</button>
+    </form>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+    <h2>Contact Us</h2>
+    <p><b>Company:</b> Ram Infotech</p>
+    <p><b>Email:</b> support@raminfotech.com</p>
+    <p><b>Phone:</b> +91 9876543210</p>
+    <p><b>Address:</b> Ram Infotech Laptop Sales and Service Center</p>
+</section>
+
+<footer>
+    <p>© 2026 Ram Infotech. All Rights Reserved.</p>
+    <p>Laptop Sales | Services | Rental Management</p>
+</footer>
+
+</body>
+</html>

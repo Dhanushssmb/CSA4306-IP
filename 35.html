@@ -1,0 +1,1068 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartBus - Bus Pass Management System</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://unpkg.com/html5-qrcode"></script>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f1f5fb;
+    color: #263449;
+}
+
+header {
+    background: linear-gradient(120deg,#102b52,#0878c9);
+    color: white;
+    padding: 24px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.logo {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.logo span {
+    color: #ffd43b;
+}
+
+header p {
+    margin-top: 5px;
+    font-size: 13px;
+}
+
+nav {
+    background: white;
+    padding: 17px 10px;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 3px 12px #00000010;
+}
+
+nav a {
+    color: #163b63;
+    text-decoration: none;
+    margin: 8px 12px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+nav a:hover {
+    color: #0878c9;
+}
+
+.hero {
+    background: linear-gradient(120deg,#102b52dd,#0878c9dd),
+    url('https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=1600')
+    center/cover;
+    color: white;
+    padding: 100px 20px;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 43px;
+    margin-bottom: 15px;
+}
+
+.hero p {
+    font-size: 18px;
+    margin-bottom: 25px;
+}
+
+.btn {
+    background: #ffd43b;
+    color: #102b52;
+    padding: 13px 25px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+section {
+    padding: 60px 7%;
+    scroll-margin-top: 65px;
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.title h2 {
+    color: #075da5;
+    font-size: 29px;
+    margin-bottom: 10px;
+}
+
+.title p {
+    color: #64748b;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(210px,1fr));
+    gap: 20px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 18px #0000000c;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card h3 {
+    color: #075da5;
+    margin: 12px 0;
+}
+
+.card p {
+    color: #64748b;
+    line-height: 1.8;
+}
+
+.icon {
+    font-size: 35px;
+}
+
+.form-box {
+    background: white;
+    max-width: 650px;
+    padding: 30px;
+    margin: auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 18px #00000010;
+}
+
+.form-box h3 {
+    color: #075da5;
+    margin-bottom: 18px;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 13px;
+    margin: 8px 0 16px;
+    border: 1px solid #d2dce9;
+    border-radius: 6px;
+    background: #fbfdff;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #0878c9;
+}
+
+label {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+button {
+    cursor: pointer;
+}
+
+.submit {
+    width: 100%;
+    padding: 14px;
+    background: #0878c9;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+.submit:hover {
+    background: #102b52;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
+    gap: 18px;
+    margin-bottom: 30px;
+}
+
+.stat {
+    background: white;
+    padding: 23px;
+    border-radius: 10px;
+    border-bottom: 4px solid #0878c9;
+}
+
+.stat h2 {
+    color: #0878c9;
+    font-size: 28px;
+}
+
+.stat p {
+    color: #64748b;
+    margin-top: 8px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    margin: 20px 0;
+}
+
+th, td {
+    padding: 14px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background: #075da5;
+    color: white;
+}
+
+.badge {
+    color: #15803d;
+    font-weight: bold;
+}
+
+.qr-area {
+    text-align: center;
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+#qrcode {
+    display: flex;
+    justify-content: center;
+    margin: 20px;
+}
+
+footer {
+    background: #102b52;
+    color: white;
+    padding: 35px;
+    text-align: center;
+    line-height: 2;
+}
+
+@media(max-width:650px) {
+    .hero h1 {
+        font-size: 30px;
+    }
+
+    nav a {
+        display: inline-block;
+    }
+
+    section {
+        padding: 40px 5%;
+    }
+
+    table {
+        font-size: 12px;
+    }
+
+    th, td {
+        padding: 8px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header>
+    <div>
+        <div class="logo">SMART<span>BUS</span></div>
+        <p>Digital Bus Pass & e-Ticket Management System</p>
+    </div>
+    <div>🚌 Safe Journey, Smart Travel</div>
+</header>
+
+<!-- NAVIGATION -->
+<nav>
+    <a href="#home">Home</a>
+    <a href="#admin">Admin</a>
+    <a href="#user">User</a>
+    <a href="#pass">Bus Pass</a>
+    <a href="#wallet">e-Wallet</a>
+    <a href="#ticket">e-Ticket</a>
+    <a href="#route">Routes</a>
+    <a href="#conductor">Conductor</a>
+    <a href="#contact">Contact</a>
+</nav>
+
+<!-- HOME -->
+<div class="hero" id="home">
+    <h1>Welcome to SmartBus</h1>
+    <p>Travel Smart with Digital Bus Pass and Online Ticket Booking</p>
+    <p>Easy Registration | QR Code Pass | Online Renewal | Live Tracking</p>
+    <a href="#user" class="btn">Get Started</a>
+</div>
+
+<!-- FEATURES -->
+<section>
+    <div class="title">
+        <h2>Our Services</h2>
+        <p>Everything you need for a comfortable bus journey</p>
+    </div>
+
+    <div class="cards">
+        <div class="card">
+            <div class="icon">🎫</div>
+            <h3>Digital Bus Pass</h3>
+            <p>Apply for student and employee bus passes online.</p>
+        </div>
+
+        <div class="card">
+            <div class="icon">📱</div>
+            <h3>QR Code</h3>
+            <p>Generate and verify digital bus passes using QR codes.</p>
+        </div>
+
+        <div class="card">
+            <div class="icon">💳</div>
+            <h3>e-Wallet</h3>
+            <p>Add money and purchase bus tickets online.</p>
+        </div>
+
+        <div class="card">
+            <div class="icon">📍</div>
+            <h3>Bus Tracking</h3>
+            <p>View bus location and estimate arrival time.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ADMIN -->
+<section id="admin">
+    <div class="title">
+        <h2>1. Admin Management</h2>
+        <p>Admin login and bus transport management</p>
+    </div>
+
+    <div class="form-box">
+        <h3>Admin Login</h3>
+
+        <form onsubmit="return demo(event,'Admin Login')">
+            <label>Admin Username</label>
+            <input type="text" placeholder="Enter username" required>
+
+            <label>Password</label>
+            <input type="password" placeholder="Enter password" required>
+
+            <button class="submit">Login</button>
+        </form>
+
+        <br><hr><br>
+
+        <h3>Admin Registration</h3>
+
+        <form onsubmit="return demo(event,'Admin Registration')">
+            <input type="text" placeholder="Admin Name" required>
+            <input type="email" placeholder="Email Address" required>
+            <input type="tel" placeholder="Mobile Number" required>
+            <input type="password" placeholder="Create Password" required>
+            <button class="submit">Register Admin</button>
+        </form>
+    </div>
+
+    <br>
+
+    <div class="cards">
+        <div class="card">
+            <h3>👨‍🎓 Manage Students</h3>
+            <p>View student information and student bus pass applications.</p>
+        </div>
+
+        <div class="card">
+            <h3>🎫 Manage Route Pass</h3>
+            <p>Manage employee and general route bus passes.</p>
+        </div>
+
+        <div class="card">
+            <h3>👨‍✈️ Conductor Management</h3>
+            <p>Create and manage conductor login accounts.</p>
+        </div>
+
+        <div class="card">
+            <h3>✅ Pass Approval</h3>
+            <p>Review and approve or reject bus pass applications.</p>
+        </div>
+    </div>
+</section>
+
+<!-- BUS AND ROUTE DETAILS -->
+<section id="bus">
+    <div class="title">
+        <h2>Bus and Route Management</h2>
+        <p>Create bus details and route information</p>
+    </div>
+
+    <div class="form-box">
+        <h3>Create Bus Details</h3>
+
+        <form onsubmit="return demo(event,'Bus Details')">
+            <input type="text" placeholder="Bus Number" required>
+
+            <input type="text" placeholder="Bus Name" required>
+
+            <input type="number" placeholder="Total Seating Capacity" required>
+
+            <input type="text" placeholder="Driver Name">
+
+            <input type="text" placeholder="Conductor Name">
+
+            <button class="submit">Add Bus</button>
+        </form>
+
+        <br><hr><br>
+
+        <h3>Create Route Information</h3>
+
+        <form onsubmit="return demo(event,'Route Information')">
+            <label>From</label>
+            <input type="text" placeholder="Starting Location" required>
+
+            <label>To</label>
+            <input type="text" placeholder="Destination" required>
+
+            <label>Departure Time</label>
+            <input type="time" required>
+
+            <label>Arrival Time</label>
+            <input type="time" required>
+
+            <label>Route Stopping Points</label>
+            <textarea rows="4" placeholder="Enter stops separated by commas"></textarea>
+
+            <button class="submit">Create Route</button>
+        </form>
+    </div>
+</section>
+
+<!-- USER -->
+<section id="user">
+    <div class="title">
+        <h2>2. User Registration & Login</h2>
+        <p>Create an account to access bus pass services</p>
+    </div>
+
+    <div class="form-box">
+        <h3>User Registration</h3>
+
+        <form onsubmit="return demo(event,'User Registration')">
+            <label>Candidate Name</label>
+            <input type="text" placeholder="Full Name" required>
+
+            <label>Address</label>
+            <textarea placeholder="Enter full address" required></textarea>
+
+            <label>Date of Birth</label>
+            <input type="date" required>
+
+            <label>Email ID</label>
+            <input type="email" placeholder="Email Address" required>
+
+            <label>Mobile Number</label>
+            <input type="tel" placeholder="Mobile Number" required>
+
+            <label>Password</label>
+            <input type="password" placeholder="Create Password" required>
+
+            <button class="submit">Register</button>
+        </form>
+
+        <br><hr><br>
+
+        <h3>User Login</h3>
+
+        <form onsubmit="return demo(event,'User Login')">
+            <input type="email" placeholder="Email Address" required>
+            <input type="password" placeholder="Password" required>
+            <button class="submit">Login</button>
+        </form>
+    </div>
+</section>
+
+<!-- BUS PASS -->
+<section id="pass">
+    <div class="title">
+        <h2>3. Apply for Bus Pass</h2>
+        <p>Student pass and employee route pass application</p>
+    </div>
+
+    <div class="form-box">
+        <h3>New Bus Pass Application</h3>
+
+        <form onsubmit="return generatePass(event)">
+            <label>Candidate Name</label>
+            <input type="text" id="candidate" placeholder="Enter candidate name" required>
+
+            <label>Pass Type</label>
+            <select id="passType" onchange="changePass()" required>
+                <option value="">Select Pass Type</option>
+                <option value="Student">Student Bus Pass</option>
+                <option value="Employee">Employee Route Pass</option>
+            </select>
+
+            <div id="studentFields">
+                <label>School / College Name</label>
+                <input type="text" id="school" placeholder="Enter school or college name">
+
+                <label>Student Class</label>
+                <input type="text" id="studentClass" placeholder="Enter class">
+            </div>
+
+            <div id="employeeFields" style="display:none">
+                <label>Working Organization</label>
+                <input type="text" id="organization" placeholder="Enter organization name">
+            </div>
+
+            <label>Address</label>
+            <textarea id="address" placeholder="Enter address" required></textarea>
+
+            <label>Date of Birth</label>
+            <input type="date" id="dob" required>
+
+            <label>Email ID</label>
+            <input type="email" id="email" placeholder="Email ID" required>
+
+            <label>From Location</label>
+            <input type="text" id="from" placeholder="Starting point" required>
+
+            <label>To Location</label>
+            <input type="text" id="to" placeholder="Destination" required>
+
+            <label>Upload Candidate Photo</label>
+            <input type="file" id="photo" accept="image/*" required>
+
+            <label>Pass Validity</label>
+            <select id="validity" required>
+                <option value="1">1 Month</option>
+                <option value="2">2 Months</option>
+                <option value="3">3 Months</option>
+            </select>
+
+            <button class="submit">Submit Bus Pass Application</button>
+        </form>
+
+        <div class="qr-area" id="passResult" style="display:none">
+            <h3>Bus Pass Application</h3>
+            <p id="passDetails"></p>
+            <div id="passQR"></div>
+            <p><b>Pass Status: Pending Approval</b></p>
+            <p>QR code is a demonstration application reference, not an approved travel pass.</p>
+        </div>
+    </div>
+</section>
+
+<!-- WALLET -->
+<section id="wallet">
+    <div class="title">
+        <h2>4. e-Wallet Management</h2>
+        <p>Add money and manage your digital wallet</p>
+    </div>
+
+    <div class="form-box">
+        <div class="stat">
+            <h2 id="balance">₹500</h2>
+            <p>Available Wallet Balance (Demo)</p>
+        </div>
+
+        <br>
+
+        <h3>Add Money to Wallet</h3>
+
+        <form onsubmit="return addMoney(event)">
+            <label>Enter Amount</label>
+            <input type="number" id="amount" placeholder="Enter amount" min="1" required>
+
+            <button class="submit">Add Money</button>
+        </form>
+    </div>
+</section>
+
+<!-- TICKET -->
+<section id="ticket">
+    <div class="title">
+        <h2>5. Online Bus e-Ticket</h2>
+        <p>Book your bus ticket easily</p>
+    </div>
+
+    <div class="form-box">
+        <h3>Book Bus Ticket</h3>
+
+        <form onsubmit="return bookTicket(event)">
+            <input type="text" id="ticketName" placeholder="Passenger Name" required>
+
+            <input type="text" id="ticketFrom" placeholder="From Location" required>
+
+            <input type="text" id="ticketTo" placeholder="To Location" required>
+
+            <input type="date" id="travelDate" required>
+
+            <select id="ticketBus">
+                <option>Government Bus</option>
+                <option>Express Bus</option>
+                <option>Town Bus</option>
+            </select>
+
+            <input type="number" id="ticketFare" placeholder="Ticket Fare (₹)" min="1" required>
+
+            <button class="submit">Purchase e-Ticket</button>
+        </form>
+
+        <div class="qr-area" id="ticketResult" style="display:none">
+            <h3>Bus e-Ticket</h3>
+            <p id="ticketDetails"></p>
+            <div id="ticketQR"></div>
+            <p class="badge">Demo Ticket Generated</p>
+        </div>
+    </div>
+</section>
+
+<!-- RENEWAL -->
+<section id="renewal">
+    <div class="title">
+        <h2>6. Bus Pass Renewal</h2>
+        <p>Renew your bus pass every month</p>
+    </div>
+
+    <div class="form-box">
+        <h3>Renew Your Pass</h3>
+
+        <form onsubmit="return renewPass(event)">
+            <input type="text" placeholder="Existing Bus Pass ID" required>
+
+            <select id="renewMonths">
+                <option value="1">1 Month</option>
+                <option value="2">2 Months</option>
+                <option value="3">3 Months</option>
+            </select>
+
+            <select id="renewType">
+                <option value="100">Student - ₹100 / Month</option>
+                <option value="300">Employee - ₹300 / Month</option>
+            </select>
+
+            <button class="submit">Calculate Renewal Amount</button>
+        </form>
+
+        <h3 id="renewResult"></h3>
+    </div>
+</section>
+
+<!-- ROUTE AND TIME -->
+<section id="route">
+    <div class="title">
+        <h2>7. Route & Expected Arrival Time</h2>
+        <p>Check bus route and estimated travel time</p>
+    </div>
+
+    <div class="form-box">
+        <h3>Calculate Journey Time</h3>
+
+        <form onsubmit="return calculateTime(event)">
+            <label>Starting Location</label>
+            <select id="startStop">
+                <option value="0">Central Bus Stand</option>
+                <option value="1">Market</option>
+                <option value="2">College</option>
+                <option value="3">Railway Station</option>
+            </select>
+
+            <label>Destination</label>
+            <select id="endStop">
+                <option value="1">Market</option>
+                <option value="2">College</option>
+                <option value="3">Railway Station</option>
+                <option value="4">Main Terminal</option>
+            </select>
+
+            <button class="submit">Calculate Expected Time</button>
+        </form>
+
+        <h3 id="timeResult" style="margin-top:20px;color:#0878c9"></h3>
+        <p id="timeNote"></p>
+    </div>
+</section>
+
+<!-- CONDUCTOR -->
+<section id="conductor">
+    <div class="title">
+        <h2>8. Conductor Management</h2>
+        <p>Conductor login and QR verification portal</p>
+    </div>
+
+    <div class="form-box">
+        <h3>Conductor Login</h3>
+
+        <form onsubmit="return demo(event,'Conductor Login')">
+            <input type="text" placeholder="Conductor ID" required>
+            <input type="password" placeholder="Password" required>
+            <button class="submit">Login</button>
+        </form>
+
+        <br><hr><br>
+
+        <h3>Scan QR Code</h3>
+        <p>Allow camera access to scan a QR code.</p>
+        <br>
+
+        <button class="submit" type="button" onclick="startScanner()">Start QR Scanner</button>
+
+        <div id="reader" style="width:100%;margin-top:20px"></div>
+
+        <h3 id="scanResult" style="margin-top:20px;color:#0878c9"></h3>
+
+        <br><hr><br>
+
+        <h3>Manual Pass / Ticket Verification</h3>
+
+        <form onsubmit="return verifyID(event)">
+            <input type="text" id="verifyID" placeholder="Enter Bus Pass / Ticket ID" required>
+            <button class="submit">Verify ID</button>
+        </form>
+
+        <h3 id="verifyResult"></h3>
+
+        <br><hr><br>
+
+        <h3>Update Bus Location</h3>
+
+        <form onsubmit="return updateLocation(event)">
+            <input type="text" id="busNumber" placeholder="Bus Number" required>
+            <input type="text" id="locationName" placeholder="Current Bus Location" required>
+            <button class="submit">Update Location</button>
+        </form>
+
+        <p id="locationResult"></p>
+
+        <button class="submit" type="button" onclick="getLocation()" style="margin-top:15px">
+            Get Current GPS Location
+        </button>
+
+        <p id="gpsResult"></p>
+    </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+    <div class="title">
+        <h2>Contact Us</h2>
+        <p>For bus pass and ticket support</p>
+    </div>
+
+    <div class="form-box">
+        <form onsubmit="return demo(event,'Contact Message')">
+            <input type="text" placeholder="Your Name" required>
+            <input type="email" placeholder="Email Address" required>
+            <input type="tel" placeholder="Mobile Number" required>
+            <textarea rows="4" placeholder="Your Message" required></textarea>
+            <button class="submit">Send Message</button>
+        </form>
+
+        <br>
+        <p>📧 Email: support@smartbus.com</p>
+        <p>📞 Phone: +91 9876543210</p>
+        <p>📍 Address: Transport Management Office, Tamil Nadu</p>
+    </div>
+</section>
+
+<footer>
+    <h2>SMARTBUS</h2>
+    <p>Smart Travel | Digital Bus Pass | Online e-Ticket</p>
+    <p>© 2026 SmartBus Management System. All Rights Reserved.</p>
+</footer>
+
+<script>
+
+// BASIC FORM
+function demo(event,name) {
+    event.preventDefault();
+    alert(name + " submitted successfully!");
+    event.target.reset();
+    return false;
+}
+
+// PASS TYPE
+function changePass() {
+    let type = document.getElementById("passType").value;
+
+    document.getElementById("studentFields").style.display =
+        type === "Student" ? "block" : "none";
+
+    document.getElementById("employeeFields").style.display =
+        type === "Employee" ? "block" : "none";
+}
+
+// QR GENERATION
+function makeQR(element,text) {
+    element.innerHTML = "";
+
+    if(typeof QRCode === "undefined") {
+        element.innerHTML = "QR library unavailable. Check internet connection.";
+        return;
+    }
+
+    new QRCode(element,{
+        text: text,
+        width: 150,
+        height: 150
+    });
+}
+
+// BUS PASS
+function generatePass(event) {
+    event.preventDefault();
+
+    let name = document.getElementById("candidate").value;
+    let type = document.getElementById("passType").value;
+    let from = document.getElementById("from").value;
+    let to = document.getElementById("to").value;
+    let id = "PASS" + Date.now().toString().slice(-7);
+
+    if(type === "Student" && !document.getElementById("school").value) {
+        alert("Please enter school or college name.");
+        return false;
+    }
+
+    if(type === "Employee" && !document.getElementById("organization").value) {
+        alert("Please enter organization name.");
+        return false;
+    }
+
+    let validity = document.getElementById("validity").value;
+
+    document.getElementById("passResult").style.display = "block";
+
+    document.getElementById("passDetails").innerHTML =
+        "Pass ID: " + id +
+        "<br>Name: " + name +
+        "<br>Type: " + type +
+        "<br>Route: " + from + " to " + to +
+        "<br>Validity: " + validity + " Month(s)";
+
+    makeQR(document.getElementById("passQR"),
+        JSON.stringify({id:id,name:name,type:type,from:from,to:to,status:"PENDING"}));
+
+    alert("Bus pass application submitted. Awaiting admin approval.");
+    return false;
+}
+
+// WALLET
+let wallet = 500;
+
+function addMoney(event) {
+    event.preventDefault();
+
+    let amount = Number(document.getElementById("amount").value);
+
+    if(amount <= 0) {
+        alert("Enter a valid amount.");
+        return false;
+    }
+
+    wallet += amount;
+
+    document.getElementById("balance").innerText = "₹" + wallet;
+
+    alert("Demo wallet balance updated successfully.");
+    event.target.reset();
+    return false;
+}
+
+// TICKET
+function bookTicket(event) {
+    event.preventDefault();
+
+    let fare = Number(document.getElementById("ticketFare").value);
+
+    if(fare <= 0) {
+        alert("Enter a valid ticket fare.");
+        return false;
+    }
+
+    if(wallet < fare) {
+        alert("Insufficient wallet balance. Please add money.");
+        return false;
+    }
+
+    wallet -= fare;
+    document.getElementById("balance").innerText = "₹" + wallet;
+
+    let id = "TKT" + Date.now().toString().slice(-7);
+    let name = document.getElementById("ticketName").value;
+    let from = document.getElementById("ticketFrom").value;
+    let to = document.getElementById("ticketTo").value;
+
+    document.getElementById("ticketResult").style.display = "block";
+
+    document.getElementById("ticketDetails").innerHTML =
+        "Ticket ID: " + id +
+        "<br>Passenger: " + name +
+        "<br>Route: " + from + " to " + to +
+        "<br>Fare: ₹" + fare;
+
+    makeQR(document.getElementById("ticketQR"),
+        JSON.stringify({id:id,name:name,from:from,to:to,fare:fare}));
+
+    alert("Demo e-ticket generated. Wallet balance deducted.");
+    event.target.reset();
+    return false;
+}
+
+// RENEWAL
+function renewPass(event) {
+    event.preventDefault();
+
+    let months = Number(document.getElementById("renewMonths").value);
+    let rate = Number(document.getElementById("renewType").value);
+    let total = months * rate;
+
+    document.getElementById("renewResult").innerText =
+        "Renewal Amount: ₹" + total +
+        " for " + months + " month(s)";
+
+    if(wallet >= total) {
+        if(confirm("Pay ₹" + total + " from demo wallet?")) {
+            wallet -= total;
+            document.getElementById("balance").innerText = "₹" + wallet;
+            alert("Demo renewal payment completed. Admin approval is still required.");
+        }
+    } else {
+        alert("Insufficient wallet balance. Please add money.");
+    }
+
+    return false;
+}
+
+// JOURNEY TIME ESTIMATE
+function calculateTime(event) {
+    event.preventDefault();
+
+    let start = Number(document.getElementById("startStop").value);
+    let end = Number(document.getElementById("endStop").value);
+
+    if(start === end) {
+        alert("Choose different starting and destination points.");
+        return false;
+    }
+
+    let minutes = Math.abs(end - start) * 12;
+
+    document.getElementById("timeResult").innerText =
+        "Estimated Travel Time: " + minutes + " Minutes";
+
+    document.getElementById("timeNote").innerText =
+        "Sample estimate based on 12 minutes per stop. Actual travel time may vary.";
+
+    return false;
+}
+
+// QR SCANNER
+let scanner = null;
+
+function startScanner() {
+    if(typeof Html5Qrcode === "undefined") {
+        alert("QR scanner library unavailable. Check internet connection.");
+        return;
+    }
+
+    if(scanner) {
+        return;
+    }
+
+    scanner = new Html5Qrcode("reader");
+
+    scanner.start(
+        {facingMode:"environment"},
+        {fps:10,qrbox:{width:220,height:220}},
+        function(decodedText) {
+            document.getElementById("scanResult").innerText =
+                "QR Scanned: " + decodedText;
+
+            scanner.stop().then(function() {
+                scanner = null;
+            });
+        },
+        function(error) {}
+    ).catch(function(error) {
+        scanner = null;
+        alert("Camera could not start. Allow camera permission and use HTTPS or localhost.");
+    });
+}
+
+// MANUAL VERIFICATION
+function verifyID(event) {
+    event.preventDefault();
+
+    let id = document.getElementById("verifyID").value;
+
+    document.getElementById("verifyResult").innerText =
+        "ID received: " + id +
+        ". Connect the backend to verify approval and validity.";
+
+    return false;
+}
+
+// BUS LOCATION
+function updateLocation(event) {
+    event.preventDefault();
+
+    let bus = document.getElementById("busNumber").value;
+    let location = document.getElementById("locationName").value;
+
+    document.getElementById("locationResult").innerText =
+        "Bus " + bus + " location updated to: " + location;
+
+    return false;
+}
+
+// GPS
+function getLocation() {
+    if(navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            document.getElementById("gpsResult").innerText =
+                "Latitude: " + position.coords.latitude +
+                " | Longitude: " + position.coords.longitude;
+        },function() {
+            alert("Please allow location access.");
+        });
+    } else {
+        alert("GPS is not supported by this browser.");
+    }
+}
+
+</script>
+
+</body>
+</html>

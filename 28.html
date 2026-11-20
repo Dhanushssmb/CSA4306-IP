@@ -1,0 +1,863 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ArtistryHub | Emily Harris</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Georgia,serif;
+    scroll-behavior:smooth;
+}
+
+body{
+    background:#faf8f4;
+    color:#29251f;
+}
+
+header{
+    background:#211d19;
+    color:white;
+    padding:18px 7%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+.logo{
+    font-size:25px;
+    color:#e5bd83;
+    font-weight:bold;
+}
+
+nav{
+    display:flex;
+    flex-wrap:wrap;
+    gap:18px;
+}
+
+nav a{
+    color:white;
+    text-decoration:none;
+    font-size:14px;
+}
+
+nav a:hover{
+    color:#e5bd83;
+}
+
+.hero{
+    min-height:570px;
+    background:
+    linear-gradient(90deg,rgba(0,0,0,.75),rgba(0,0,0,.1)),
+    url("https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=1600");
+    background-size:cover;
+    background-position:center;
+    display:flex;
+    align-items:center;
+    padding:70px 9%;
+    color:white;
+}
+
+.hero-content{
+    max-width:550px;
+}
+
+.hero h1{
+    font-size:58px;
+    margin-bottom:20px;
+}
+
+.hero p{
+    font-size:18px;
+    line-height:1.8;
+    margin-bottom:25px;
+}
+
+.btn{
+    display:inline-block;
+    padding:13px 25px;
+    background:#b98b58;
+    color:white;
+    text-decoration:none;
+    border:none;
+    border-radius:3px;
+    cursor:pointer;
+    font-size:15px;
+}
+
+.btn:hover{
+    background:#8e6339;
+}
+
+section{
+    padding:75px 8%;
+}
+
+.section-title{
+    text-align:center;
+    margin-bottom:40px;
+}
+
+.section-title h2{
+    font-size:35px;
+    margin-bottom:12px;
+}
+
+.section-title p{
+    color:#777;
+    font-size:15px;
+}
+
+.about{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:45px;
+    align-items:center;
+}
+
+.about img{
+    width:100%;
+    height:440px;
+    object-fit:cover;
+    border-radius:5px;
+}
+
+.about-text h2{
+    font-size:36px;
+    margin-bottom:20px;
+}
+
+.about-text p{
+    color:#655e55;
+    line-height:1.9;
+    margin-bottom:15px;
+}
+
+.gallery{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:22px;
+}
+
+.art-card{
+    background:white;
+    border-radius:6px;
+    overflow:hidden;
+    box-shadow:0 3px 15px #00000012;
+    transition:.3s;
+}
+
+.art-card:hover{
+    transform:translateY(-7px);
+}
+
+.art-card img{
+    width:100%;
+    height:260px;
+    object-fit:cover;
+    cursor:pointer;
+}
+
+.art-info{
+    padding:18px;
+}
+
+.art-info h3{
+    margin-bottom:8px;
+}
+
+.art-info p{
+    color:#777;
+    font-size:14px;
+    line-height:1.6;
+}
+
+.filters{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.filters button{
+    margin:5px;
+    padding:10px 18px;
+    border:1px solid #b98b58;
+    background:transparent;
+    color:#29251f;
+    cursor:pointer;
+    border-radius:3px;
+}
+
+.filters button.active,
+.filters button:hover{
+    background:#b98b58;
+    color:white;
+}
+
+.dark-section{
+    background:#211d19;
+    color:white;
+}
+
+.dark-section .section-title p{
+    color:#ccc;
+}
+
+.list-item{
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
+    padding:20px 5px;
+    border-bottom:1px solid #62574b;
+    flex-wrap:wrap;
+}
+
+.list-item span{
+    color:#d8b58c;
+}
+
+.media-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+}
+
+.media-grid img{
+    width:100%;
+    height:230px;
+    object-fit:cover;
+    border-radius:5px;
+}
+
+.news-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:22px;
+}
+
+.news-card{
+    background:white;
+    padding:25px;
+    border-radius:5px;
+    box-shadow:0 3px 12px #00000010;
+}
+
+.news-card h3{
+    margin:12px 0;
+}
+
+.news-card p{
+    color:#777;
+    line-height:1.7;
+}
+
+.news-card small{
+    color:#b98b58;
+}
+
+.price{
+    color:#a16d37;
+    font-weight:bold;
+    margin:12px 0;
+}
+
+.contact{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:40px;
+}
+
+.contact-info p{
+    margin:18px 0;
+    color:#71695f;
+}
+
+form input,form textarea,form select{
+    width:100%;
+    padding:13px;
+    margin:8px 0 16px;
+    border:1px solid #ddd;
+    background:white;
+    border-radius:3px;
+    font-size:14px;
+}
+
+form label{
+    font-size:14px;
+    font-weight:bold;
+}
+
+footer{
+    background:#211d19;
+    color:white;
+    text-align:center;
+    padding:35px 15px;
+}
+
+footer p{
+    margin:10px;
+    color:#c7bdb1;
+}
+
+.social a{
+    color:#e5bd83;
+    text-decoration:none;
+    margin:10px;
+}
+
+.cart-box{
+    background:#f1e7d9;
+    padding:18px;
+    margin-top:25px;
+    border-radius:5px;
+}
+
+#imageModal{
+    display:none;
+    position:fixed;
+    z-index:500;
+    inset:0;
+    background:#000e;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+#imageModal img{
+    max-width:90%;
+    max-height:85vh;
+    object-fit:contain;
+}
+
+#imageModal button{
+    position:absolute;
+    top:20px;
+    right:30px;
+    background:white;
+    color:black;
+    border:none;
+    padding:10px 15px;
+    cursor:pointer;
+}
+
+@media(max-width:750px){
+    header{
+        justify-content:center;
+        gap:15px;
+    }
+
+    nav{
+        justify-content:center;
+    }
+
+    .hero h1{
+        font-size:40px;
+    }
+
+    .about,.contact{
+        grid-template-columns:1fr;
+    }
+
+    section{
+        padding:50px 6%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header>
+    <div class="logo">ArtistryHub.</div>
+
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#portfolio">Portfolio</a>
+        <a href="#works">Works</a>
+        <a href="#media">Media</a>
+        <a href="#news">News</a>
+        <a href="#store">Store</a>
+        <a href="#contact">Contact</a>
+    </nav>
+</header>
+
+<!-- HOMEPAGE -->
+<div class="hero" id="home">
+    <div class="hero-content">
+        <h1>Art That Speaks Beyond Words</h1>
+        <p>
+            Welcome to ArtistryHub, the creative world of
+            Emily Harris. Explore beautiful artworks,
+            artistic expressions and creative journeys.
+        </p>
+        <a href="#portfolio" class="btn">Explore Artwork</a>
+    </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+    <div class="about">
+
+        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=900"
+        alt="Artist portrait">
+
+        <div class="about-text">
+            <h2>About Emily Harris</h2>
+
+            <p>
+                Emily Harris is a passionate visual artist
+                known for her creativity, imagination and
+                unique artistic expressions.
+            </p>
+
+            <p>
+                Her artistic journey focuses on exploring
+                emotions, nature, colors and everyday life
+                through beautiful paintings and creative
+                designs.
+            </p>
+
+            <p>
+                Her portfolio represents a collection of
+                artistic experiments, exhibitions and
+                creative achievements.
+            </p>
+
+            <a href="#portfolio" class="btn">View My Work</a>
+        </div>
+
+    </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio">
+    <div class="section-title">
+        <h2>My Creative Portfolio</h2>
+        <p>Discover a collection of artistic creations.</p>
+    </div>
+
+    <div class="filters">
+        <button class="active" onclick="filterArt('all',this)">All</button>
+        <button onclick="filterArt('painting',this)">Paintings</button>
+        <button onclick="filterArt('nature',this)">Nature</button>
+        <button onclick="filterArt('abstract',this)">Abstract</button>
+    </div>
+
+    <div class="gallery" id="artGallery">
+
+        <div class="art-card" data-category="painting">
+            <img onclick="openImage(this.src)"
+            src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=700"
+            alt="Colorful painting">
+            <div class="art-info">
+                <h3>Colorful Expressions</h3>
+                <p>Painting | 2024</p>
+                <p>A creative expression of colors and emotions.</p>
+            </div>
+        </div>
+
+        <div class="art-card" data-category="nature">
+            <img onclick="openImage(this.src)"
+            src="https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?w=700"
+            alt="Nature artwork">
+            <div class="art-info">
+                <h3>Morning Dreams</h3>
+                <p>Nature | 2023</p>
+                <p>Inspired by the beauty of nature and sunlight.</p>
+            </div>
+        </div>
+
+        <div class="art-card" data-category="abstract">
+            <img onclick="openImage(this.src)"
+            src="https://images.unsplash.com/photo-1549490349-8643362247b5?w=700"
+            alt="Abstract artwork">
+            <div class="art-info">
+                <h3>Abstract Vision</h3>
+                <p>Abstract | 2025</p>
+                <p>An imaginative combination of shapes and colors.</p>
+            </div>
+        </div>
+
+        <div class="art-card" data-category="painting">
+            <img onclick="openImage(this.src)"
+            src="https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=700"
+            alt="Art painting">
+            <div class="art-info">
+                <h3>Silent Beauty</h3>
+                <p>Painting | 2024</p>
+                <p>A peaceful visual representation of beauty.</p>
+            </div>
+        </div>
+
+        <div class="art-card" data-category="nature">
+            <img onclick="openImage(this.src)"
+            src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=700"
+            alt="Landscape">
+            <div class="art-info">
+                <h3>Nature's Story</h3>
+                <p>Nature | 2025</p>
+                <p>A creative tribute to the natural world.</p>
+            </div>
+        </div>
+
+        <div class="art-card" data-category="abstract">
+            <img onclick="openImage(this.src)"
+            src="https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=700"
+            alt="Modern art">
+            <div class="art-info">
+                <h3>Modern Imagination</h3>
+                <p>Abstract | 2025</p>
+                <p>Exploring modern artistic imagination.</p>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- DISCOGRAPHY / BIBLIOGRAPHY -->
+<section id="works" class="dark-section">
+    <div class="section-title">
+        <h2>Artistic Works & Achievements</h2>
+        <p>Selected works and creative milestones.</p>
+    </div>
+
+    <div class="list-item">
+        <div>
+            <h3>Colorful Expressions</h3>
+            <p>Painting Collection</p>
+        </div>
+        <span>2024</span>
+    </div>
+
+    <div class="list-item">
+        <div>
+            <h3>Nature's Story</h3>
+            <p>Landscape Art Collection</p>
+        </div>
+        <span>2025</span>
+    </div>
+
+    <div class="list-item">
+        <div>
+            <h3>Abstract Vision</h3>
+            <p>Modern Art Collection</p>
+        </div>
+        <span>2025</span>
+    </div>
+
+    <div class="list-item">
+        <div>
+            <h3>Creative Journey</h3>
+            <p>Personal Art Exhibition</p>
+        </div>
+        <span>2026</span>
+    </div>
+</section>
+
+<!-- MEDIA GALLERY -->
+<section id="media">
+    <div class="section-title">
+        <h2>Media Gallery</h2>
+        <p>Explore moments from the artist's creative world.</p>
+    </div>
+
+    <div class="media-grid">
+        <img src="https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=700"
+        alt="Artist painting">
+
+        <img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=700"
+        alt="Art studio">
+
+        <img src="https://images.unsplash.com/photo-1455390582262-044cdead277a?w=700"
+        alt="Creative workspace">
+    </div>
+
+    <div style="text-align:center;margin-top:30px">
+        <h3>Artist Inspiration Video</h3>
+        <p style="margin:15px;color:#777">
+            Watch an example of an artist's creative process.
+        </p>
+
+        <a class="btn"
+        href="https://www.youtube.com/results?search_query=painting+art+process"
+        target="_blank">
+        Watch on YouTube
+        </a>
+    </div>
+</section>
+
+<!-- NEWS -->
+<section id="news" class="dark-section">
+    <div class="section-title">
+        <h2>News & Updates</h2>
+        <p>Latest creative activities and announcements.</p>
+    </div>
+
+    <div class="news-grid">
+
+        <div class="news-card">
+            <small>March 2026</small>
+            <h3>New Artwork Collection</h3>
+            <p>A new collection of creative paintings is being prepared for art lovers.</p>
+        </div>
+
+        <div class="news-card">
+            <small>April 2026</small>
+            <h3>Art Exhibition</h3>
+            <p>An upcoming exhibition will showcase selected paintings and creative works.</p>
+        </div>
+
+        <div class="news-card">
+            <small>May 2026</small>
+            <h3>Creative Workshop</h3>
+            <p>A creative workshop will introduce visitors to painting techniques.</p>
+        </div>
+
+    </div>
+</section>
+
+<!-- STORE -->
+<section id="store">
+    <div class="section-title">
+        <h2>Art Store</h2>
+        <p>Explore artwork prints and creative merchandise.</p>
+    </div>
+
+    <div class="gallery">
+
+        <div class="art-card">
+            <img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=700"
+            alt="Art print">
+            <div class="art-info">
+                <h3>Colorful Art Print</h3>
+                <p>Premium art print.</p>
+                <div class="price">₹799</div>
+                <button class="btn" onclick="addCart('Colorful Art Print',799)">Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="art-card">
+            <img src="https://images.unsplash.com/photo-1549490349-8643362247b5?w=700"
+            alt="Abstract print">
+            <div class="art-info">
+                <h3>Abstract Art Print</h3>
+                <p>Modern wall decoration.</p>
+                <div class="price">₹999</div>
+                <button class="btn" onclick="addCart('Abstract Art Print',999)">Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="art-card">
+            <img src="https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?w=700"
+            alt="Nature print">
+            <div class="art-info">
+                <h3>Nature Collection</h3>
+                <p>Beautiful landscape print.</p>
+                <div class="price">₹599</div>
+                <button class="btn" onclick="addCart('Nature Collection',599)">Add to Cart</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="cart-box">
+        <h3>🛒 Shopping Cart</h3>
+        <div id="cartItems">Your cart is empty.</div>
+        <h3 id="cartTotal">Total: ₹0</h3>
+        <button class="btn" onclick="checkout()">Place Demo Order</button>
+    </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+    <div class="section-title">
+        <h2>Get In Touch</h2>
+        <p>For bookings, collaborations and fan messages.</p>
+    </div>
+
+    <div class="contact">
+
+        <div class="contact-info">
+            <h2>Contact Emily Harris</h2>
+            <p>📧 Email: emily@example.com</p>
+            <p>📍 Location: Art Studio, New York</p>
+            <p>🎨 Available for art exhibitions and collaborations.</p>
+
+            <h3>Follow on Social Media</h3>
+            <div class="social">
+                <a href="https://www.instagram.com/" target="_blank">Instagram</a>
+                <a href="https://www.facebook.com/" target="_blank">Facebook</a>
+                <a href="https://www.youtube.com/" target="_blank">YouTube</a>
+            </div>
+        </div>
+
+        <div>
+            <form id="contactForm">
+                <label>Your Name</label>
+                <input type="text" id="contactName" required>
+
+                <label>Email Address</label>
+                <input type="email" id="contactEmail" required>
+
+                <label>Subject</label>
+                <input type="text" id="contactSubject" required>
+
+                <label>Your Message</label>
+                <textarea id="contactMessage" rows="5" required></textarea>
+
+                <button class="btn" type="submit">Send Message</button>
+            </form>
+        </div>
+
+    </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section style="background:#e9dfd2;text-align:center">
+    <h2>Subscribe to Our Newsletter</h2>
+    <p style="margin:15px">Receive updates about new artworks and exhibitions.</p>
+
+    <form id="newsletterForm" style="max-width:450px;margin:auto">
+        <input type="email" id="newsletterEmail"
+        placeholder="Enter your email address" required>
+
+        <button class="btn" type="submit">Subscribe</button>
+    </form>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <h2 style="color:#e5bd83">ArtistryHub.</h2>
+    <p>Celebrating creativity, imagination and artistic excellence.</p>
+    <p>© 2026 ArtistryHub | Emily Harris Portfolio</p>
+</footer>
+
+<!-- IMAGE POPUP -->
+<div id="imageModal" onclick="closeImage()">
+    <button onclick="closeImage()">✕ Close</button>
+    <img id="modalImage" alt="Artwork preview">
+</div>
+
+<script>
+
+// PORTFOLIO FILTER
+function filterArt(category,button){
+    let cards=document.querySelectorAll(".art-card[data-category]");
+
+    cards.forEach(card=>{
+        if(category==="all" || card.dataset.category===category){
+            card.style.display="block";
+        }else{
+            card.style.display="none";
+        }
+    });
+
+    document.querySelectorAll(".filters button").forEach(btn=>{
+        btn.classList.remove("active");
+    });
+
+    button.classList.add("active");
+}
+
+// IMAGE POPUP
+function openImage(src){
+    document.getElementById("imageModal").style.display="flex";
+    document.getElementById("modalImage").src=src;
+}
+
+function closeImage(){
+    document.getElementById("imageModal").style.display="none";
+}
+
+// SHOPPING CART
+let cart=[];
+
+function addCart(name,price){
+    cart.push({name:name,price:price});
+    updateCart();
+    alert(name+" added to cart!");
+}
+
+function updateCart(){
+    let html="";
+    let total=0;
+
+    cart.forEach((item,index)=>{
+        html+=`<p>${item.name} - ₹${item.price}
+        <button onclick="removeCart(${index})">Remove</button></p>`;
+
+        total+=item.price;
+    });
+
+    document.getElementById("cartItems").innerHTML=
+    html || "Your cart is empty.";
+
+    document.getElementById("cartTotal").innerText="Total: ₹"+total;
+}
+
+function removeCart(index){
+    cart.splice(index,1);
+    updateCart();
+}
+
+function checkout(){
+    if(cart.length===0){
+        alert("Your cart is empty!");
+        return;
+    }
+
+    alert("Demo order placed successfully! Total: ₹"+
+    cart.reduce((sum,item)=>sum+item.price,0));
+
+    cart=[];
+    updateCart();
+}
+
+// CONTACT FORM
+document.getElementById("contactForm").addEventListener("submit",function(e){
+    e.preventDefault();
+
+    let name=document.getElementById("contactName").value;
+
+    alert("Thank you "+name+"! Your demo message has been submitted.");
+
+    this.reset();
+});
+
+// NEWSLETTER
+document.getElementById("newsletterForm").addEventListener("submit",function(e){
+    e.preventDefault();
+
+    let email=document.getElementById("newsletterEmail").value;
+
+    let subscribers=JSON.parse(localStorage.getItem("artSubscribers")||"[]");
+
+    if(subscribers.includes(email)){
+        alert("You are already subscribed!");
+        return;
+    }
+
+    subscribers.push(email);
+
+    localStorage.setItem("artSubscribers",JSON.stringify(subscribers));
+
+    alert("Thank you for subscribing!");
+
+    this.reset();
+});
+
+</script>
+
+</body>
+</html>

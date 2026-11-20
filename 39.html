@@ -1,0 +1,715 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gourmet Haven | Fine Dining Restaurant</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Georgia, serif;
+    scroll-behavior: smooth;
+}
+
+body {
+    background: #fffaf3;
+    color: #333;
+}
+
+header {
+    background: #20140f;
+    color: white;
+    padding: 20px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.logo {
+    font-size: 27px;
+    color: #d9ad65;
+    font-weight: bold;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 10px;
+    font-size: 14px;
+}
+
+nav a:hover {
+    color: #d9ad65;
+}
+
+.page {
+    display: none;
+    min-height: 500px;
+}
+
+.page.active {
+    display: block;
+}
+
+.hero {
+    min-height: 530px;
+    background: linear-gradient(#0008,#0008),
+    url("https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1600")
+    center/cover;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 30px;
+}
+
+.hero h1 {
+    font-size: 55px;
+    color: #e9bd75;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 20px;
+    margin-bottom: 25px;
+}
+
+button, .btn {
+    background: #b47b3c;
+    color: white;
+    border: none;
+    padding: 12px 23px;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    margin: 5px;
+}
+
+button:hover, .btn:hover {
+    background: #805125;
+}
+
+section {
+    padding: 55px 7%;
+}
+
+.title {
+    text-align: center;
+    font-size: 32px;
+    color: #74451f;
+    margin-bottom: 35px;
+}
+
+.intro {
+    text-align: center;
+    max-width: 800px;
+    margin: auto;
+    line-height: 1.8;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(230px,1fr));
+    gap: 25px;
+}
+
+.card {
+    background: white;
+    border-radius: 9px;
+    overflow: hidden;
+    box-shadow: 0 3px 12px #ddd;
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+.card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.card h3 {
+    color: #74451f;
+    margin: 15px;
+}
+
+.card p {
+    padding: 0 15px;
+    line-height: 1.6;
+}
+
+.price {
+    color: #a56b2e;
+    font-weight: bold;
+    margin: 12px;
+    font-size: 19px;
+}
+
+.content {
+    background: white;
+    max-width: 850px;
+    margin: auto;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 3px 12px #ddd;
+    line-height: 1.8;
+}
+
+.menu-buttons {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.menu-buttons button {
+    margin: 7px;
+}
+
+.menu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    padding: 20px 5px;
+    gap: 15px;
+}
+
+.menu-item h3 {
+    color: #74451f;
+}
+
+form input, form textarea, form select {
+    width: 100%;
+    padding: 13px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.gallery img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.offer {
+    background: #352017;
+    color: white;
+    padding: 35px;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.offer h2 {
+    color: #e9bd75;
+}
+
+footer {
+    background: #20140f;
+    color: white;
+    text-align: center;
+    padding: 35px;
+    margin-top: 40px;
+}
+
+footer a {
+    color: #e9bd75;
+    margin: 10px;
+    text-decoration: none;
+}
+
+@media(max-width:700px) {
+    header {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    nav {
+        text-align: center;
+    }
+
+    nav a {
+        display: inline-block;
+    }
+
+    .hero h1 {
+        font-size: 35px;
+    }
+
+    .menu-item {
+        align-items: flex-start;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">🍽 Gourmet Haven</div>
+
+    <nav>
+        <a href="#" onclick="showPage('home')">Home</a>
+        <a href="#" onclick="showPage('menu')">Menu</a>
+        <a href="#" onclick="showPage('about')">About</a>
+        <a href="#" onclick="showPage('gallery')">Gallery</a>
+        <a href="#" onclick="showPage('offers')">Offers</a>
+        <a href="#" onclick="showPage('reviews')">Reviews</a>
+        <a href="#" onclick="showPage('reservation')">Reservation</a>
+        <a href="#" onclick="showPage('contact')">Contact</a>
+    </nav>
+</header>
+
+<!-- HOME PAGE -->
+<div id="home" class="page active">
+
+    <div class="hero">
+        <h1>Welcome to Gourmet Haven</h1>
+        <p>Experience the Art of Fine Dining</p>
+        <p>Delicious Food | Elegant Atmosphere | Exceptional Service</p>
+        <button onclick="showPage('menu')">Explore Our Menu</button>
+        <button onclick="showPage('reservation')">Book a Table</button>
+    </div>
+
+    <section>
+        <h2 class="title">Welcome to Our Restaurant</h2>
+        <div class="intro">
+            <p>
+                Gourmet Haven offers a wonderful dining experience
+                with delicious dishes, fresh ingredients and
+                excellent hospitality. Enjoy unforgettable moments
+                with family and friends in our elegant restaurant.
+            </p>
+        </div>
+    </section>
+
+    <section>
+        <h2 class="title">Our Signature Dishes</h2>
+        <div class="cards">
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1547592180-85f173990554?w=600">
+                <h3>Special Pasta</h3>
+                <p>Fresh pasta prepared with creamy Italian sauce.</p>
+                <p class="price">₹350</p>
+            </div>
+
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600">
+                <h3>Italian Pizza</h3>
+                <p>Delicious pizza with cheese and fresh toppings.</p>
+                <p class="price">₹450</p>
+            </div>
+
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?w=600">
+                <h3>Chocolate Dessert</h3>
+                <p>Rich and delicious chocolate dessert.</p>
+                <p class="price">₹220</p>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<!-- MENU PAGE -->
+<div id="menu" class="page">
+
+    <section>
+        <h2 class="title">Our Delicious Menu</h2>
+
+        <div class="menu-buttons">
+            <button onclick="filterMenu('all')">All</button>
+            <button onclick="filterMenu('starter')">Starters</button>
+            <button onclick="filterMenu('main')">Main Course</button>
+            <button onclick="filterMenu('dessert')">Desserts</button>
+            <button onclick="filterMenu('drinks')">Drinks</button>
+        </div>
+
+        <div class="content" id="menuList"></div>
+    </section>
+
+</div>
+
+<!-- ABOUT PAGE -->
+<div id="about" class="page">
+
+    <section>
+        <h2 class="title">About Gourmet Haven</h2>
+
+        <div class="content">
+            <p>
+                Gourmet Haven is a fine dining restaurant
+                dedicated to providing delicious food and
+                exceptional customer service.
+            </p>
+
+            <h3>Our History</h3>
+            <p>
+                Established with a passion for cooking,
+                Gourmet Haven brings together traditional
+                flavours and modern culinary techniques.
+            </p>
+
+            <h3>Our Culinary Philosophy</h3>
+            <p>
+                We believe in fresh ingredients, quality
+                preparation and beautiful food presentation.
+            </p>
+
+            <h3>Meet Our Head Chef</h3>
+            <img width="180"
+            style="border-radius:10px;margin:15px 0"
+            src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=400"
+            alt="Head Chef">
+
+            <h3>Chef Michael Anderson</h3>
+            <p>
+                Our head chef has a passion for creating
+                innovative dishes and providing guests
+                with memorable dining experiences.
+            </p>
+
+            <h3>Our Commitment</h3>
+            <p>
+                We focus on quality, hygiene, customer
+                satisfaction and excellent hospitality.
+            </p>
+        </div>
+    </section>
+
+</div>
+
+<!-- GALLERY PAGE -->
+<div id="gallery" class="page">
+
+    <section>
+        <h2 class="title">Restaurant Gallery</h2>
+
+        <div class="cards gallery">
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600">
+                <h3>Restaurant Interior</h3>
+            </div>
+
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600">
+                <h3>Fine Dining Experience</h3>
+            </div>
+
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600">
+                <h3>Special Dishes</h3>
+            </div>
+
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1515003197210-e0cd7184f8b5?w=600">
+                <h3>Fresh Food</h3>
+            </div>
+
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?w=600">
+                <h3>Dining Area</h3>
+            </div>
+
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?w=600">
+                <h3>Delicious Desserts</h3>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<!-- OFFERS PAGE -->
+<div id="offers" class="page">
+
+    <section>
+        <h2 class="title">Special Offers & Events</h2>
+
+        <div class="cards">
+            <div class="offer">
+                <h2>Weekend Special</h2>
+                <h3>20% OFF</h3>
+                <p>Enjoy selected dishes every weekend.</p>
+            </div>
+
+            <div class="offer">
+                <h2>Family Dinner</h2>
+                <h3>Special Combo</h3>
+                <p>Enjoy delicious meals with your family.</p>
+            </div>
+
+            <div class="offer">
+                <h2>Birthday Celebration</h2>
+                <h3>Free Dessert</h3>
+                <p>Celebrate your birthday with us.</p>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<!-- REVIEWS PAGE -->
+<div id="reviews" class="page">
+
+    <section>
+        <h2 class="title">Customer Testimonials</h2>
+
+        <div class="cards">
+            <div class="card">
+                <h3>⭐⭐⭐⭐⭐</h3>
+                <p>"Excellent food and beautiful atmosphere.
+                A wonderful dining experience."</p>
+                <h3>- Rahul</h3>
+            </div>
+
+            <div class="card">
+                <h3>⭐⭐⭐⭐⭐</h3>
+                <p>"The staff were friendly and the food
+                was absolutely delicious."</p>
+                <h3>- Priya</h3>
+            </div>
+
+            <div class="card">
+                <h3>⭐⭐⭐⭐⭐</h3>
+                <p>"A perfect place for family dinners
+                and special occasions."</p>
+                <h3>- Arjun</h3>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<!-- RESERVATION PAGE -->
+<div id="reservation" class="page">
+
+    <section>
+        <h2 class="title">Book Your Table</h2>
+
+        <div class="content">
+            <p>Reserve your table and enjoy an unforgettable dining experience.</p>
+
+            <form onsubmit="bookTable(event)">
+
+                <input type="text" placeholder="Your Full Name" required>
+
+                <input type="email" placeholder="Email Address" required>
+
+                <input type="tel" placeholder="Phone Number" required>
+
+                <label>Select Reservation Date</label>
+                <input type="date" id="bookingDate" required>
+
+                <label>Select Time</label>
+                <select required>
+                    <option value="">Choose Time</option>
+                    <option>12:00 PM</option>
+                    <option>1:00 PM</option>
+                    <option>2:00 PM</option>
+                    <option>7:00 PM</option>
+                    <option>8:00 PM</option>
+                    <option>9:00 PM</option>
+                </select>
+
+                <label>Number of Guests</label>
+                <select required>
+                    <option value="">Select Guests</option>
+                    <option>1 Person</option>
+                    <option>2 People</option>
+                    <option>3 People</option>
+                    <option>4 People</option>
+                    <option>5 People</option>
+                    <option>6 People</option>
+                </select>
+
+                <textarea rows="4"
+                placeholder="Special Requests"></textarea>
+
+                <button type="submit">Confirm Reservation</button>
+
+            </form>
+        </div>
+    </section>
+
+</div>
+
+<!-- CONTACT PAGE -->
+<div id="contact" class="page">
+
+    <section>
+        <h2 class="title">Contact Us</h2>
+
+        <div class="content">
+
+            <p><b>Address:</b> 123 Food Street, Chennai, Tamil Nadu, India</p>
+            <p><b>Phone:</b> +91 98765 43210</p>
+            <p><b>Email:</b> info@gourmethaven.com</p>
+            <p><b>Opening Hours:</b> 12 PM - 10 PM</p>
+
+            <h3>Find Our Location</h3>
+
+            <iframe
+                width="100%"
+                height="300"
+                style="border:0;border-radius:8px"
+                loading="lazy"
+                src="https://maps.google.com/maps?q=Chennai%20Tamil%20Nadu&t=&z=13&ie=UTF8&iwloc=&output=embed">
+            </iframe>
+
+            <h3>Send Us a Message</h3>
+
+            <form onsubmit="sendMessage(event)">
+                <input type="text" placeholder="Your Name" required>
+                <input type="email" placeholder="Your Email" required>
+                <input type="text" placeholder="Subject" required>
+                <textarea rows="5" placeholder="Your Message" required></textarea>
+
+                <button type="submit">Send Message</button>
+            </form>
+
+        </div>
+    </section>
+
+</div>
+
+<footer>
+    <h2 style="color:#e9bd75">🍽 Gourmet Haven</h2>
+    <p>Experience Delicious Food and Elegant Dining.</p>
+
+    <br>
+
+    <a href="#" onclick="showPage('home')">Home</a>
+    <a href="#" onclick="showPage('menu')">Menu</a>
+    <a href="#" onclick="showPage('about')">About Us</a>
+    <a href="#" onclick="showPage('contact')">Contact</a>
+
+    <p style="margin-top:20px">
+        © 2026 Gourmet Haven. All Rights Reserved.
+    </p>
+</footer>
+
+<script>
+
+const menuItems = [
+    {
+        name:"Tomato Soup",
+        category:"starter",
+        description:"Fresh tomatoes with herbs and cream.",
+        price:150
+    },
+    {
+        name:"Paneer Tikka",
+        category:"starter",
+        description:"Grilled paneer with Indian spices.",
+        price:220
+    },
+    {
+        name:"Veg Biryani",
+        category:"main",
+        description:"Traditional aromatic rice with vegetables.",
+        price:280
+    },
+    {
+        name:"Grilled Chicken",
+        category:"main",
+        description:"Tender chicken with special seasoning.",
+        price:420
+    },
+    {
+        name:"Chocolate Cake",
+        category:"dessert",
+        description:"Rich chocolate cake with cream.",
+        price:180
+    },
+    {
+        name:"Ice Cream",
+        category:"dessert",
+        description:"Delicious vanilla and chocolate ice cream.",
+        price:120
+    },
+    {
+        name:"Fresh Lime Juice",
+        category:"drinks",
+        description:"Freshly squeezed lime juice.",
+        price:90
+    },
+    {
+        name:"Cold Coffee",
+        category:"drinks",
+        description:"Chilled coffee with creamy milk.",
+        price:140
+    }
+];
+
+function showPage(page) {
+
+    document.querySelectorAll('.page').forEach(function(p) {
+        p.classList.remove('active');
+    });
+
+    document.getElementById(page).classList.add('active');
+
+    window.scrollTo(0,0);
+}
+
+function filterMenu(category) {
+
+    let filtered = category === 'all'
+        ? menuItems
+        : menuItems.filter(item => item.category === category);
+
+    let html = "";
+
+    filtered.forEach(item => {
+
+        html += `
+            <div class="menu-item">
+                <div>
+                    <h3>${item.name}</h3>
+                    <p>${item.description}</p>
+                </div>
+                <h3>₹${item.price}</h3>
+            </div>
+        `;
+
+    });
+
+    document.getElementById('menuList').innerHTML = html;
+}
+
+function bookTable(event) {
+
+    event.preventDefault();
+
+    alert("Thank you! Your table reservation request has been submitted successfully.");
+
+    event.target.reset();
+}
+
+function sendMessage(event) {
+
+    event.preventDefault();
+
+    alert("Thank you! Your message has been submitted successfully.");
+
+    event.target.reset();
+}
+
+document.getElementById("bookingDate").min =
+    new Date().toISOString().split("T")[0];
+
+filterMenu('all');
+
+</script>
+
+</body>
+</html>

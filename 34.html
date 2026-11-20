@@ -1,0 +1,865 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LearnWell Tuition Centre</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+body {
+    background: #f4f7fc;
+    color: #263449;
+}
+
+/* HEADER */
+header {
+    background: linear-gradient(120deg,#172554,#2563eb);
+    color: white;
+    padding: 22px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.logo {
+    font-size: 27px;
+    font-weight: bold;
+}
+
+.logo span {
+    color: #facc15;
+}
+
+header p {
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+nav {
+    background: white;
+    padding: 17px;
+    text-align: center;
+    box-shadow: 0 3px 12px #00000010;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+nav a {
+    text-decoration: none;
+    color: #253858;
+    margin: 0 13px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+nav a:hover {
+    color: #2563eb;
+}
+
+/* HERO */
+.hero {
+    background: linear-gradient(120deg,#172554dd,#2563ebcc),
+    url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1600')
+    center/cover;
+    color: white;
+    padding: 100px 8%;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 45px;
+    margin-bottom: 15px;
+}
+
+.hero p {
+    font-size: 18px;
+    margin-bottom: 25px;
+}
+
+.btn {
+    display: inline-block;
+    background: #facc15;
+    color: #172554;
+    padding: 13px 25px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: white;
+}
+
+/* GENERAL */
+section {
+    padding: 65px 8%;
+    scroll-margin-top: 65px;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.section-title h2 {
+    color: #1e40af;
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.section-title p {
+    color: #64748b;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+    gap: 22px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 18px #0000000c;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 22px #00000015;
+}
+
+.card h3 {
+    color: #1e40af;
+    margin: 12px 0;
+}
+
+.card p {
+    color: #64748b;
+    line-height: 1.8;
+}
+
+.card .price {
+    font-size: 23px;
+    color: #15803d;
+    font-weight: bold;
+    margin-top: 12px;
+}
+
+.icon {
+    font-size: 35px;
+}
+
+/* ANNOUNCEMENTS */
+.announcement {
+    background: white;
+    padding: 20px;
+    border-left: 5px solid #2563eb;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    box-shadow: 0 3px 12px #00000008;
+}
+
+.announcement h3 {
+    color: #1e40af;
+    margin-bottom: 8px;
+}
+
+.announcement small {
+    color: #64748b;
+}
+
+/* FORMS */
+.form-container {
+    background: white;
+    padding: 30px;
+    max-width: 650px;
+    margin: auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px #00000010;
+}
+
+.form-container h3 {
+    color: #1e40af;
+    margin-bottom: 20px;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 13px;
+    margin: 9px 0 17px;
+    border: 1px solid #d4dce8;
+    border-radius: 6px;
+    outline: none;
+    background: #fbfdff;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #2563eb;
+}
+
+label {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.form-container button {
+    width: 100%;
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.form-container button:hover {
+    background: #172554;
+}
+
+/* REPORTS */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
+    gap: 18px;
+    margin-bottom: 30px;
+}
+
+.stat-box {
+    background: white;
+    padding: 23px;
+    border-radius: 10px;
+    border-bottom: 4px solid #2563eb;
+}
+
+.stat-box h2 {
+    color: #1e40af;
+    font-size: 28px;
+}
+
+.stat-box p {
+    color: #64748b;
+    margin-top: 8px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    margin-top: 20px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+th {
+    background: #1e40af;
+    color: white;
+}
+
+.status {
+    color: #15803d;
+    font-weight: bold;
+}
+
+/* ABOUT */
+.about {
+    background: #eaf1ff;
+}
+
+footer {
+    background: #172554;
+    color: white;
+    padding: 35px;
+    text-align: center;
+    line-height: 2;
+}
+
+footer a {
+    color: #facc15;
+    text-decoration: none;
+}
+
+@media(max-width:700px) {
+    header {
+        justify-content: center;
+        text-align: center;
+    }
+
+    nav a {
+        display: inline-block;
+        margin: 8px;
+    }
+
+    .hero h1 {
+        font-size: 32px;
+    }
+
+    section {
+        padding: 45px 5%;
+    }
+
+    table {
+        font-size: 12px;
+    }
+
+    th, td {
+        padding: 9px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header>
+    <div>
+        <div class="logo">Learn<span>Well</span></div>
+        <p>Tuition Centre | Learn Today, Lead Tomorrow</p>
+    </div>
+    <div>
+        📞 +91 98765 43210
+    </div>
+</header>
+
+<!-- NAVIGATION -->
+<nav>
+    <a href="#home">Home</a>
+    <a href="#announcements">Announcements</a>
+    <a href="#admin">Admin</a>
+    <a href="#teachers">Teachers</a>
+    <a href="#students">Students</a>
+    <a href="#subjects">Subjects</a>
+    <a href="#tuition">Tuition</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+</nav>
+
+<!-- HOME -->
+<div class="hero" id="home">
+    <h1>Welcome to LearnWell Tuition Centre</h1>
+    <p>Quality Education for a Brighter Future</p>
+    <p>Expert Teachers | Affordable Fees | Online & Offline Classes</p>
+    <a href="#students" class="btn">Register Now</a>
+</div>
+
+<!-- ANNOUNCEMENTS -->
+<section id="announcements">
+    <div class="section-title">
+        <h2>Latest Announcements</h2>
+        <p>Stay updated with our latest news and events</p>
+    </div>
+
+    <div class="announcement">
+        <h3>📢 New Batch Admissions Open</h3>
+        <p>Admissions are now open for Mathematics, Science and Computer Science.</p>
+        <small>20 November 2026</small>
+    </div>
+
+    <div class="announcement">
+        <h3>📢 Monthly Test Schedule</h3>
+        <p>Monthly examinations will be conducted at the end of this month.</p>
+        <small>18 November 2026</small>
+    </div>
+
+    <div class="announcement">
+        <h3>📢 Special Revision Classes</h3>
+        <p>Special revision classes are available for upcoming examinations.</p>
+        <small>15 November 2026</small>
+    </div>
+</section>
+
+<!-- ADMIN -->
+<section id="admin">
+    <div class="section-title">
+        <h2>1. Admin Login & Registration</h2>
+        <p>Administration Management Portal</p>
+    </div>
+
+    <div class="form-container">
+        <h3>Admin Login</h3>
+
+        <form onsubmit="return submitForm(event,'Admin Login')">
+            <label>Username</label>
+            <input type="text" placeholder="Enter admin username" required>
+
+            <label>Email Address</label>
+            <input type="email" placeholder="Enter email" required>
+
+            <label>Password</label>
+            <input type="password" placeholder="Enter password" required>
+
+            <button type="submit">Login to Dashboard</button>
+        </form>
+
+        <br><hr><br>
+
+        <h3>Admin Registration</h3>
+
+        <form onsubmit="return submitForm(event,'Admin Registration')">
+            <label>Admin Name</label>
+            <input type="text" placeholder="Enter admin name" required>
+
+            <label>Email</label>
+            <input type="email" placeholder="Enter email address" required>
+
+            <label>Mobile Number</label>
+            <input type="tel" placeholder="Enter mobile number" required>
+
+            <label>Create Password</label>
+            <input type="password" placeholder="Create password" required>
+
+            <button type="submit">Register Admin</button>
+        </form>
+    </div>
+</section>
+
+<!-- TEACHERS -->
+<section id="teachers">
+    <div class="section-title">
+        <h2>2. Teacher Login & Registration</h2>
+        <p>Manage teaching staff and their information</p>
+    </div>
+
+    <div class="cards">
+
+        <div class="card">
+            <div class="icon">👨‍🏫</div>
+            <h3>Teacher Login</h3>
+            <p>Access teaching schedules, student records and class information.</p>
+        </div>
+
+        <div class="card">
+            <div class="icon">📝</div>
+            <h3>Teacher Registration</h3>
+            <p>Register as a new teacher and provide qualification details.</p>
+        </div>
+
+    </div>
+
+    <br>
+
+    <div class="form-container">
+        <h3>Teacher Registration Form</h3>
+
+        <form onsubmit="return submitForm(event,'Teacher Registration')">
+            <label>Teacher Name</label>
+            <input type="text" placeholder="Enter teacher name" required>
+
+            <label>Email Address</label>
+            <input type="email" placeholder="Enter email" required>
+
+            <label>Mobile Number</label>
+            <input type="tel" placeholder="Enter mobile number" required>
+
+            <label>Qualification</label>
+            <input type="text" placeholder="Enter qualification" required>
+
+            <label>Teaching Subject</label>
+            <select required>
+                <option value="">Select Subject</option>
+                <option>Mathematics</option>
+                <option>Physics</option>
+                <option>Chemistry</option>
+                <option>Computer Science</option>
+                <option>English</option>
+            </select>
+
+            <label>Password</label>
+            <input type="password" placeholder="Create password" required>
+
+            <button type="submit">Register Teacher</button>
+        </form>
+
+        <br><hr><br>
+
+        <h3>Teacher Login</h3>
+
+        <form onsubmit="return submitForm(event,'Teacher Login')">
+            <input type="email" placeholder="Teacher Email" required>
+            <input type="password" placeholder="Password" required>
+            <button type="submit">Teacher Login</button>
+        </form>
+    </div>
+</section>
+
+<!-- STUDENTS -->
+<section id="students">
+    <div class="section-title">
+        <h2>3. Student Management</h2>
+        <p>Student registration, fees and academic reports</p>
+    </div>
+
+    <div class="form-container">
+        <h3>Online Student Registration</h3>
+
+        <form onsubmit="return submitForm(event,'Student Registration')">
+            <label>Student Name</label>
+            <input type="text" placeholder="Enter student name" required>
+
+            <label>Parent Name</label>
+            <input type="text" placeholder="Enter parent name" required>
+
+            <label>Email Address</label>
+            <input type="email" placeholder="Enter email" required>
+
+            <label>Mobile Number</label>
+            <input type="tel" placeholder="Enter phone number" required>
+
+            <label>Class / Standard</label>
+            <select required>
+                <option value="">Select Class</option>
+                <option>6th Standard</option>
+                <option>7th Standard</option>
+                <option>8th Standard</option>
+                <option>9th Standard</option>
+                <option>10th Standard</option>
+                <option>11th Standard</option>
+                <option>12th Standard</option>
+            </select>
+
+            <label>Select Subject</label>
+            <select required>
+                <option>Mathematics</option>
+                <option>Science</option>
+                <option>English</option>
+                <option>Computer Science</option>
+            </select>
+
+            <button type="submit">Register Student</button>
+        </form>
+    </div>
+
+    <br><br>
+
+    <h3>Student Fee Details</h3>
+
+    <div class="stats">
+        <div class="stat-box">
+            <h2>₹45,000</h2>
+            <p>Total Fees Collected</p>
+        </div>
+
+        <div class="stat-box">
+            <h2>₹15,000</h2>
+            <p>Pending Fees</p>
+        </div>
+
+        <div class="stat-box">
+            <h2>30</h2>
+            <p>Total Students</p>
+        </div>
+    </div>
+
+    <table>
+        <tr>
+            <th>Student Name</th>
+            <th>Class</th>
+            <th>Total Fees</th>
+            <th>Paid</th>
+            <th>Balance</th>
+        </tr>
+
+        <tr>
+            <td>Arun Kumar</td>
+            <td>10th</td>
+            <td>₹5,000</td>
+            <td>₹5,000</td>
+            <td class="status">Paid</td>
+        </tr>
+
+        <tr>
+            <td>Priya</td>
+            <td>12th</td>
+            <td>₹6,000</td>
+            <td>₹4,000</td>
+            <td style="color:red">₹2,000</td>
+        </tr>
+
+        <tr>
+            <td>Rahul</td>
+            <td>9th</td>
+            <td>₹4,000</td>
+            <td>₹3,000</td>
+            <td style="color:red">₹1,000</td>
+        </tr>
+    </table>
+
+    <br><br>
+
+    <h3>Monthly and Yearly Reports</h3>
+
+    <div class="cards">
+        <div class="card">
+            <h3>📅 Monthly Report</h3>
+            <p>View monthly attendance, fees collection and student performance.</p>
+            <select>
+                <option>November 2026</option>
+                <option>October 2026</option>
+                <option>September 2026</option>
+            </select>
+            <button onclick="alert('Monthly report selected')">View Report</button>
+        </div>
+
+        <div class="card">
+            <h3>📊 Yearly Report</h3>
+            <p>View yearly fee collection and academic performance reports.</p>
+            <select>
+                <option>2026</option>
+                <option>2025</option>
+                <option>2024</option>
+            </select>
+            <button onclick="alert('Yearly report selected')">View Report</button>
+        </div>
+
+        <div class="card">
+            <h3>⭐ Feedback Report</h3>
+            <p>Review student and parent feedback about teaching quality.</p>
+            <button onclick="document.getElementById('feedback').scrollIntoView()">Give Feedback</button>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="form-container" id="feedback">
+        <h3>Student Feedback Form</h3>
+
+        <form onsubmit="return submitForm(event,'Feedback')">
+            <input type="text" placeholder="Student Name" required>
+
+            <label>Teaching Quality</label>
+            <select required>
+                <option>Excellent</option>
+                <option>Good</option>
+                <option>Average</option>
+            </select>
+
+            <label>Feedback</label>
+            <textarea rows="4" placeholder="Write your feedback" required></textarea>
+
+            <button type="submit">Submit Feedback</button>
+        </form>
+    </div>
+</section>
+
+<!-- SUBJECTS -->
+<section id="subjects">
+    <div class="section-title">
+        <h2>4. Subjects and Course Details</h2>
+        <p>Choose your subjects and course duration</p>
+    </div>
+
+    <div class="cards">
+
+        <div class="card">
+            <div class="icon">📐</div>
+            <h3>Mathematics</h3>
+            <p>Duration: 6 Months</p>
+            <p>Classes: 3 Days / Week</p>
+            <p class="price">₹3,000</p>
+        </div>
+
+        <div class="card">
+            <div class="icon">🔬</div>
+            <h3>Science</h3>
+            <p>Duration: 6 Months</p>
+            <p>Classes: 3 Days / Week</p>
+            <p class="price">₹3,500</p>
+        </div>
+
+        <div class="card">
+            <div class="icon">💻</div>
+            <h3>Computer Science</h3>
+            <p>Duration: 4 Months</p>
+            <p>Classes: 2 Days / Week</p>
+            <p class="price">₹4,000</p>
+        </div>
+
+        <div class="card">
+            <div class="icon">📚</div>
+            <h3>English</h3>
+            <p>Duration: 3 Months</p>
+            <p>Classes: 2 Days / Week</p>
+            <p class="price">₹2,000</p>
+        </div>
+
+        <div class="card">
+            <div class="icon">⚛️</div>
+            <h3>Physics</h3>
+            <p>Duration: 6 Months</p>
+            <p>Classes: 3 Days / Week</p>
+            <p class="price">₹3,500</p>
+        </div>
+
+        <div class="card">
+            <div class="icon">🧪</div>
+            <h3>Chemistry</h3>
+            <p>Duration: 6 Months</p>
+            <p>Classes: 3 Days / Week</p>
+            <p class="price">₹3,500</p>
+        </div>
+
+    </div>
+</section>
+
+<!-- TUITION AVAILABILITY -->
+<section id="tuition">
+    <div class="section-title">
+        <h2>5. Online / Offline Tuition Availability</h2>
+        <p>Learn from anywhere with flexible learning options</p>
+    </div>
+
+    <div class="cards">
+
+        <div class="card">
+            <div class="icon">💻</div>
+            <h3>Online Tuition</h3>
+            <p>Attend live classes from home using a computer or mobile.</p>
+            <p>Flexible Timings</p>
+            <p>Live Video Classes</p>
+            <p>Digital Study Materials</p>
+            <h3>₹2,500 / Month</h3>
+        </div>
+
+        <div class="card">
+            <div class="icon">🏫</div>
+            <h3>Offline Tuition</h3>
+            <p>Attend classroom sessions with experienced teachers.</p>
+            <p>Direct Teacher Support</p>
+            <p>Classroom Learning</p>
+            <p>Regular Tests</p>
+            <h3>₹3,000 / Month</h3>
+        </div>
+
+    </div>
+
+    <br>
+
+    <div class="form-container">
+        <h3>Tuition Admission Booking</h3>
+
+        <form onsubmit="return submitForm(event,'Tuition Admission')">
+
+            <label>Student Name</label>
+            <input type="text" placeholder="Enter student name" required>
+
+            <label>Choose Learning Mode</label>
+            <select required>
+                <option value="">Select Tuition Mode</option>
+                <option>Online Tuition</option>
+                <option>Offline Tuition</option>
+            </select>
+
+            <label>Select Subject</label>
+            <select required>
+                <option>Mathematics</option>
+                <option>Science</option>
+                <option>Computer Science</option>
+                <option>English</option>
+                <option>Physics</option>
+                <option>Chemistry</option>
+            </select>
+
+            <label>Preferred Time</label>
+            <select required>
+                <option>Morning (8 AM - 10 AM)</option>
+                <option>Afternoon (2 PM - 4 PM)</option>
+                <option>Evening (5 PM - 7 PM)</option>
+            </select>
+
+            <label>Starting Date</label>
+            <input type="date" required>
+
+            <button type="submit">Book Tuition</button>
+        </form>
+    </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+    <div class="section-title">
+        <h2>About LearnWell</h2>
+        <p>Our Mission and Vision</p>
+    </div>
+
+    <div class="cards">
+        <div class="card">
+            <h3>Our Mission</h3>
+            <p>To provide quality education and help students achieve academic success through effective teaching.</p>
+        </div>
+
+        <div class="card">
+            <h3>Our Vision</h3>
+            <p>To become a trusted tuition centre that develops knowledge, confidence and skills in every student.</p>
+        </div>
+
+        <div class="card">
+            <h3>Our Teachers</h3>
+            <p>Our experienced teachers provide individual attention, regular assessments and academic guidance.</p>
+        </div>
+    </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+    <div class="section-title">
+        <h2>Contact Us</h2>
+        <p>We are here to help students and parents</p>
+    </div>
+
+    <div class="form-container">
+        <form onsubmit="return submitForm(event,'Contact Message')">
+            <input type="text" placeholder="Your Name" required>
+            <input type="email" placeholder="Email Address" required>
+            <input type="tel" placeholder="Mobile Number" required>
+            <textarea rows="4" placeholder="Your Message" required></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+
+        <br>
+        <p>📧 Email: support@learnwell.com</p>
+        <p>📞 Phone: +91 98765 43210</p>
+        <p>📍 Address: LearnWell Tuition Centre, Tamil Nadu</p>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <h2>LearnWell Tuition Centre</h2>
+    <p>Learn Today, Lead Tomorrow.</p>
+    <p>Quality Education for Every Student</p>
+    <p>© 2026 LearnWell. All Rights Reserved.</p>
+</footer>
+
+<script>
+function submitForm(event, name) {
+    event.preventDefault();
+    alert(name + " submitted successfully!");
+    event.target.reset();
+    return false;
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,403 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Online Phone Bill Payment</title>
+<style>
+*{box-sizing:border-box}
+body{
+    margin:0;
+    font-family:Arial;
+    background:#eef2f7;
+    color:#222;
+}
+header{
+    background:#123c69;
+    color:white;
+    padding:20px;
+    text-align:center;
+}
+nav{
+    background:#092b4c;
+    padding:12px;
+    text-align:center;
+}
+nav button{
+    padding:10px 20px;
+    margin:5px;
+    border:0;
+    background:white;
+    color:#123c69;
+    cursor:pointer;
+    border-radius:5px;
+}
+.container{
+    background:white;
+    width:90%;
+    max-width:650px;
+    margin:25px auto;
+    padding:25px;
+    border-radius:10px;
+    box-shadow:0 2px 10px #bbb;
+}
+h2{text-align:center;color:#123c69}
+input,select{
+    width:100%;
+    padding:12px;
+    margin:8px 0 15px;
+    border:1px solid #aaa;
+    border-radius:5px;
+}
+.mainbtn{
+    width:100%;
+    padding:12px;
+    background:#123c69;
+    color:white;
+    border:0;
+    border-radius:5px;
+    cursor:pointer;
+}
+.mainbtn:hover{background:#0876bb}
+.page{display:none}
+.info{
+    background:#e8f3ff;
+    padding:15px;
+    margin:10px 0;
+    border-radius:5px;
+}
+.success{color:green;font-weight:bold}
+.danger{color:red;font-weight:bold}
+table{width:100%;border-collapse:collapse}
+td,th{padding:10px;border:1px solid #ccc;text-align:center}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>Online Phone Bill Payment System</h1>
+<p>Manage and Pay Your Monthly Phone Bills</p>
+</header>
+
+<nav>
+<button onclick="show('home')">Home</button>
+<button onclick="show('adminLogin')">Admin</button>
+<button onclick="show('register')">Register</button>
+<button onclick="show('customerLogin')">Customer Login</button>
+</nav>
+
+<!-- HOME -->
+<div id="home" class="container page">
+<h2>Welcome</h2>
+<p>Welcome to the Online Phone Bill Payment System.</p>
+<p>Pay your monthly phone bills securely and easily.</p>
+</div>
+
+<!-- ADMIN LOGIN -->
+<div id="adminLogin" class="container page">
+<h2>Admin Login</h2>
+<input id="adminUser" placeholder="Admin Username">
+<input id="adminPass" type="password" placeholder="Password">
+<button class="mainbtn" onclick="adminLogin()">Login</button>
+<p>Demo Username: admin</p>
+<p>Demo Password: admin123</p>
+</div>
+
+<!-- ADMIN DASHBOARD -->
+<div id="adminPanel" class="container page">
+<h2>Admin Dashboard</h2>
+<h3>Update Monthly Bill Details</h3>
+
+<label>Monthly Bill Amount (₹)</label>
+<input type="number" id="billAmount" placeholder="Enter bill amount">
+
+<label>Billing Start Date</label>
+<input type="date" id="startDate">
+
+<label>Billing End Date</label>
+<input type="date" id="endDate">
+
+<label>Last Date of Payment</label>
+<input type="date" id="dueDate">
+
+<button class="mainbtn" onclick="updateBill()">Update Bill</button>
+<p id="adminMessage"></p>
+<button class="mainbtn" onclick="logout()">Logout</button>
+</div>
+
+<!-- CUSTOMER REGISTER -->
+<div id="register" class="container page">
+<h2>Customer Registration</h2>
+<input id="regName" placeholder="Full Name">
+<input id="regPhone" placeholder="Phone Number">
+<input id="regEmail" type="email" placeholder="Email Address">
+<input id="regPass" type="password" placeholder="Create Password">
+<button class="mainbtn" onclick="register()">Register</button>
+</div>
+
+<!-- CUSTOMER LOGIN -->
+<div id="customerLogin" class="container page">
+<h2>Customer Login</h2>
+<input id="loginPhone" placeholder="Phone Number">
+<input id="loginPass" type="password" placeholder="Password">
+<button class="mainbtn" onclick="customerLogin()">Login</button>
+</div>
+
+<!-- CUSTOMER DASHBOARD -->
+<div id="dashboard" class="container page">
+<h2>Customer Dashboard</h2>
+<div id="customerInfo"></div>
+
+<div class="info">
+<h3>Current Bill Details</h3>
+<p>Billing Period: <span id="period"></span></p>
+<p>Bill Amount: ₹<span id="amount"></span></p>
+<p>Last Payment Date: <span id="due"></span></p>
+<p>Fine Amount: ₹<span id="fine"></span></p>
+<h3>Total Amount: ₹<span id="total"></span></h3>
+<p id="billStatus"></p>
+</div>
+
+<h3>Make Payment</h3>
+<label>Payment Type</label>
+<select id="payType">
+<option value="full">Full Bill Payment</option>
+<option value="custom">Custom Amount</option>
+</select>
+
+<input type="number" id="customAmount"
+placeholder="Enter custom amount">
+
+<label>Payment Method</label>
+<select id="method">
+<option>UPI</option>
+<option>Debit Card</option>
+<option>Credit Card</option>
+<option>Net Banking</option>
+</select>
+
+<button class="mainbtn" onclick="payBill()">Pay Now</button>
+<p id="paymentMessage"></p>
+
+<h3>Payment History</h3>
+<table>
+<thead>
+<tr><th>Date</th><th>Amount</th><th>Method</th></tr>
+</thead>
+<tbody id="history"></tbody>
+</table>
+
+<button class="mainbtn" onclick="logout()">Logout</button>
+</div>
+
+<script>
+function show(id){
+    document.querySelectorAll('.page').forEach(p=>p.style.display='none');
+    document.getElementById(id).style.display='block';
+}
+show('home');
+
+function getData(key, fallback){
+    return JSON.parse(localStorage.getItem(key)) || fallback;
+}
+function setData(key,value){
+    localStorage.setItem(key,JSON.stringify(value));
+}
+
+// ADMIN LOGIN
+function adminLogin(){
+    if(adminUser.value==="admin" &&
+       adminPass.value==="admin123"){
+        show('adminPanel');
+    }else{
+        alert("Invalid Admin Login");
+    }
+}
+
+// ADMIN BILL UPDATE
+function updateBill(){
+    let bill={
+        amount:Number(billAmount.value),
+        start:startDate.value,
+        end:endDate.value,
+        due:dueDate.value
+    };
+
+    if(!bill.amount || !bill.start || !bill.end || !bill.due){
+        alert("Please fill all bill details");
+        return;
+    }
+
+    if(bill.end<bill.start || bill.due<bill.start){
+        alert("Please check the billing dates");
+        return;
+    }
+
+    setData('monthlyBill',bill);
+    adminMessage.innerHTML="Monthly Bill Updated Successfully!";
+    adminMessage.className="success";
+}
+
+// CUSTOMER REGISTER
+function register(){
+    let users=getData('users',[]);
+    let user={
+        name:regName.value,
+        phone:regPhone.value,
+        email:regEmail.value,
+        password:regPass.value
+    };
+
+    if(!user.name || !user.phone || !user.email || !user.password){
+        alert("Please fill all details");
+        return;
+    }
+
+    if(users.some(u=>u.phone===user.phone)){
+        alert("Phone number already registered");
+        return;
+    }
+
+    users.push(user);
+    setData('users',users);
+    alert("Registration Successful");
+    show('customerLogin');
+}
+
+// CUSTOMER LOGIN
+let currentUser=null;
+
+function customerLogin(){
+    let users=getData('users',[]);
+    currentUser=users.find(u=>
+        u.phone===loginPhone.value &&
+        u.password===loginPass.value
+    );
+
+    if(currentUser){
+        loadDashboard();
+        show('dashboard');
+    }else{
+        alert("Invalid Customer Login");
+    }
+}
+
+// CALCULATE FINE
+function getFine(bill){
+    let today=new Date();
+    today.setHours(0,0,0,0);
+
+    let due=new Date(bill.due+"T00:00:00");
+    if(today<=due) return 0;
+
+    return Math.floor((today-due)/86400000)*10;
+}
+
+// CUSTOMER DASHBOARD
+function loadDashboard(){
+    let bill=getData('monthlyBill',null);
+
+    customerInfo.innerHTML=
+        "<h3>Welcome "+currentUser.name+"</h3>"+
+        "<p>Phone Number: "+currentUser.phone+"</p>";
+
+    if(!bill){
+        alert("Admin has not updated the monthly bill yet");
+        return;
+    }
+
+    let fine=getFine(bill);
+    let total=bill.amount+fine;
+
+    period.innerText=bill.start+" to "+bill.end;
+    amount.innerText=bill.amount;
+    due.innerText=bill.due;
+    document.getElementById('fine').innerText=fine;
+    document.getElementById('total').innerText=total;
+
+    let payments=getData('payments',[]);
+    let paid=payments.filter(p=>p.phone===currentUser.phone &&
+        p.start===bill.start && p.end===bill.end)
+        .reduce((sum,p)=>sum+p.amount,0);
+
+    let remaining=Math.max(0,total-paid);
+
+    billStatus.innerHTML=remaining===0?
+        "Bill Paid Successfully":
+        "Outstanding Amount: ₹"+remaining;
+
+    let historyData=payments.filter(p=>
+        p.phone===currentUser.phone);
+
+    history.innerHTML=historyData.map(p=>
+        "<tr><td>"+p.date+"</td><td>₹"+p.amount+
+        "</td><td>"+p.method+"</td></tr>"
+    ).join("");
+}
+
+// PAYMENT
+function payBill(){
+    let bill=getData('monthlyBill',null);
+    if(!bill) return;
+
+    let fine=getFine(bill);
+    let total=bill.amount+fine;
+
+    let payments=getData('payments',[]);
+    let paid=payments.filter(p=>p.phone===currentUser.phone &&
+        p.start===bill.start && p.end===bill.end)
+        .reduce((sum,p)=>sum+p.amount,0);
+
+    let remaining=Math.max(0,total-paid);
+
+    if(remaining===0){
+        alert("This bill is already paid");
+        return;
+    }
+
+    let payType=document.getElementById('payType').value;
+    let amount=payType==="full"?
+        remaining:Number(customAmount.value);
+
+    if(!amount || amount<=0 || amount>remaining){
+        alert("Enter a valid payment amount");
+        return;
+    }
+
+    let method=document.getElementById('method').value;
+
+    // Demo payment confirmation
+    if(!confirm("Confirm payment of ₹"+amount+" using "+method+"?"))
+        return;
+
+    let payment={
+        phone:currentUser.phone,
+        amount:amount,
+        method:method,
+        date:new Date().toLocaleDateString(),
+        start:bill.start,
+        end:bill.end
+    };
+
+    payments.push(payment);
+    setData('payments',payments);
+
+    paymentMessage.innerHTML=
+        "<span class='success'>Payment Successful!<br>"+
+        "Amount: ₹"+amount+"<br>"+
+        "Method: "+method+"<br>"+
+        "Date: "+payment.date+"<br>"+
+        "Transaction ID: "+Date.now()+"</span>";
+
+    loadDashboard();
+}
+
+// LOGOUT
+function logout(){
+    currentUser=null;
+    show('home');
+}
+</script>
+
+</body>
+</html>

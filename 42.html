@@ -1,0 +1,1026 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TasteBook - Digital Recipe Book</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #fffaf5;
+    color: #333;
+}
+
+header {
+    background: #7c3525;
+    color: white;
+    padding: 18px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.logo {
+    font-size: 27px;
+    font-weight: bold;
+}
+
+.logo span {
+    color: #ffc66b;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 8px;
+    font-size: 15px;
+}
+
+nav a:hover {
+    color: #ffc66b;
+}
+
+.hero {
+    min-height: 450px;
+    background:
+    linear-gradient(rgba(0,0,0,.4),rgba(0,0,0,.5)),
+    url("https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=1600")
+    center/cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    padding: 30px;
+}
+
+.hero h1 {
+    font-size: 48px;
+    margin-bottom: 15px;
+}
+
+.hero p {
+    font-size: 18px;
+    margin-bottom: 25px;
+}
+
+.btn {
+    background: #e98c38;
+    color: white;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 7px;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.btn:hover {
+    background: #bd6123;
+}
+
+section {
+    padding: 55px 7%;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 32px;
+    color: #7c3525;
+    margin-bottom: 12px;
+}
+
+.section-desc {
+    text-align: center;
+    color: #777;
+    margin-bottom: 30px;
+}
+
+.search-area {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+}
+
+.search-area input,
+.search-area select {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 7px;
+    min-width: 180px;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+    gap: 25px;
+}
+
+.card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,.08);
+    transition: .3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card img {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 18px;
+}
+
+.card h3 {
+    color: #7c3525;
+    margin-bottom: 8px;
+}
+
+.card p {
+    color: #666;
+    margin: 7px 0;
+}
+
+.card button {
+    margin-top: 10px;
+}
+
+.tag {
+    display: inline-block;
+    background: #fff0df;
+    color: #a45225;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+}
+
+.details {
+    max-width: 950px;
+    margin: auto;
+    background: white;
+    padding: 28px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,.08);
+}
+
+.details img {
+    width: 100%;
+    height: 350px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin: 15px 0;
+}
+
+.details h2,
+.details h3 {
+    color: #7c3525;
+    margin: 15px 0 10px;
+}
+
+.details ul,
+.details ol {
+    margin-left: 25px;
+    line-height: 2;
+}
+
+.servings {
+    background: #fff1e4;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 15px 0;
+}
+
+.servings button {
+    padding: 7px 14px;
+    margin: 5px;
+    border: none;
+    background: #7c3525;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.ingredients label {
+    display: block;
+    padding: 5px;
+}
+
+.comments {
+    margin-top: 25px;
+}
+
+input, textarea, select {
+    font-family: inherit;
+}
+
+.comments input,
+.comments textarea,
+.form-control {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+}
+
+.comment {
+    background: #fff3e9;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 7px;
+}
+
+.rating {
+    font-size: 25px;
+    cursor: pointer;
+    color: #e89b27;
+}
+
+.meal-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(140px,1fr));
+    gap: 12px;
+}
+
+.meal-day {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0,0,0,.06);
+}
+
+.meal-day select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 8px;
+}
+
+.shopping {
+    background: white;
+    max-width: 750px;
+    margin: auto;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(0,0,0,.07);
+}
+
+.shopping li {
+    margin: 10px 0;
+}
+
+.about-box {
+    text-align: center;
+    max-width: 750px;
+    margin: auto;
+    line-height: 1.8;
+}
+
+footer {
+    background: #7c3525;
+    color: white;
+    text-align: center;
+    padding: 25px;
+}
+
+footer p {
+    margin: 7px;
+}
+
+.hidden {
+    display: none;
+}
+
+@media(max-width:700px) {
+    header {
+        justify-content: center;
+        gap: 15px;
+    }
+
+    nav {
+        text-align: center;
+    }
+
+    nav a {
+        display: inline-block;
+        margin: 5px;
+    }
+
+    .hero h1 {
+        font-size: 34px;
+    }
+
+    section {
+        padding: 40px 5%;
+    }
+}
+
+@media print {
+    header, footer, .hero, #recipes, #planner,
+    #shopping, #submit, #about, .comments,
+    .print-hide, #recipeDetail > button {
+        display: none !important;
+    }
+
+    #recipeDetail {
+        display: block !important;
+        padding: 0;
+    }
+
+    .details {
+        box-shadow: none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">Taste<span>Book</span> 🍲</div>
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#recipes">Recipes</a>
+        <a href="#planner">Meal Planner</a>
+        <a href="#shopping">Shopping List</a>
+        <a href="#submit">Submit Recipe</a>
+        <a href="#about">About</a>
+    </nav>
+</header>
+
+<!-- HOMEPAGE -->
+<div class="hero" id="home">
+    <div>
+        <h1>Discover Delicious Recipes</h1>
+        <p>Cook, Share and Enjoy Your Favourite Food!</p>
+        <a href="#recipes" class="btn">Explore Recipes</a>
+    </div>
+</div>
+
+<!-- RECIPE LIST -->
+<section id="recipes">
+    <h2 class="section-title">Explore Our Recipes</h2>
+    <p class="section-desc">
+        Find delicious recipes for every taste and occasion.
+    </p>
+
+    <div class="search-area">
+        <input type="text" id="search" placeholder="Search recipes or ingredients..."
+        oninput="displayRecipes()">
+
+        <select id="category" onchange="displayRecipes()">
+            <option value="all">All Categories</option>
+            <option value="Breakfast">Breakfast</option>
+            <option value="Main Course">Main Course</option>
+            <option value="Dessert">Dessert</option>
+        </select>
+
+        <select id="cuisine" onchange="displayRecipes()">
+            <option value="all">All Cuisines</option>
+            <option value="Indian">Indian</option>
+            <option value="Italian">Italian</option>
+            <option value="Mexican">Mexican</option>
+        </select>
+
+        <select id="diet" onchange="displayRecipes()">
+            <option value="all">All Diets</option>
+            <option value="Vegetarian">Vegetarian</option>
+            <option value="Vegan">Vegan</option>
+        </select>
+
+        <select id="difficulty" onchange="displayRecipes()">
+            <option value="all">All Difficulties</option>
+            <option value="Easy">Easy</option>
+            <option value="Medium">Medium</option>
+        </select>
+    </div>
+
+    <div class="cards" id="recipeCards"></div>
+</section>
+
+<!-- RECIPE DETAILS -->
+<section id="recipeDetail" class="hidden">
+    <div class="details">
+        <button class="btn print-hide" onclick="closeRecipe()">← Back to Recipes</button>
+        <div id="recipeContent"></div>
+
+        <div class="print-hide">
+            <button class="btn" onclick="addShopping()">Add Ingredients to Shopping List</button>
+            <button class="btn" onclick="window.print()">Print Recipe</button>
+            <button class="btn" onclick="shareRecipe()">Share Recipe</button>
+        </div>
+
+        <div class="comments print-hide">
+            <h3>Rate This Recipe</h3>
+            <div class="rating" id="stars">
+                <span onclick="setRating(1)">☆</span>
+                <span onclick="setRating(2)">☆</span>
+                <span onclick="setRating(3)">☆</span>
+                <span onclick="setRating(4)">☆</span>
+                <span onclick="setRating(5)">☆</span>
+            </div>
+            <p id="ratingMessage">Select your rating.</p>
+
+            <h3>Comments and Reviews</h3>
+            <input type="text" id="reviewName" placeholder="Your Name">
+            <textarea id="reviewText" rows="3" placeholder="Share your cooking experience..."></textarea>
+            <button class="btn" onclick="addReview()">Post Review</button>
+            <div id="reviewList"></div>
+        </div>
+    </div>
+</section>
+
+<!-- MEAL PLANNER -->
+<section id="planner">
+    <h2 class="section-title">Weekly Meal Planner</h2>
+    <p class="section-desc">Plan your delicious meals for the entire week.</p>
+
+    <div class="meal-grid" id="mealGrid"></div>
+    <br>
+    <button class="btn" onclick="generateMealList()">Generate Shopping List</button>
+</section>
+
+<!-- SHOPPING LIST -->
+<section id="shopping">
+    <h2 class="section-title">My Shopping List</h2>
+    <p class="section-desc">Collect all ingredients in one place.</p>
+
+    <div class="shopping">
+        <input type="text" class="form-control" id="newItem"
+        placeholder="Enter an ingredient">
+        <button class="btn" onclick="addCustomItem()">Add Item</button>
+
+        <ul id="shoppingList"></ul>
+        <button class="btn" onclick="clearShopping()">Clear List</button>
+    </div>
+</section>
+
+<!-- SUBMIT RECIPE -->
+<section id="submit">
+    <h2 class="section-title">Share Your Own Recipe</h2>
+    <p class="section-desc">Add your favourite recipe to our collection.</p>
+
+    <div class="shopping">
+        <form id="recipeForm">
+            <input class="form-control" id="newTitle" placeholder="Recipe Name" required>
+            <input class="form-control" id="newImage" placeholder="Image URL (optional)">
+            <input class="form-control" id="newCuisine" placeholder="Cuisine (Indian, Italian...)" required>
+            <select class="form-control" id="newCategory">
+                <option>Breakfast</option>
+                <option>Main Course</option>
+                <option>Dessert</option>
+            </select>
+            <select class="form-control" id="newDiet">
+                <option>Vegetarian</option>
+                <option>Vegan</option>
+            </select>
+            <select class="form-control" id="newDifficulty">
+                <option>Easy</option>
+                <option>Medium</option>
+            </select>
+            <input class="form-control" id="newTime" type="number"
+            placeholder="Cooking time in minutes" required>
+            <textarea class="form-control" id="newIngredients"
+            placeholder="Ingredients separated by commas" required></textarea>
+            <textarea class="form-control" id="newSteps"
+            placeholder="Cooking instructions" required></textarea>
+            <button class="btn" type="submit">Submit Recipe</button>
+        </form>
+    </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+    <h2 class="section-title">About TasteBook</h2>
+    <div class="about-box">
+        <p>
+            TasteBook is a digital recipe book platform created for food lovers.
+            Our goal is to help people discover new recipes, learn cooking
+            techniques and share their favourite dishes with others.
+        </p>
+        <p>
+            From traditional Indian food to international cuisines, TasteBook
+            brings delicious recipes together in one place.
+        </p>
+        <h3>Cook with Love ❤️ Share with Taste!</h3>
+    </div>
+</section>
+
+<footer>
+    <h2>TasteBook 🍲</h2>
+    <p>Your Digital Kitchen Companion</p>
+    <p>Explore Recipes | Cook Delicious Food | Share Happiness</p>
+    <p>© 2026 TasteBook. All Rights Reserved.</p>
+</footer>
+
+<script>
+
+// RECIPE DATABASE
+let recipes = [
+{
+ id:1,
+ title:"South Indian Masala Dosa",
+ cuisine:"Indian",
+ category:"Breakfast",
+ diet:"Vegetarian",
+ difficulty:"Medium",
+ time:30,
+ servings:2,
+ image:"https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=900",
+ ingredients:[
+  {name:"Dosa batter",qty:2,unit:"cups"},
+  {name:"Potatoes",qty:2,unit:"pieces"},
+  {name:"Onion",qty:1,unit:"piece"},
+  {name:"Oil",qty:2,unit:"tbsp"},
+  {name:"Mustard seeds",qty:1,unit:"tsp"}
+ ],
+ steps:[
+  "Heat oil in a pan and add mustard seeds.",
+  "Add chopped onions and cook until soft.",
+  "Add boiled potatoes and spices. Mix well.",
+  "Spread dosa batter on a hot pan.",
+  "Add potato masala and fold the dosa.",
+  "Serve hot with chutney and sambar."
+ ],
+ tips:"Use a hot non-stick pan for crispy dosa."
+},
+{
+ id:2,
+ title:"Italian Vegetable Pizza",
+ cuisine:"Italian",
+ category:"Main Course",
+ diet:"Vegetarian",
+ difficulty:"Medium",
+ time:45,
+ servings:2,
+ image:"https://images.unsplash.com/photo-1513104890138-7c749659a591?w=900",
+ ingredients:[
+  {name:"Pizza base",qty:1,unit:"piece"},
+  {name:"Tomato sauce",qty:3,unit:"tbsp"},
+  {name:"Mozzarella cheese",qty:100,unit:"g"},
+  {name:"Capsicum",qty:1,unit:"piece"},
+  {name:"Onion",qty:1,unit:"piece"}
+ ],
+ steps:[
+  "Preheat the oven to 200°C.",
+  "Spread tomato sauce over the pizza base.",
+  "Add chopped vegetables and cheese.",
+  "Bake for 12 to 15 minutes.",
+  "Cut into slices and serve hot."
+ ],
+ tips:"Add olives and herbs for extra flavour."
+},
+{
+ id:3,
+ title:"Fresh Fruit Salad",
+ cuisine:"Mexican",
+ category:"Dessert",
+ diet:"Vegan",
+ difficulty:"Easy",
+ time:15,
+ servings:2,
+ image:"https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=900",
+ ingredients:[
+  {name:"Apple",qty:1,unit:"piece"},
+  {name:"Banana",qty:2,unit:"pieces"},
+  {name:"Orange",qty:1,unit:"piece"},
+  {name:"Grapes",qty:100,unit:"g"},
+  {name:"Honey",qty:1,unit:"tbsp"}
+ ],
+ steps:[
+  "Wash all fruits properly.",
+  "Cut fruits into small pieces.",
+  "Mix all fruits in a large bowl.",
+  "Add honey if desired.",
+  "Refrigerate for 10 minutes and serve."
+ ],
+ tips:"Use seasonal fruits for the best taste."
+},
+{
+ id:4,
+ title:"Vegetable Fried Rice",
+ cuisine:"Indian",
+ category:"Main Course",
+ diet:"Vegan",
+ difficulty:"Easy",
+ time:25,
+ servings:2,
+ image:"https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=900",
+ ingredients:[
+  {name:"Cooked rice",qty:2,unit:"cups"},
+  {name:"Carrot",qty:1,unit:"piece"},
+  {name:"Beans",qty:50,unit:"g"},
+  {name:"Soy sauce",qty:1,unit:"tbsp"},
+  {name:"Oil",qty:2,unit:"tbsp"}
+ ],
+ steps:[
+  "Heat oil in a pan.",
+  "Add chopped vegetables and stir-fry.",
+  "Add cooked rice and soy sauce.",
+  "Mix everything well.",
+  "Serve hot with your favourite side dish."
+ ],
+ tips:"Use chilled cooked rice for better texture."
+},
+{
+ id:5,
+ title:"Chocolate Cake",
+ cuisine:"Italian",
+ category:"Dessert",
+ diet:"Vegetarian",
+ difficulty:"Medium",
+ time:50,
+ servings:4,
+ image:"https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=900",
+ ingredients:[
+  {name:"Flour",qty:2,unit:"cups"},
+  {name:"Cocoa powder",qty:0.5,unit:"cup"},
+  {name:"Sugar",qty:1,unit:"cup"},
+  {name:"Milk",qty:1,unit:"cup"},
+  {name:"Butter",qty:100,unit:"g"}
+ ],
+ steps:[
+  "Mix flour, cocoa powder and sugar.",
+  "Add milk and melted butter.",
+  "Mix until the batter is smooth.",
+  "Pour into a greased cake pan.",
+  "Bake at 180°C for 30 to 35 minutes.",
+  "Cool and serve."
+ ],
+ tips:"Check the cake with a toothpick before removing it."
+}
+];
+
+let currentRecipe = null;
+let currentServings = 2;
+let shoppingItems = [];
+let selectedRating = 0;
+let savedRecipes = JSON.parse(localStorage.getItem("tasteFavorites") || "[]");
+
+// DISPLAY RECIPES
+function displayRecipes() {
+    let search = document.getElementById("search").value.toLowerCase();
+    let category = document.getElementById("category").value;
+    let cuisine = document.getElementById("cuisine").value;
+    let diet = document.getElementById("diet").value;
+    let difficulty = document.getElementById("difficulty").value;
+
+    let filtered = recipes.filter(r => {
+        let ingredients = r.ingredients.map(i => i.name).join(" ").toLowerCase();
+
+        return (
+            (r.title.toLowerCase().includes(search) ||
+            ingredients.includes(search)) &&
+            (category === "all" || r.category === category) &&
+            (cuisine === "all" || r.cuisine === cuisine) &&
+            (diet === "all" || r.diet === diet) &&
+            (difficulty === "all" || r.difficulty === difficulty)
+        );
+    });
+
+    let html = "";
+
+    filtered.forEach(r => {
+        let favorite = savedRecipes.includes(r.id);
+
+        html += `
+        <div class="card">
+            <img src="${r.image}" alt="${r.title}">
+            <div class="card-content">
+                <span class="tag">${r.cuisine}</span>
+                <h3>${r.title}</h3>
+                <p>⏱ ${r.time} minutes | ${r.difficulty}</p>
+                <p>🥗 ${r.diet} | ${r.category}</p>
+                <button class="btn" onclick="openRecipe(${r.id})">
+                    View Recipe
+                </button>
+                <button class="btn" onclick="toggleFavorite(${r.id})">
+                    ${favorite ? "❤️ Saved" : "♡ Favorite"}
+                </button>
+            </div>
+        </div>`;
+    });
+
+    document.getElementById("recipeCards").innerHTML =
+        html || "<p>No recipes found. Try another search.</p>";
+}
+
+// OPEN RECIPE
+function openRecipe(id) {
+    currentRecipe = recipes.find(r => r.id === id);
+    currentServings = currentRecipe.servings;
+    selectedRating = 0;
+
+    document.getElementById("recipeDetail").classList.remove("hidden");
+    document.getElementById("recipes").style.display = "none";
+
+    showRecipeDetails();
+    document.getElementById("recipeDetail").scrollIntoView();
+}
+
+function showRecipeDetails() {
+    let r = currentRecipe;
+
+    let ingredients = r.ingredients.map((item,index) => `
+        <label>
+        <input type="checkbox">
+        ${item.name}: ${(item.qty * currentServings / r.servings).toFixed(2)}
+        ${item.unit}
+        </label>
+    `).join("");
+
+    let steps = r.steps.map(step => `<li>${step}</li>`).join("");
+
+    document.getElementById("recipeContent").innerHTML = `
+        <h2>${r.title}</h2>
+        <p>⭐ ${r.cuisine} | ${r.category} | ${r.diet}</p>
+        <img src="${r.image}" alt="${r.title}">
+        <p><b>Preparation Time:</b> ${r.time} minutes</p>
+        <p><b>Difficulty:</b> ${r.difficulty}</p>
+
+        <div class="servings">
+            <b>Servings:</b>
+            <button onclick="changeServings(-1)">−</button>
+            ${currentServings}
+            <button onclick="changeServings(1)">+</button>
+        </div>
+
+        <h3>Ingredients</h3>
+        <div class="ingredients">${ingredients}</div>
+
+        <h3>Cooking Instructions</h3>
+        <ol>${steps}</ol>
+
+        <h3>Chef's Tips</h3>
+        <p>${r.tips}</p>
+    `;
+
+    document.getElementById("reviewList").innerHTML = "";
+    document.getElementById("ratingMessage").textContent = "Select your rating.";
+    updateStars();
+}
+
+// SERVING SIZE
+function changeServings(value) {
+    if (currentServings + value < 1) return;
+
+    currentServings += value;
+    showRecipeDetails();
+}
+
+// FAVORITES
+function toggleFavorite(id) {
+    if (savedRecipes.includes(id)) {
+        savedRecipes = savedRecipes.filter(x => x !== id);
+    } else {
+        savedRecipes.push(id);
+    }
+
+    localStorage.setItem("tasteFavorites", JSON.stringify(savedRecipes));
+    displayRecipes();
+}
+
+// RATINGS
+function setRating(value) {
+    selectedRating = value;
+    updateStars();
+    document.getElementById("ratingMessage").textContent =
+        "You rated this recipe " + value + " out of 5 stars.";
+}
+
+function updateStars() {
+    document.querySelectorAll("#stars span").forEach((star,index) => {
+        star.textContent = index < selectedRating ? "★" : "☆";
+    });
+}
+
+// COMMENTS
+function addReview() {
+    let name = document.getElementById("reviewName").value.trim();
+    let message = document.getElementById("reviewText").value.trim();
+
+    if (!name || !message) {
+        alert("Please enter your name and review.");
+        return;
+    }
+
+    let box = document.createElement("div");
+    box.className = "comment";
+
+    let heading = document.createElement("strong");
+    heading.textContent = name + (selectedRating ? " - " + selectedRating + "/5 ⭐" : "");
+
+    let paragraph = document.createElement("p");
+    paragraph.textContent = message;
+
+    box.append(heading, paragraph);
+    document.getElementById("reviewList").appendChild(box);
+
+    document.getElementById("reviewName").value = "";
+    document.getElementById("reviewText").value = "";
+}
+
+// SHOPPING LIST
+function addShopping() {
+    currentRecipe.ingredients.forEach(item => {
+        let amount = item.qty * currentServings / currentRecipe.servings;
+        shoppingItems.push(
+            `${item.name} - ${amount.toFixed(2)} ${item.unit}`
+        );
+    });
+
+    displayShopping();
+    document.getElementById("shopping").scrollIntoView();
+}
+
+function addCustomItem() {
+    let item = document.getElementById("newItem").value.trim();
+
+    if (!item) {
+        alert("Enter an ingredient.");
+        return;
+    }
+
+    shoppingItems.push(item);
+    document.getElementById("newItem").value = "";
+    displayShopping();
+}
+
+function displayShopping() {
+    let list = document.getElementById("shoppingList");
+    list.innerHTML = "";
+
+    shoppingItems.forEach((item,index) => {
+        let li = document.createElement("li");
+        li.textContent = item + " ";
+
+        let remove = document.createElement("button");
+        remove.textContent = "Remove";
+        remove.className = "btn";
+        remove.onclick = () => {
+            shoppingItems.splice(index,1);
+            displayShopping();
+        };
+
+        li.appendChild(remove);
+        list.appendChild(li);
+    });
+}
+
+function clearShopping() {
+    shoppingItems = [];
+    displayShopping();
+}
+
+// WEEKLY MEAL PLANNER
+let days = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+
+function createPlanner() {
+    let grid = document.getElementById("mealGrid");
+
+    days.forEach(day => {
+        let div = document.createElement("div");
+        div.className = "meal-day";
+
+        let heading = document.createElement("h3");
+        heading.textContent = day;
+
+        let select = document.createElement("select");
+        select.className = "meal-select";
+        select.dataset.day = day;
+
+        let first = document.createElement("option");
+        first.value = "";
+        first.textContent = "Choose meal";
+        select.appendChild(first);
+
+        recipes.forEach(r => {
+            let option = document.createElement("option");
+            option.value = r.id;
+            option.textContent = r.title;
+            select.appendChild(option);
+        });
+
+        div.append(heading,select);
+        grid.appendChild(div);
+    });
+}
+
+function generateMealList() {
+    document.querySelectorAll(".meal-select").forEach(select => {
+        if (select.value) {
+            let r = recipes.find(item => item.id == select.value);
+
+            r.ingredients.forEach(item => {
+                shoppingItems.push(
+                    `${item.name} - ${item.qty} ${item.unit} (${select.dataset.day})`
+                );
+            });
+        }
+    });
+
+    displayShopping();
+    document.getElementById("shopping").scrollIntoView();
+}
+
+// USER SUBMITTED RECIPES
+document.getElementById("recipeForm").addEventListener("submit",function(e) {
+    e.preventDefault();
+
+    let title = document.getElementById("newTitle").value.trim();
+    let image = document.getElementById("newImage").value.trim();
+    let cuisine = document.getElementById("newCuisine").value.trim();
+    let category = document.getElementById("newCategory").value;
+    let diet = document.getElementById("newDiet").value;
+    let difficulty = document.getElementById("newDifficulty").value;
+    let time = Number(document.getElementById("newTime").value);
+    let ingredientText = document.getElementById("newIngredients").value;
+    let stepsText = document.getElementById("newSteps").value;
+
+    if (time <= 0) {
+        alert("Enter a valid cooking time.");
+        return;
+    }
+
+    let ingredients = ingredientText.split(",").map(item => ({
+        name: item.trim(),
+        qty: 1,
+        unit: "portion"
+    })).filter(item => item.name);
+
+    let newRecipe = {
+        id: Date.now(),
+        title,
+        cuisine,
+        category,
+        diet,
+        difficulty,
+        time,
+        servings: 2,
+        image: image || "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=900",
+        ingredients,
+        steps: stepsText.split("\n").map(s => s.trim()).filter(Boolean),
+        tips: "Enjoy your homemade recipe!"
+    };
+
+    recipes.push(newRecipe);
+    displayRecipes();
+    this.reset();
+
+    alert("Your recipe has been added successfully!");
+    document.getElementById("recipes").style.display = "block";
+    document.getElementById("recipes").scrollIntoView();
+});
+
+// SHARE
+function shareRecipe() {
+    let url = window.location.href.split("#")[0] + "#recipes";
+    let text = currentRecipe.title + " - Try this delicious recipe! " + url;
+
+    if (navigator.share) {
+        navigator.share({
+            title: currentRecipe.title,
+            text: text,
+            url: url
+        }).catch(() => {});
+    } else {
+        navigator.clipboard.writeText(text)
+        .then(() => alert("Recipe link copied!"))
+        .catch(() => alert("Please copy the recipe link manually."));
+    }
+}
+
+// CLOSE RECIPE
+function closeRecipe() {
+    document.getElementById("recipeDetail").classList.add("hidden");
+    document.getElementById("recipes").style.display = "block";
+    document.getElementById("recipes").scrollIntoView();
+}
+
+// INITIALIZE
+displayRecipes();
+createPlanner();
+displayShopping();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,699 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EventConnect - Tech Conference 2026</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+    scroll-behavior:smooth;
+}
+
+body{
+    background:#f5f7fb;
+    color:#202b3c;
+}
+
+header{
+    background:#101d38;
+    color:white;
+    padding:18px 7%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:15px;
+}
+
+.logo{
+    font-size:25px;
+    font-weight:bold;
+    color:#fbbf24;
+}
+
+nav{
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+}
+
+nav a{
+    color:white;
+    text-decoration:none;
+    font-size:14px;
+}
+
+nav a:hover{
+    color:#fbbf24;
+}
+
+.hero{
+    background:linear-gradient(120deg,#101d38dd,#174ea6cc),
+    url("https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1600");
+    background-size:cover;
+    background-position:center;
+    color:white;
+    text-align:center;
+    padding:100px 20px;
+}
+
+.hero h1{
+    font-size:48px;
+    margin-bottom:18px;
+}
+
+.hero p{
+    font-size:18px;
+    line-height:1.7;
+    margin-bottom:25px;
+}
+
+.btn{
+    display:inline-block;
+    background:#f59e0b;
+    color:#101d38;
+    padding:13px 25px;
+    text-decoration:none;
+    border:0;
+    border-radius:5px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.btn:hover{
+    background:#fbbf24;
+}
+
+section{
+    padding:65px 8%;
+}
+
+.title{
+    text-align:center;
+    margin-bottom:35px;
+}
+
+.title h2{
+    font-size:32px;
+    color:#101d38;
+    margin-bottom:12px;
+}
+
+.title p{
+    color:#64748b;
+    line-height:1.6;
+}
+
+.details{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+}
+
+.detail-card{
+    background:white;
+    padding:25px;
+    text-align:center;
+    border-radius:10px;
+    box-shadow:0 3px 12px #00000010;
+}
+
+.detail-card h3{
+    color:#174ea6;
+    margin:12px 0;
+}
+
+.detail-card p{
+    color:#64748b;
+    line-height:1.6;
+}
+
+.about{
+    background:#eaf1ff;
+}
+
+.about-content{
+    max-width:850px;
+    margin:auto;
+    text-align:center;
+}
+
+.about-content p{
+    line-height:1.9;
+    color:#475569;
+    margin-bottom:18px;
+}
+
+.audience{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:18px;
+    margin-top:25px;
+}
+
+.audience-card{
+    background:white;
+    padding:20px;
+    border-radius:8px;
+    text-align:center;
+}
+
+.speakers{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:25px;
+}
+
+.speaker-card{
+    background:white;
+    border-radius:10px;
+    overflow:hidden;
+    text-align:center;
+    box-shadow:0 4px 15px #00000012;
+    padding-bottom:20px;
+}
+
+.speaker-card img{
+    width:100%;
+    height:230px;
+    object-fit:cover;
+}
+
+.speaker-card h3{
+    margin:15px 0 8px;
+    color:#101d38;
+}
+
+.speaker-card p{
+    color:#64748b;
+    margin-bottom:12px;
+}
+
+.speaker-card a{
+    color:#174ea6;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.schedule{
+    background:#101d38;
+    color:white;
+}
+
+.schedule .title h2{
+    color:#fbbf24;
+}
+
+.schedule .title p{
+    color:#cbd5e1;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    background:white;
+    color:#202b3c;
+    border-radius:8px;
+    overflow:hidden;
+}
+
+th,td{
+    padding:16px;
+    border:1px solid #e2e8f0;
+    text-align:left;
+}
+
+th{
+    background:#f59e0b;
+    color:#101d38;
+}
+
+tr:nth-child(even){
+    background:#f1f5f9;
+}
+
+.table-wrap{
+    overflow-x:auto;
+}
+
+.register{
+    background:#eaf1ff;
+}
+
+.form-box{
+    max-width:600px;
+    margin:auto;
+    padding:30px;
+    background:white;
+    border-radius:10px;
+    box-shadow:0 4px 15px #00000012;
+}
+
+input,select,textarea{
+    width:100%;
+    padding:13px;
+    margin:8px 0 18px;
+    border:1px solid #cbd5e1;
+    border-radius:5px;
+    font-size:15px;
+}
+
+label{
+    font-weight:bold;
+    color:#334155;
+}
+
+.form-box button{
+    width:100%;
+}
+
+#confirmation{
+    display:none;
+    margin-top:20px;
+    padding:18px;
+    background:#dcfce7;
+    color:#166534;
+    border-radius:7px;
+}
+
+.participants{
+    background:white;
+}
+
+footer{
+    background:#101d38;
+    color:white;
+    text-align:center;
+    padding:30px 15px;
+}
+
+footer p{
+    margin:10px;
+    color:#cbd5e1;
+}
+
+@media(max-width:650px){
+    header{
+        justify-content:center;
+    }
+
+    nav{
+        justify-content:center;
+    }
+
+    .hero h1{
+        font-size:34px;
+    }
+
+    section{
+        padding:45px 5%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header>
+    <div class="logo">EventConnect</div>
+
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#about">About Event</a>
+        <a href="#speakers">Speakers</a>
+        <a href="#venue">Venue</a>
+        <a href="#schedule">Schedule</a>
+        <a href="#register">Register</a>
+    </nav>
+</header>
+
+<!-- HOMEPAGE -->
+<div class="hero" id="home">
+    <h1>TECH INNOVATION SUMMIT 2026</h1>
+
+    <p>
+        Explore Technology, Innovation and Future Opportunities.<br>
+        Learn from experts and connect with innovative minds.
+    </p>
+
+    <p>📅 December 15, 2026 | 📍 Chennai, India</p>
+
+    <a href="#register" class="btn">Register Now</a>
+</div>
+
+<!-- EVENT DETAILS -->
+<section id="venue">
+    <div class="title">
+        <h2>Event Information</h2>
+        <p>Everything you need to know about the event.</p>
+    </div>
+
+    <div class="details">
+
+        <div class="detail-card">
+            <h1>📅</h1>
+            <h3>Event Date</h3>
+            <p>15 December 2026</p>
+        </div>
+
+        <div class="detail-card">
+            <h1>📍</h1>
+            <h3>Event Venue</h3>
+            <p>Chennai Trade Centre<br>Chennai, Tamil Nadu</p>
+        </div>
+
+        <div class="detail-card">
+            <h1>⏰</h1>
+            <h3>Event Time</h3>
+            <p>9:00 AM - 5:00 PM</p>
+        </div>
+
+        <div class="detail-card">
+            <h1>🎟️</h1>
+            <h3>Registration</h3>
+            <p>Free for students<br>Limited seats available</p>
+        </div>
+
+    </div>
+</section>
+
+<!-- EVENT PURPOSE -->
+<section class="about" id="about">
+    <div class="title">
+        <h2>About the Event</h2>
+        <p>Understand the purpose and importance of this summit.</p>
+    </div>
+
+    <div class="about-content">
+        <p>
+            Tech Innovation Summit 2026 is an educational and
+            professional event designed to introduce participants
+            to the latest developments in technology, artificial
+            intelligence, software development and digital innovation.
+        </p>
+
+        <p>
+            The main purpose of this event is to share technical
+            knowledge, encourage creative thinking, improve practical
+            skills and provide networking opportunities.
+            Participants can interact with experienced speakers
+            and learn about future career opportunities.
+        </p>
+
+        <h3>Target Audience</h3>
+
+        <div class="audience">
+            <div class="audience-card">
+                <h2>🎓</h2>
+                <h3>Students</h3>
+                <p>College and university students.</p>
+            </div>
+
+            <div class="audience-card">
+                <h2>💻</h2>
+                <h3>Developers</h3>
+                <p>Software and web developers.</p>
+            </div>
+
+            <div class="audience-card">
+                <h2>🚀</h2>
+                <h3>Entrepreneurs</h3>
+                <p>Startup founders and innovators.</p>
+            </div>
+
+            <div class="audience-card">
+                <h2>👨‍🏫</h2>
+                <h3>Professionals</h3>
+                <p>Teachers and technology experts.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SPEAKERS -->
+<section id="speakers">
+    <div class="title">
+        <h2>Our Guest Speakers</h2>
+        <p>Meet the experts sharing their knowledge at the event.</p>
+    </div>
+
+    <div class="speakers">
+
+        <div class="speaker-card">
+            <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600"
+            alt="Speaker 1">
+            <h3>Dr. Arjun Kumar</h3>
+            <p>Artificial Intelligence Expert</p>
+            <a href="https://www.linkedin.com/" target="_blank">View Profile ↗</a>
+        </div>
+
+        <div class="speaker-card">
+            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600"
+            alt="Speaker 2">
+            <h3>Ms. Priya Sharma</h3>
+            <p>Technology Innovation Specialist</p>
+            <a href="https://www.linkedin.com/" target="_blank">View Profile ↗</a>
+        </div>
+
+        <div class="speaker-card">
+            <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=600"
+            alt="Speaker 3">
+            <h3>Mr. Rahul Verma</h3>
+            <p>Software Development Expert</p>
+            <a href="https://www.linkedin.com/" target="_blank">View Profile ↗</a>
+        </div>
+
+    </div>
+</section>
+
+<!-- SCHEDULE -->
+<section class="schedule" id="schedule">
+    <div class="title">
+        <h2>Event Schedule</h2>
+        <p>Plan your day with our event activities.</p>
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <tr>
+                <th>Time</th>
+                <th>Activity</th>
+                <th>Speaker</th>
+            </tr>
+
+            <tr>
+                <td>09:00 AM - 09:30 AM</td>
+                <td>Registration and Welcome</td>
+                <td>Event Team</td>
+            </tr>
+
+            <tr>
+                <td>09:30 AM - 10:30 AM</td>
+                <td>Opening Ceremony</td>
+                <td>Dr. Arjun Kumar</td>
+            </tr>
+
+            <tr>
+                <td>10:30 AM - 11:30 AM</td>
+                <td>Artificial Intelligence Trends</td>
+                <td>Dr. Arjun Kumar</td>
+            </tr>
+
+            <tr>
+                <td>11:30 AM - 12:30 PM</td>
+                <td>Technology Innovation</td>
+                <td>Ms. Priya Sharma</td>
+            </tr>
+
+            <tr>
+                <td>12:30 PM - 01:30 PM</td>
+                <td>Lunch Break</td>
+                <td>-</td>
+            </tr>
+
+            <tr>
+                <td>01:30 PM - 02:30 PM</td>
+                <td>Modern Software Development</td>
+                <td>Mr. Rahul Verma</td>
+            </tr>
+
+            <tr>
+                <td>02:30 PM - 04:00 PM</td>
+                <td>Interactive Workshop</td>
+                <td>All Speakers</td>
+            </tr>
+
+            <tr>
+                <td>04:00 PM - 05:00 PM</td>
+                <td>Questions and Closing Ceremony</td>
+                <td>Event Team</td>
+            </tr>
+        </table>
+    </div>
+</section>
+
+<!-- REGISTRATION -->
+<section class="register" id="register">
+    <div class="title">
+        <h2>Event Registration</h2>
+        <p>Join us! Complete the form to register for the event.</p>
+    </div>
+
+    <div class="form-box">
+        <form id="registrationForm">
+
+            <label>Full Name</label>
+            <input type="text" id="name" placeholder="Enter your name" required>
+
+            <label>Email Address</label>
+            <input type="email" id="email" placeholder="Enter your email" required>
+
+            <label>Mobile Number</label>
+            <input type="tel" id="mobile" pattern="[0-9]{10}"
+            placeholder="Enter 10 digit mobile number" required>
+
+            <label>College / Organization</label>
+            <input type="text" id="organization"
+            placeholder="Enter college or organization" required>
+
+            <label>Participant Category</label>
+            <select id="category" required>
+                <option value="">Select Category</option>
+                <option>Student</option>
+                <option>Developer</option>
+                <option>Entrepreneur</option>
+                <option>Professional</option>
+                <option>Teacher</option>
+            </select>
+
+            <label>Choose Session</label>
+            <select id="session" required>
+                <option value="">Select Session</option>
+                <option>Artificial Intelligence</option>
+                <option>Technology Innovation</option>
+                <option>Software Development</option>
+                <option>All Sessions</option>
+            </select>
+
+            <button type="submit" class="btn">Submit Registration</button>
+
+        </form>
+
+        <div id="confirmation"></div>
+    </div>
+</section>
+
+<!-- PARTICIPANTS -->
+<section class="participants">
+    <div class="title">
+        <h2>Registered Participants</h2>
+        <p>Sample registration records saved in this browser.</p>
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Registration ID</th>
+                    <th>Name</th>
+                    <th>Organization</th>
+                    <th>Category</th>
+                </tr>
+            </thead>
+            <tbody id="participantList">
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <h2 style="color:#fbbf24">EventConnect</h2>
+    <p>Connecting People, Ideas and Innovation.</p>
+    <p>Contact: events@example.com</p>
+    <p>© 2026 EventConnect. All Rights Reserved.</p>
+</footer>
+
+<script>
+
+// GET REGISTRATIONS FROM LOCAL STORAGE
+function getParticipants(){
+    return JSON.parse(localStorage.getItem("eventParticipants") || "[]");
+}
+
+// DISPLAY PARTICIPANTS
+function displayParticipants(){
+    let participants=getParticipants();
+    let html="";
+
+    participants.forEach(p=>{
+        html+=`
+        <tr>
+            <td>${p.id}</td>
+            <td>${p.name}</td>
+            <td>${p.organization}</td>
+            <td>${p.category}</td>
+        </tr>`;
+    });
+
+    document.getElementById("participantList").innerHTML=
+    html || '<tr><td colspan="4">No registrations yet.</td></tr>';
+}
+
+// FORM SUBMISSION
+document.getElementById("registrationForm")
+.addEventListener("submit",function(e){
+
+    e.preventDefault();
+
+    let participants=getParticipants();
+
+    let email=document.getElementById("email").value.trim().toLowerCase();
+
+    if(participants.some(p=>p.email===email)){
+        alert("This email is already registered!");
+        return;
+    }
+
+    let participant={
+        id:"EVT"+Date.now().toString().slice(-7),
+        name:document.getElementById("name").value.trim(),
+        email:email,
+        mobile:document.getElementById("mobile").value,
+        organization:document.getElementById("organization").value.trim(),
+        category:document.getElementById("category").value,
+        session:document.getElementById("session").value
+    };
+
+    participants.push(participant);
+
+    localStorage.setItem("eventParticipants",
+    JSON.stringify(participants));
+
+    document.getElementById("confirmation").style.display="block";
+
+    document.getElementById("confirmation").innerHTML=
+    "<h3>Registration Successful!</h3>"+
+    "<p>Thank you, "+participant.name+"!</p>"+
+    "<p>Your Registration ID is: <b>"+participant.id+"</b></p>"+
+    "<p>Selected Session: "+participant.session+"</p>";
+
+    this.reset();
+
+    displayParticipants();
+});
+
+// LOAD REGISTRATIONS
+displayParticipants();
+
+</script>
+
+</body>
+</html>

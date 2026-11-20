@@ -1,0 +1,617 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Bus Pass Management System</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://unpkg.com/html5-qrcode"></script>
+
+<style>
+*{box-sizing:border-box;font-family:Arial}
+body{margin:0;background:#f1f5f9;color:#1e293b}
+header{background:#102d4d;color:white;padding:20px 5%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap}
+header h2{color:#38bdf8}
+nav{display:flex;flex-wrap:wrap;gap:5px}
+nav button{padding:10px;border:0;border-radius:5px;cursor:pointer}
+button{cursor:pointer}
+.hero{text-align:center;padding:65px 15px;background:linear-gradient(120deg,#102d4d,#0284c7);color:white}
+.hero h1{font-size:36px}
+.container{max-width:1150px;margin:25px auto;padding:15px}
+.section{display:none;background:white;padding:25px;border-radius:10px;margin-bottom:20px}
+.section.active{display:block}
+h2{color:#075985;margin-bottom:18px}
+h3{margin-bottom:10px}
+input,select,textarea{width:100%;padding:12px;margin:8px 0 15px;border:1px solid #cbd5e1;border-radius:5px}
+.btn{background:#0284c7;color:white;padding:11px 18px;border:0;border-radius:5px;margin:4px}
+.btn:hover{background:#0369a1}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:15px}
+.card{background:#f8fafc;padding:20px;border-left:5px solid #0284c7;border-radius:8px;margin:12px 0}
+table{width:100%;border-collapse:collapse;margin:15px 0;min-width:550px}
+th,td{border:1px solid #ddd;padding:12px;text-align:left}
+th{background:#075985;color:white}
+.table-wrap{overflow-x:auto}
+.demo{background:#eff6ff;padding:20px;border-radius:10px;margin:20px 0}
+.demo h3{color:#0369a1}
+.badge{background:#dcfce7;color:#166534;padding:5px 10px;border-radius:15px}
+footer{background:#102d4d;color:white;text-align:center;padding:20px}
+img.preview{width:100px;height:100px;object-fit:cover;display:none}
+</style>
+</head>
+
+<body>
+
+<header>
+<h2>🚌 Smart Bus Pass</h2>
+<nav>
+<button onclick="page('home')">Home</button>
+<button onclick="page('user')">User</button>
+<button onclick="page('admin')">Admin</button>
+<button onclick="page('conductor')">Conductor</button>
+<button onclick="page('demo')">Demo Examples</button>
+</nav>
+</header>
+
+<div class="hero" id="hero">
+<h1>Smart Bus Pass & E-Ticket Management System</h1>
+<p>Digital Bus Pass | Online Ticket Booking | QR Verification | Bus Tracking</p>
+<button class="btn" onclick="page('user')">Get Started</button>
+<button class="btn" onclick="page('demo')">View Demo</button>
+</div>
+
+<div class="container">
+
+<!-- HOME -->
+
+<div class="section" id="home">
+<h2>Welcome to Smart Bus Pass</h2>
+<p>This application provides an online platform for students, employees and passengers to apply for bus passes, renew passes, purchase e-tickets and check bus information.</p>
+
+<div class="cards">
+<div class="card"><h3>👨‍🎓 Student Pass</h3><p>Apply for government and private student passes.</p></div>
+<div class="card"><h3>💼 Route Pass</h3><p>Working employees can apply for route passes.</p></div>
+<div class="card"><h3>🎫 E-Ticket</h3><p>Purchase bus tickets using the eWallet.</p></div>
+<div class="card"><h3>📱 QR Verification</h3><p>Conductor verifies the passenger pass.</p></div>
+</div>
+
+<h2>Project Modules</h2>
+<div class="card">
+1. User Registration and Login<br><br>
+2. Student and Route Bus Pass Application<br><br>
+3. eWallet and Online Ticket Booking<br><br>
+4. Admin Approval and Management<br><br>
+5. QR Code Generation and Verification<br><br>
+6. Conductor and Bus Location Management
+</div>
+</div>
+
+<!-- USER -->
+
+<div class="section" id="user">
+
+<h2>User Registration</h2>
+
+<input id="name" placeholder="Candidate Name">
+<input id="address" placeholder="Address">
+<input id="dob" type="date">
+<input id="email" type="email" placeholder="Email ID">
+<input id="institution" placeholder="School / College / Organization">
+<select id="type">
+<option value="">Select User Type</option>
+<option>Government School Student</option>
+<option>Private School Student</option>
+<option>College Student</option>
+<option>Working Employee</option>
+</select>
+
+<label>Candidate Photo</label>
+<input id="photo" type="file" accept="image/*">
+<img id="preview" class="preview">
+<input id="password" type="password" placeholder="Create Password">
+
+<button class="btn" onclick="register()">Register</button>
+
+<hr>
+
+<h2>User Login</h2>
+<input id="loginEmail" placeholder="Email">
+<input id="loginPassword" type="password" placeholder="Password">
+<button class="btn" onclick="login()">Login</button>
+
+<div id="userDash" style="display:none">
+
+<hr>
+<h2>User Dashboard</h2>
+
+<div class="cards">
+<div class="card"><h3>Wallet Balance</h3><h2 id="wallet">₹0</h2></div>
+<div class="card"><h3>Pass Status</h3><h2 id="status">Not Applied</h2></div>
+</div>
+
+<h2>Add Money - eWallet</h2>
+<input type="number" id="money" placeholder="Enter Amount">
+<button class="btn" onclick="addMoney()">Add Money</button>
+
+<hr>
+
+<h2>Apply New Bus Pass</h2>
+
+<select id="passType">
+<option value="Student Pass">Student Pass</option>
+<option value="Route Pass">Route Pass</option>
+</select>
+
+<select id="months">
+<option value="1">1 Month</option>
+<option value="3">3 Months</option>
+<option value="6">6 Months</option>
+</select>
+
+<input id="from" placeholder="From Location">
+<input id="to" placeholder="To Location">
+
+<button class="btn" onclick="applyPass()">Apply Bus Pass</button>
+
+<hr>
+
+<h2>Renew Bus Pass</h2>
+<select id="renewMonths">
+<option value="1">1 Month</option>
+<option value="3">3 Months</option>
+<option value="6">6 Months</option>
+</select>
+<button class="btn" onclick="renew()">Renew Pass</button>
+
+<hr>
+
+<h2>Buy Bus e-Ticket</h2>
+<select id="route"></select>
+<input id="quantity" type="number" value="1" min="1">
+<button class="btn" onclick="buyTicket()">Buy Ticket</button>
+
+<hr>
+
+<h2>My Bus Pass / QR Code</h2>
+<div id="myPass"></div>
+<div id="qr"></div>
+
+<h2>Expected Travel Time</h2>
+<select id="timeRoute"></select>
+<button class="btn" onclick="travelTime()">Calculate Time</button>
+<h3 id="timeResult"></h3>
+
+</div>
+</div>
+
+<!-- ADMIN -->
+
+<div class="section" id="admin">
+
+<h2>Admin Login</h2>
+<input id="adminID" placeholder="Username">
+<input id="adminPW" type="password" placeholder="Password">
+<button class="btn" onclick="adminLogin()">Login</button>
+
+<div id="adminDash" style="display:none">
+
+<h2>Admin Dashboard</h2>
+
+<div class="cards">
+<div class="card"><h3>Total Users</h3><h2 id="usersCount">0</h2></div>
+<div class="card"><h3>Total Passes</h3><h2 id="passCount">0</h2></div>
+<div class="card"><h3>Total Tickets</h3><h2 id="ticketCount">0</h2></div>
+</div>
+
+<h2>Manage & Approve Bus Pass</h2>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Name</th><th>Type</th><th>Route</th><th>Fee</th><th>Status</th><th>Action</th></tr></thead>
+<tbody id="applications"></tbody>
+</table>
+</div>
+
+<h2>Create Bus Details</h2>
+<input id="busNo" placeholder="Bus Number">
+<input id="busName" placeholder="Bus Name">
+<button class="btn" onclick="createBus()">Create Bus</button>
+<div id="busList"></div>
+
+<h2>Create Route Information</h2>
+<input id="routeFrom" placeholder="From">
+<input id="routeTo" placeholder="To">
+<input id="routeTime" type="time">
+<input id="stops" placeholder="Route Stops (comma separated)">
+<input id="duration" type="number" placeholder="Travel Duration in Minutes">
+<input id="fare" type="number" placeholder="Ticket Fare">
+<button class="btn" onclick="createRoute()">Create Route</button>
+<div id="routeList"></div>
+
+<h2>Manage Conductor Login</h2>
+<input id="newCon" placeholder="Conductor ID">
+<input id="newConPass" type="password" placeholder="Password">
+<button class="btn" onclick="createConductor()">Add Conductor</button>
+<div id="conList"></div>
+
+<h2>Daily Reports</h2>
+<div id="dailyReport"></div>
+
+</div>
+</div>
+
+<!-- CONDUCTOR -->
+
+<div class="section" id="conductor">
+
+<h2>Conductor Login</h2>
+<input id="conID" placeholder="Conductor ID">
+<input id="conPW" type="password" placeholder="Password">
+<button class="btn" onclick="conLogin()">Login</button>
+
+<div id="conDash" style="display:none">
+
+<h2>Scan QR Code</h2>
+<div id="reader" style="max-width:350px"></div>
+
+<input id="qrID" placeholder="Enter Pass ID or Ticket ID">
+<button class="btn" onclick="verify()">Verify Pass / Ticket</button>
+<h3 id="verifyResult"></h3>
+
+<hr>
+
+<h2>Update Bus Location</h2>
+<input id="locationBus" placeholder="Bus Number">
+<input id="location" placeholder="Current Location">
+<button class="btn" onclick="updateLocation()">Update Location</button>
+<p id="locationResult"></p>
+
+</div>
+</div>
+
+<!-- DEMO EXAMPLES -->
+
+<div class="section" id="demo">
+
+<h2>Project Demonstration - Sample Data</h2>
+
+<div class="demo">
+<h3>1. Sample Student Details</h3>
+<div class="table-wrap">
+<table>
+<tr><th>Name</th><th>Category</th><th>Institution</th><th>Pass Type</th></tr>
+<tr><td>Rahul Kumar</td><td>Government Student</td><td>Government Higher Secondary School</td><td>Free Student Pass</td></tr>
+<tr><td>Priya Sharma</td><td>Private Student</td><td>ABC Public School</td><td>Student Pass</td></tr>
+<tr><td>Arun Kumar</td><td>College Student</td><td>XYZ College</td><td>Student Pass</td></tr>
+<tr><td>Vijay Kumar</td><td>Employee</td><td>ABC Technologies</td><td>Route Pass</td></tr>
+</table>
+</div>
+</div>
+
+<div class="demo">
+<h3>2. Sample Bus Details</h3>
+<table>
+<tr><th>Bus Number</th><th>Bus Name</th><th>Type</th></tr>
+<tr><td>TN 01 AB 1234</td><td>City Express</td><td>Ordinary</td></tr>
+<tr><td>TN 02 CD 5678</td><td>Town Bus</td><td>Local</td></tr>
+<tr><td>TN 03 EF 9012</td><td>Green Express</td><td>Express</td></tr>
+</table>
+</div>
+
+<div class="demo">
+<h3>3. Sample Route Information</h3>
+<table>
+<tr><th>From</th><th>To</th><th>Route Stops</th><th>Time</th><th>Duration</th></tr>
+<tr><td>Chittoor</td><td>Vellore</td><td>Katpadi, Gudiyatham</td><td>08:00 AM</td><td>90 Minutes</td></tr>
+<tr><td>Chennai</td><td>Kanchipuram</td><td>Sriperumbudur, Sunguvarchatram</td><td>09:00 AM</td><td>120 Minutes</td></tr>
+<tr><td>Tirupati</td><td>Chittoor</td><td>Puthalapattu</td><td>10:00 AM</td><td>75 Minutes</td></tr>
+</table>
+</div>
+
+<div class="demo">
+<h3>4. Sample Bus Pass Fee Structure</h3>
+<table>
+<tr><th>Category</th><th>1 Month</th><th>3 Months</th><th>6 Months</th></tr>
+<tr><td>Government School Student</td><td>Free</td><td>Free</td><td>Free</td></tr>
+<tr><td>Private School Student</td><td>₹200</td><td>₹600</td><td>₹1200</td></tr>
+<tr><td>College Student</td><td>₹300</td><td>₹900</td><td>₹1800</td></tr>
+<tr><td>Working Employee</td><td>₹300</td><td>₹900</td><td>₹1800</td></tr>
+</table>
+<p>Note: These are sample prices for demonstration only.</p>
+</div>
+
+<div class="demo">
+<h3>5. Sample e-Ticket</h3>
+<p>Ticket ID: TICKET1001</p>
+<p>Passenger: Rahul Kumar</p>
+<p>Route: Chittoor to Vellore</p>
+<p>Ticket Amount: ₹50</p>
+<p>Status: Confirmed (Sample)</p>
+</div>
+
+<div class="demo">
+<h3>6. Sample Bus Pass</h3>
+<p>Pass ID: PASS1001</p>
+<p>Candidate: Rahul Kumar</p>
+<p>School: Government Higher Secondary School</p>
+<p>Route: Chittoor to Vellore</p>
+<p>Validity: 1 Month</p>
+<p>Amount: ₹0</p>
+<p>Status: Approved (Sample)</p>
+</div>
+
+<div class="demo">
+<h3>7. Project Working Process</h3>
+<ol>
+<li>User registers with personal information.</li>
+<li>User selects Student Pass or Route Pass.</li>
+<li>User adds money to the eWallet if a fee is required.</li>
+<li>User submits the bus pass application.</li>
+<li>Admin verifies and approves the application.</li>
+<li>System generates the QR code.</li>
+<li>User can renew the pass or buy e-tickets.</li>
+<li>Conductor scans the QR code.</li>
+<li>Conductor verifies the ticket or pass.</li>
+<li>Conductor updates bus location.</li>
+<li>User checks estimated travel time.</li>
+</ol>
+</div>
+
+</div>
+
+</div>
+
+<footer>
+<p>© 2026 Smart Bus Pass Management System</p>
+<p>Digital Transportation Management Application</p>
+</footer>
+
+<script>
+// DATABASE
+let users=JSON.parse(localStorage.getItem("sb_users")||"[]");
+let passes=JSON.parse(localStorage.getItem("sb_passes")||"[]");
+let routes=JSON.parse(localStorage.getItem("sb_routes")||"[]");
+let buses=JSON.parse(localStorage.getItem("sb_buses")||"[]");
+let tickets=JSON.parse(localStorage.getItem("sb_tickets")||"[]");
+let conductors=JSON.parse(localStorage.getItem("sb_conductors")||"[]");
+
+let current=null,admin=false,conductor=false,scanner=null;
+
+function save(){
+localStorage.setItem("sb_users",JSON.stringify(users));
+localStorage.setItem("sb_passes",JSON.stringify(passes));
+localStorage.setItem("sb_routes",JSON.stringify(routes));
+localStorage.setItem("sb_buses",JSON.stringify(buses));
+localStorage.setItem("sb_tickets",JSON.stringify(tickets));
+localStorage.setItem("sb_conductors",JSON.stringify(conductors));
+}
+
+function page(id){
+document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+document.getElementById(id).classList.add("active");
+hero.style.display=id==="home"?"block":"none";
+if(id==="user")renderUser();
+if(id==="admin"&&admin)renderAdmin();
+}
+
+// PHOTO PREVIEW
+photo.addEventListener("change",function(){
+if(this.files[0]){
+preview.src=URL.createObjectURL(this.files[0]);
+preview.style.display="block";
+}
+});
+
+// REGISTER
+function register(){
+let u={
+id:"U"+Date.now(),
+name:name.value,address:address.value,dob:dob.value,
+email:email.value,institution:institution.value,
+type:type.value,password:password.value,
+photoName:photo.files[0]?.name||"",wallet:0
+};
+if(!u.name||!u.email||!u.password||!u.type||!u.address||!u.dob||!u.institution){
+alert("Please fill all details");return;
+}
+if(users.some(x=>x.email===u.email)){alert("Email already exists");return;}
+users.push(u);save();alert("Registration Successful!");
+}
+
+// LOGIN
+function login(){
+current=users.find(u=>u.email===loginEmail.value&&u.password===loginPassword.value);
+if(!current){alert("Invalid Login");return;}
+userDash.style.display="block";renderUser();
+alert("Welcome "+current.name);
+}
+
+// USER DASHBOARD
+function renderUser(){
+if(!current)return;
+wallet.innerText="₹"+current.wallet;
+let p=passes.find(x=>x.userID===current.id&&x.status==="Approved");
+status.innerText=p?"Approved":"Not Approved";
+myPass.innerHTML=p?`<div class="card">
+<h3>${p.id}</h3>
+<p>Name: ${current.name}</p>
+<p>Pass: ${p.type}</p>
+<p>Route: ${p.from} to ${p.to}</p>
+<p>Validity: ${p.validUntil}</p>
+</div>`:"No approved pass";
+qr.innerHTML="";
+if(p)new QRCode(qr,{text:p.id,width:150,height:150});
+route.innerHTML='<option value="">Select Route</option>';
+timeRoute.innerHTML='<option value="">Select Route</option>';
+routes.forEach((r,i)=>{
+let op=`<option value="${i}">${r.from} to ${r.to}</option>`;
+route.innerHTML+=op;timeRoute.innerHTML+=op;
+});
+}
+
+// WALLET
+function addMoney(){
+let n=Number(money.value);
+if(!current||!Number.isFinite(n)||n<=0){alert("Enter valid amount");return;}
+current.wallet+=n;save();renderUser();alert("Demo Wallet Credited");
+}
+
+// APPLY PASS
+function applyPass(){
+if(!current)return;
+let m=Number(months.value),t=passType.value;
+if(!from.value||!to.value){alert("Enter route");return;}
+if(passes.some(p=>p.userID===current.id&&p.status==="Pending")){
+alert("Pending application exists");return;
+}
+let fee=current.type==="Government School Student"&&t==="Student Pass"?0:
+current.type==="Private School Student"?m*200:m*300;
+passes.push({id:"PASS"+Date.now(),userID:current.id,type:t,
+from:from.value,to:to.value,months:m,fee,status:"Pending",validUntil:""});
+save();alert("Application Submitted. Fee: ₹"+fee);
+}
+
+// RENEW
+function renew(){
+if(!current)return;
+let p=passes.find(x=>x.userID===current.id&&x.status==="Approved");
+if(!p){alert("No approved pass");return;}
+let m=Number(renewMonths.value);
+let fee=current.type==="Government School Student"&&p.type==="Student Pass"?0:
+current.type==="Private School Student"?m*200:m*300;
+if(current.wallet<fee){alert("Insufficient Wallet Balance");return;}
+current.wallet-=fee;p.months=m;
+p.validUntil=new Date(Date.now()+m*30*86400000).toLocaleDateString();
+save();renderUser();alert("Renewal Successful");
+}
+
+// TICKET
+function buyTicket(){
+if(!current)return;
+if(route.value===""||!Number.isInteger(Number(quantity.value))||Number(quantity.value)<1){
+alert("Select route and valid quantity");return;
+}
+let r=routes[Number(route.value)],amount=r.fare*Number(quantity.value);
+if(current.wallet<amount){alert("Insufficient Balance");return;}
+current.wallet-=amount;
+let t={id:"TICKET"+Date.now(),userID:current.id,
+route:r.from+" to "+r.to,amount};
+tickets.push(t);save();renderUser();
+alert("Ticket Purchased: "+t.id);
+}
+
+// TIME
+function travelTime(){
+if(timeRoute.value===""){alert("Select Route");return;}
+timeResult.innerText="Expected Travel Time: "+routes[Number(timeRoute.value)].duration+" Minutes";
+}
+
+// ADMIN
+function adminLogin(){
+if(adminID.value==="admin"&&adminPW.value==="admin123"){
+admin=true;adminDash.style.display="block";renderAdmin();
+alert("Admin Login Successful");
+}else alert("Invalid Admin Login");
+}
+
+function renderAdmin(){
+usersCount.innerText=users.length;
+passCount.innerText=passes.length;
+ticketCount.innerText=tickets.length;
+applications.innerHTML="";
+passes.forEach((p,i)=>{
+let u=users.find(x=>x.id===p.userID);
+applications.innerHTML+=`<tr>
+<td>${u?.name||"Unknown"}</td><td>${p.type}</td>
+<td>${p.from} - ${p.to}</td><td>₹${p.fee}</td>
+<td>${p.status}</td><td><button class="btn" onclick="approve(${i})">Approve</button></td>
+</tr>`;
+});
+busList.innerHTML=buses.map(b=>`<p>${b.number} - ${b.name}</p>`).join("");
+routeList.innerHTML=routes.map(r=>`<p>${r.from} - ${r.to} | ₹${r.fare}</p>`).join("");
+conList.innerHTML=conductors.map(c=>`<p>${c.id}</p>`).join("");
+dailyReport.innerHTML=`<p>Total Applications: ${passes.length}</p>
+<p>Approved Passes: ${passes.filter(p=>p.status==="Approved").length}</p>
+<p>Total Tickets: ${tickets.length}</p>`;
+}
+
+function approve(i){
+if(!admin)return;
+let p=passes[i],u=users.find(x=>x.id===p.userID);
+if(p.status!=="Pending"){alert("Already Processed");return;}
+if(u.wallet<p.fee){alert("User needs to add money first");return;}
+u.wallet-=p.fee;p.status="Approved";
+p.validUntil=new Date(Date.now()+p.months*30*86400000).toLocaleDateString();
+save();renderAdmin();alert("Pass Approved");
+}
+
+// BUS
+function createBus(){
+if(!admin)return;
+if(!busNo.value||!busName.value){alert("Enter details");return;}
+buses.push({number:busNo.value,name:busName.value});
+save();renderAdmin();alert("Bus Created");
+}
+
+// ROUTE
+function createRoute(){
+if(!admin)return;
+let r={from:routeFrom.value,to:routeTo.value,time:routeTime.value,
+stops:stops.value,duration:Number(duration.value),fare:Number(fare.value)};
+if(!r.from||!r.to||!r.time||!r.stops||r.duration<=0||r.fare<0){
+alert("Enter valid details");return;
+}
+routes.push(r);save();renderAdmin();alert("Route Created");
+}
+
+// CONDUCTOR
+function createConductor(){
+if(!admin)return;
+if(!newCon.value||!newConPass.value){alert("Enter details");return;}
+if(conductors.some(c=>c.id===newCon.value)){alert("ID already exists");return;}
+conductors.push({id:newCon.value,password:newConPass.value});
+save();renderAdmin();alert("Conductor Added");
+}
+
+function conLogin(){
+conductor=conductors.some(c=>c.id===conID.value&&c.password===conPW.value)||
+(conID.value==="CON01"&&conPW.value==="1234");
+if(conductor){conDash.style.display="block";alert("Conductor Login Successful");startScanner();}
+else alert("Invalid Login");
+}
+
+function startScanner(){
+if(scanner||typeof Html5Qrcode==="undefined")return;
+scanner=new Html5Qrcode("reader");
+scanner.start({facingMode:"environment"},{fps:10,qrbox:200},
+text=>{qrID.value=text;scanner.stop().then(()=>{scanner=null;verify();});},
+()=>{}).catch(()=>{scanner=null;});
+}
+
+// QR VERIFICATION
+function verify(){
+if(!conductor)return;
+let id=qrID.value.trim();
+let p=passes.find(x=>x.id===id&&x.status==="Approved");
+let t=tickets.find(x=>x.id===id);
+verifyResult.innerText=p?"VALID BUS PASS":
+t?"VALID BUS TICKET":"INVALID PASS OR TICKET";
+}
+
+// LOCATION
+function updateLocation(){
+if(!conductor)return;
+if(!locationBus.value||!location.value){alert("Enter details");return;}
+localStorage.setItem("sb_location",JSON.stringify({
+bus:locationBus.value,location:location.value,
+time:new Date().toLocaleTimeString()
+}));
+locationResult.innerText="Location Updated: "+locationBus.value+" - "+location.value;
+alert("Location Updated");
+}
+
+page("home");
+</script>
+
+</body>
+</html>

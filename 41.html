@@ -1,0 +1,755 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WanderWorld - Travel Blog</title>
+
+<!-- Leaflet Map CSS -->
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f8faf9;
+    color: #263238;
+    line-height: 1.6;
+}
+
+header {
+    background: #123c36;
+    color: white;
+    padding: 18px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.logo {
+    font-size: 26px;
+    font-weight: bold;
+}
+
+.logo span {
+    color: #f4bd62;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 10px;
+    font-size: 15px;
+}
+
+nav a:hover {
+    color: #f4bd62;
+}
+
+.hero {
+    min-height: 520px;
+    background:
+    linear-gradient(rgba(0,0,0,.35),rgba(0,0,0,.45)),
+    url("https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1600")
+    center/cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    padding: 30px;
+}
+
+.hero h1 {
+    font-size: 52px;
+    margin-bottom: 15px;
+}
+
+.hero p {
+    font-size: 19px;
+    margin-bottom: 25px;
+}
+
+.btn {
+    display: inline-block;
+    background: #f4bd62;
+    color: #173c35;
+    padding: 12px 24px;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: white;
+}
+
+section {
+    padding: 60px 7%;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 32px;
+    color: #123c36;
+    margin-bottom: 12px;
+}
+
+.section-desc {
+    text-align: center;
+    color: #687773;
+    margin-bottom: 35px;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
+    gap: 25px;
+}
+
+.card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,.08);
+    transition: .3s;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+}
+
+.card img {
+    width: 100%;
+    height: 210px;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 20px;
+}
+
+.card h3 {
+    color: #123c36;
+    margin-bottom: 8px;
+}
+
+.card p {
+    color: #65716d;
+    margin-bottom: 15px;
+}
+
+.read-more {
+    color: #c17e25;
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.filters {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.filters button {
+    padding: 10px 18px;
+    margin: 5px;
+    border: 1px solid #123c36;
+    background: white;
+    color: #123c36;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.filters button:hover,
+.filters button.active {
+    background: #123c36;
+    color: white;
+}
+
+#map {
+    height: 420px;
+    width: 100%;
+    border-radius: 12px;
+    z-index: 1;
+}
+
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+    gap: 15px;
+}
+
+.gallery img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.gallery img:hover {
+    transform: scale(1.03);
+}
+
+.lightbox {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    inset: 0;
+    background: rgba(0,0,0,.92);
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.lightbox img {
+    max-width: 90%;
+    max-height: 85vh;
+    border-radius: 10px;
+}
+
+.close {
+    position: absolute;
+    top: 20px;
+    right: 35px;
+    color: white;
+    font-size: 40px;
+    cursor: pointer;
+}
+
+.article-box {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,.06);
+    max-width: 900px;
+    margin: auto;
+}
+
+.article-box img {
+    width: 100%;
+    max-height: 420px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin: 15px 0;
+}
+
+.article-box h2 {
+    color: #123c36;
+    margin-bottom: 10px;
+}
+
+.article-box p {
+    margin: 12px 0;
+}
+
+.tips {
+    background: #edf5f0;
+    padding: 18px;
+    border-radius: 8px;
+    margin-top: 18px;
+}
+
+.comments {
+    margin-top: 25px;
+}
+
+.comments input,
+.comments textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-family: inherit;
+}
+
+.comment {
+    background: #f1f5f3;
+    padding: 12px;
+    border-radius: 7px;
+    margin-top: 10px;
+}
+
+.social a {
+    display: inline-block;
+    background: #123c36;
+    color: white;
+    padding: 9px 15px;
+    border-radius: 6px;
+    margin: 5px;
+    text-decoration: none;
+}
+
+.about {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+    gap: 30px;
+    align-items: center;
+}
+
+.about img {
+    width: 100%;
+    height: 350px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.resource {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 3px 12px rgba(0,0,0,.06);
+}
+
+.resource h3 {
+    color: #123c36;
+    margin-bottom: 10px;
+}
+
+.resource a {
+    color: #b27624;
+}
+
+footer {
+    background: #123c36;
+    color: white;
+    text-align: center;
+    padding: 25px;
+}
+
+footer a {
+    color: #f4bd62;
+    text-decoration: none;
+}
+
+@media(max-width:700px) {
+    header {
+        justify-content: center;
+        gap: 15px;
+    }
+
+    nav {
+        text-align: center;
+    }
+
+    nav a {
+        display: inline-block;
+        margin: 5px;
+    }
+
+    .hero h1 {
+        font-size: 35px;
+    }
+
+    section {
+        padding: 45px 5%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">Wander<span>World</span> ✈</div>
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#blogs">Blogs</a>
+        <a href="#destinations">Destinations</a>
+        <a href="#map-section">Map</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#about">About</a>
+        <a href="#resources">Resources</a>
+    </nav>
+</header>
+
+<!-- HOMEPAGE -->
+<div class="hero" id="home">
+    <div>
+        <h1>Explore The World With Me</h1>
+        <p>Discover beautiful places, cultures, food and unforgettable journeys.</p>
+        <a href="#blogs" class="btn">Explore Travel Stories</a>
+    </div>
+</div>
+
+<!-- BLOG ARTICLES -->
+<section id="blogs">
+    <h2 class="section-title">Latest Travel Stories</h2>
+    <p class="section-desc">Read about my unforgettable travel experiences.</p>
+
+    <div class="filters">
+        <button class="active" onclick="filterBlogs('all',this)">All</button>
+        <button onclick="filterBlogs('India',this)">India</button>
+        <button onclick="filterBlogs('Europe',this)">Europe</button>
+        <button onclick="filterBlogs('Asia',this)">Asia</button>
+    </div>
+
+    <div class="cards" id="blogCards">
+
+        <div class="card" data-category="India">
+            <img src="https://images.unsplash.com/photo-1564507592333-c60657eea523?w=800">
+            <div class="card-content">
+                <h3>Discover the Beauty of Taj Mahal</h3>
+                <p>Explore the history, architecture and beauty of India's famous monument in Agra.</p>
+                <a class="read-more" onclick="showArticle('taj')">Read Full Article →</a>
+            </div>
+        </div>
+
+        <div class="card" data-category="Europe">
+            <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800">
+            <div class="card-content">
+                <h3>A Wonderful Trip to Paris</h3>
+                <p>Experience the Eiffel Tower, beautiful streets and delicious French food.</p>
+                <a class="read-more" onclick="showArticle('paris')">Read Full Article →</a>
+            </div>
+        </div>
+
+        <div class="card" data-category="Asia">
+            <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800">
+            <div class="card-content">
+                <h3>Adventure in Bali</h3>
+                <p>Enjoy tropical beaches, green landscapes and beautiful cultural experiences.</p>
+                <a class="read-more" onclick="showArticle('bali')">Read Full Article →</a>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- FULL BLOG ARTICLE -->
+<section id="article" style="display:none;">
+    <div class="article-box">
+        <button class="btn" onclick="closeArticle()">← Back to Blogs</button>
+        <div id="articleContent"></div>
+
+        <div class="social">
+            <h3>Share this article</h3>
+            <a id="whatsapp" target="_blank">WhatsApp</a>
+            <a id="facebook" target="_blank">Facebook</a>
+            <button class="btn" onclick="copyPage()">Copy Link</button>
+        </div>
+
+        <div class="comments">
+            <h3>Leave a Comment</h3>
+            <input type="text" id="commentName" placeholder="Your Name">
+            <textarea id="commentText" rows="4" placeholder="Write your comment..."></textarea>
+            <button class="btn" onclick="addComment()">Post Comment</button>
+            <div id="commentList"></div>
+        </div>
+    </div>
+</section>
+
+<!-- DESTINATIONS -->
+<section id="destinations">
+    <h2 class="section-title">Popular Destinations</h2>
+    <p class="section-desc">Explore some amazing places around the world.</p>
+
+    <div class="cards">
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1570168007204-dfb528c6958f?w=800">
+            <div class="card-content">
+                <h3>India</h3>
+                <p>Discover historical places, temples, mountains and diverse cultures.</p>
+                <a href="#blogs" class="read-more">Explore India →</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?w=800">
+            <div class="card-content">
+                <h3>France</h3>
+                <p>Enjoy beautiful cities, art, architecture and amazing cuisine.</p>
+                <a href="#blogs" class="read-more">Explore France →</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800">
+            <div class="card-content">
+                <h3>Indonesia</h3>
+                <p>Discover beaches, waterfalls, nature and island adventures.</p>
+                <a href="#blogs" class="read-more">Explore Indonesia →</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- INTERACTIVE MAP -->
+<section id="map-section">
+    <h2 class="section-title">My Travel Map</h2>
+    <p class="section-desc">Click on a marker to explore a travel story.</p>
+    <div id="map"></div>
+</section>
+
+<!-- PHOTO GALLERY -->
+<section id="gallery">
+    <h2 class="section-title">Travel Photo Gallery</h2>
+    <p class="section-desc">Beautiful moments captured during my adventures.</p>
+
+    <div class="gallery">
+        <img onclick="openImage(this.src)" src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800">
+        <img onclick="openImage(this.src)" src="https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800">
+        <img onclick="openImage(this.src)" src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=800">
+        <img onclick="openImage(this.src)" src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800">
+        <img onclick="openImage(this.src)" src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800">
+        <img onclick="openImage(this.src)" src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=800">
+    </div>
+</section>
+
+<!-- IMAGE LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeImage()">
+    <span class="close">&times;</span>
+    <img id="largeImage" alt="Selected travel photograph">
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+    <h2 class="section-title">About the Traveler</h2>
+    <p class="section-desc">The person behind the travel stories.</p>
+
+    <div class="about">
+        <img src="https://images.unsplash.com/photo-1500534623283-312aade485b7?w=900" alt="Travel landscape">
+        <div>
+            <h2>Hello, I'm a Travel Enthusiast!</h2>
+            <p>
+                Welcome to WanderWorld! I love travelling, discovering new
+                destinations, meeting people and learning about different cultures.
+                Through this blog, I share my travel experiences, photographs,
+                guides and useful tips.
+            </p>
+            <p>
+                My goal is to inspire people to explore the world and create
+                unforgettable memories. My future plans include visiting more
+                countries, exploring new cultures and sharing more adventures.
+            </p>
+            <a href="#blogs" class="btn">Read My Stories</a>
+        </div>
+    </div>
+</section>
+
+<!-- RESOURCES -->
+<section id="resources">
+    <h2 class="section-title">Travel Resources</h2>
+    <p class="section-desc">Useful information to make your trips easier.</p>
+
+    <div class="cards">
+        <div class="resource">
+            <h3>🎒 Packing Checklist</h3>
+            <p>Remember to carry your clothes, passport, ID proof, charger,
+            medicines, toiletries and other important items.</p>
+        </div>
+
+        <div class="resource">
+            <h3>✈ Flight Booking</h3>
+            <p>Compare flight prices and plan your journey.</p>
+            <a href="https://www.google.com/travel/flights" target="_blank">Explore Flights</a>
+        </div>
+
+        <div class="resource">
+            <h3>🏨 Hotel Booking</h3>
+            <p>Find suitable accommodation for your next trip.</p>
+            <a href="https://www.booking.com" target="_blank">Explore Hotels</a>
+        </div>
+
+        <div class="resource">
+            <h3>🗺 Travel Navigation</h3>
+            <p>Find directions and discover places around the world.</p>
+            <a href="https://www.google.com/maps" target="_blank">Open Maps</a>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <h2>WanderWorld ✈</h2>
+    <p>Explore More. Travel More. Create Memories.</p>
+    <p>Follow my travel journey on social media.</p>
+    <div class="social">
+        <a href="https://www.instagram.com" target="_blank">Instagram</a>
+        <a href="https://www.facebook.com" target="_blank">Facebook</a>
+        <a href="https://www.youtube.com" target="_blank">YouTube</a>
+    </div>
+    <p>© 2026 WanderWorld. All Rights Reserved.</p>
+</footer>
+
+<!-- Leaflet Map JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+
+// BLOG FILTER
+function filterBlogs(category, button) {
+    let cards = document.querySelectorAll("#blogCards .card");
+
+    cards.forEach(card => {
+        if (category === "all" || card.dataset.category === category) {
+            card.style.display = "block";
+        } else {
+            card.style.display = "none";
+        }
+    });
+
+    document.querySelectorAll(".filters button").forEach(btn => {
+        btn.classList.remove("active");
+    });
+
+    button.classList.add("active");
+}
+
+// BLOG ARTICLE DATA
+const articles = {
+    taj: {
+        title: "Discover the Beauty of Taj Mahal",
+        image: "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=1000",
+        text: "The Taj Mahal in Agra is one of the most beautiful monuments in the world. Built by Mughal Emperor Shah Jahan, it is a symbol of love and outstanding architecture. Visitors can enjoy its white marble structure, peaceful gardens and beautiful surroundings.",
+        tips: "Visit early in the morning, carry your camera and check ticket information before travelling."
+    },
+    paris: {
+        title: "A Wonderful Trip to Paris",
+        image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1000",
+        text: "Paris is famous for its beautiful streets, historic buildings and the Eiffel Tower. Walking around the city, visiting museums and tasting French food makes the journey special. The city offers memorable experiences for every traveller.",
+        tips: "Plan your Eiffel Tower visit in advance, use public transport and keep your belongings safe."
+    },
+    bali: {
+        title: "Adventure in Bali",
+        image: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=1000",
+        text: "Bali is a beautiful Indonesian island known for its beaches, temples, green rice terraces and waterfalls. Travellers can enjoy local food, cultural performances and exciting outdoor activities.",
+        tips: "Carry sunscreen, respect local customs and check weather conditions before outdoor activities."
+    }
+};
+
+let currentArticle = "";
+
+function showArticle(id) {
+    currentArticle = id;
+    let article = articles[id];
+
+    document.getElementById("articleContent").innerHTML = `
+        <h2>${article.title}</h2>
+        <img src="${article.image}" alt="${article.title}">
+        <p>${article.text}</p>
+        <div class="tips">
+            <h3>Travel Tips</h3>
+            <p>${article.tips}</p>
+        </div>
+    `;
+
+    document.getElementById("article").style.display = "block";
+    document.getElementById("article").scrollIntoView();
+
+    let page = window.location.href.split("#")[0];
+    let shareText = encodeURIComponent(article.title + " - " + page + "#article");
+
+    document.getElementById("whatsapp").href =
+        "https://wa.me/?text=" + shareText;
+
+    document.getElementById("facebook").href =
+        "https://www.facebook.com/sharer/sharer.php?u=" +
+        encodeURIComponent(page + "#article");
+
+    document.getElementById("commentList").innerHTML = "";
+}
+
+function closeArticle() {
+    document.getElementById("article").style.display = "none";
+    document.getElementById("blogs").scrollIntoView();
+}
+
+// COMMENTS
+function addComment() {
+    let name = document.getElementById("commentName").value.trim();
+    let message = document.getElementById("commentText").value.trim();
+
+    if (name === "" || message === "") {
+        alert("Please enter your name and comment.");
+        return;
+    }
+
+    let comment = document.createElement("div");
+    comment.className = "comment";
+
+    let user = document.createElement("strong");
+    user.textContent = name;
+
+    let content = document.createElement("p");
+    content.textContent = message;
+
+    comment.append(user, content);
+    document.getElementById("commentList").appendChild(comment);
+
+    document.getElementById("commentName").value = "";
+    document.getElementById("commentText").value = "";
+}
+
+// SHARE LINK
+function copyPage() {
+    navigator.clipboard.writeText(window.location.href)
+    .then(() => alert("Page link copied!"))
+    .catch(() => alert("Unable to copy link. Please copy it manually."));
+}
+
+// PHOTO GALLERY
+function openImage(src) {
+    document.getElementById("lightbox").style.display = "flex";
+    document.getElementById("largeImage").src = src;
+}
+
+function closeImage() {
+    document.getElementById("lightbox").style.display = "none";
+}
+
+// INTERACTIVE MAP
+const map = L.map('map').setView([20, 30], 2);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
+
+const places = [
+    {
+        name: "Taj Mahal, India",
+        lat: 27.1751,
+        lng: 78.0421,
+        article: "taj"
+    },
+    {
+        name: "Paris, France",
+        lat: 48.8566,
+        lng: 2.3522,
+        article: "paris"
+    },
+    {
+        name: "Bali, Indonesia",
+        lat: -8.4095,
+        lng: 115.1889,
+        article: "bali"
+    }
+];
+
+places.forEach(place => {
+    L.marker([place.lat, place.lng])
+    .addTo(map)
+    .bindPopup(
+        `<b>${place.name}</b><br>
+        <button onclick="showArticle('${place.article}')">
+        Read Travel Story</button>`
+    );
+});
+
+</script>
+
+</body>
+</html>

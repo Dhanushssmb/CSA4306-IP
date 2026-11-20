@@ -1,0 +1,530 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Traffic Squad - Penalty Management</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#f1f5f9;color:#1e293b}
+header{background:#0f172a;color:white;padding:18px 7%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+header h2{color:#facc15}
+nav{display:flex;gap:10px;flex-wrap:wrap}
+button,.btn{border:0;padding:10px 16px;border-radius:6px;cursor:pointer;font-weight:bold;background:#2563eb;color:white}
+button:hover,.btn:hover{opacity:.85}
+nav button{background:#334155}
+.hero{background:linear-gradient(120deg,#0f172a,#1d4ed8);color:white;padding:65px 8%;text-align:center}
+.hero h1{font-size:38px;margin-bottom:15px}
+.hero p{font-size:17px;line-height:1.7}
+.container{max-width:1100px;margin:30px auto;padding:0 18px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin:25px 0}
+.card{background:white;padding:22px;border-radius:12px;box-shadow:0 3px 12px #0001}
+.card h3{margin-bottom:10px;color:#1d4ed8}
+.section{display:none;background:white;padding:25px;border-radius:12px;margin-bottom:25px;box-shadow:0 3px 12px #0001}
+.section.active{display:block}
+.section h2{margin-bottom:20px;color:#0f172a}
+input,select,textarea{width:100%;padding:12px;margin:8px 0 15px;border:1px solid #cbd5e1;border-radius:6px}
+label{font-weight:bold;font-size:14px}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+table{width:100%;border-collapse:collapse;margin-top:15px;min-width:600px}
+th,td{padding:12px;border:1px solid #e2e8f0;text-align:left;font-size:14px}
+th{background:#0f172a;color:white}
+.table-wrap{overflow-x:auto}
+.status{padding:5px 9px;border-radius:20px;background:#dcfce7;color:#166534;font-size:12px}
+.pending{background:#fef3c7;color:#92400e}
+.danger{background:#dc2626}
+.green{background:#16a34a}
+.gray{background:#64748b}
+.receipt{border:2px dashed #2563eb;padding:20px;margin-top:15px;border-radius:8px}
+.receipt h3{text-align:center;margin-bottom:15px;color:#1d4ed8}
+.photo{max-width:180px;max-height:150px;display:block;margin:10px 0;border-radius:8px}
+.notice{padding:12px;background:#eff6ff;border-left:4px solid #2563eb;margin:15px 0}
+footer{text-align:center;padding:25px;background:#0f172a;color:white;margin-top:40px}
+.small{font-size:13px;color:#64748b}
+.hidden{display:none}
+@media(max-width:600px){header{justify-content:center}.hero h1{font-size:28px}}
+</style>
+</head>
+<body>
+
+<header>
+<h2>🚦 TRAFFIC SQUAD</h2>
+<nav>
+<button onclick="show('home')">Home</button>
+<button onclick="show('user')">User</button>
+<button onclick="show('police')">Police</button>
+<button onclick="show('admin')">Admin</button>
+<button onclick="show('demo')">Demo</button>
+</nav>
+</header>
+
+<div class="hero" id="hero">
+<h1>Traffic Penalty Collection & Management</h1>
+<p>A digital platform to report traffic violations, upload proof, generate challans and manage penalty records.</p>
+<br>
+<button onclick="show('user')">User Portal</button>
+<button onclick="show('police')">Police Portal</button>
+</div>
+
+<div class="container">
+
+<!-- HOME -->
+<div id="home" class="section active">
+<h2>Welcome to Traffic Squad</h2>
+<p>Traffic Squad is an online traffic violation management system. Police officers can register traffic cases with proof photographs. Vehicle owners can view their challans and penalty details online.</p>
+<div class="cards">
+<div class="card"><h3>👤 User Portal</h3><p>Register, log in and view traffic challans.</p></div>
+<div class="card"><h3>👮 Police Portal</h3><p>Create cases and upload violation evidence.</p></div>
+<div class="card"><h3>📊 Admin Portal</h3><p>Manage police accounts and daily reports.</p></div>
+<div class="card"><h3>📍 Traffic Information</h3><p>Open Google Maps to view traffic conditions.</p></div>
+</div>
+<div class="notice">This is a college project prototype. Demo data is stored in your browser.</div>
+</div>
+
+<!-- USER -->
+<div id="user" class="section">
+<h2>User Registration / Login</h2>
+<div id="userAuth">
+<div class="form-grid">
+<div>
+<h3>New User Registration</h3>
+<form id="registerForm">
+<label>Full Name</label><input id="regName" required>
+<label>Email</label><input id="regEmail" type="email" required>
+<label>Mobile Number</label><input id="regMobile" required>
+<label>Vehicle Number</label><input id="regVehicle" placeholder="TN01AB1234" required>
+<label>Password</label><input id="regPassword" type="password" required>
+<button type="submit">Register</button>
+</form>
+</div>
+<div>
+<h3>User Login</h3>
+<form id="userLoginForm">
+<label>Email</label><input id="loginEmail" type="email" required>
+<label>Password</label><input id="loginPassword" type="password" required>
+<button type="submit">Login</button>
+</form>
+</div>
+</div>
+</div>
+
+<div id="userDashboard" class="hidden">
+<h3 id="userWelcome"></h3>
+<button class="gray" onclick="userLogout()">Logout</button>
+<div class="cards">
+<div class="card"><h3>My Challans</h3><p id="userChallanCount">0</p></div>
+<div class="card"><h3>My Cases</h3><p id="userCaseCount">0</p></div>
+</div>
+<h3>My Challan Details</h3>
+<div class="table-wrap" id="userChallans"></div>
+<h3 style="margin-top:25px">My Filed Cases</h3>
+<div class="table-wrap" id="userCases"></div>
+<div id="receiptArea"></div>
+</div>
+</div>
+
+<!-- POLICE -->
+<div id="police" class="section">
+<h2>Police Login</h2>
+<div id="policeAuth">
+<form id="policeLoginForm" style="max-width:400px">
+<label>Police ID</label><input id="policeId" required>
+<label>Password</label><input id="policePassword" type="password" required>
+<button type="submit">Police Login</button>
+</form>
+<p class="small">Demo login: POL01 / police123</p>
+</div>
+
+<div id="policeDashboard" class="hidden">
+<h3>Police Dashboard</h3>
+<button class="gray" onclick="policeLogout()">Logout</button>
+<div class="cards">
+<div class="card"><h3>Total Cases</h3><p id="policeTotal">0</p></div>
+<div class="card"><h3>New Cases</h3><p id="policeNew">0</p></div>
+</div>
+
+<h3>Create Traffic Violation Case</h3>
+<form id="caseForm">
+<div class="form-grid">
+<div><label>Vehicle Owner Name</label><input id="ownerName" required></div>
+<div><label>Vehicle Number</label><input id="vehicleNumber" required placeholder="TN01AB1234"></div>
+<div><label>Owner Email</label><input id="ownerEmail" type="email" required></div>
+<div><label>Mobile Number</label><input id="ownerMobile" required></div>
+<div><label>Violation Type</label>
+<select id="violation" required>
+<option value="">Select Violation</option>
+<option value="Over Speeding">Over Speeding</option>
+<option value="No Helmet">No Helmet</option>
+<option value="Signal Jumping">Signal Jumping</option>
+<option value="No Parking">No Parking</option>
+<option value="No Driving Licence">No Driving Licence</option>
+<option value="No Seat Belt">No Seat Belt</option>
+<option value="Wrong Side Driving">Wrong Side Driving</option>
+</select></div>
+<div><label>Fine Amount (₹)</label><input id="fineAmount" type="number" min="0" required></div>
+<div><label>Violation Location</label><input id="caseLocation" required></div>
+<div><label>Violation Date</label><input id="caseDate" type="date" required></div>
+</div>
+<label>Case Description</label>
+<textarea id="caseDescription" rows="3" placeholder="Enter violation details"></textarea>
+<label>Upload Vehicle / Violation Proof Photo</label>
+<input id="proofPhoto" type="file" accept="image/*" required>
+<img id="photoPreview" class="photo hidden">
+<button type="submit">Create Case & Generate Challan</button>
+</form>
+
+<h3 style="margin-top:30px">Manage Traffic Cases</h3>
+<div class="table-wrap" id="policeCases"></div>
+<br>
+<a href="https://www.google.com/maps" target="_blank" class="btn">Open Google Maps Traffic</a>
+</div>
+</div>
+
+<!-- ADMIN -->
+<div id="admin" class="section">
+<h2>Admin Login</h2>
+<div id="adminAuth">
+<form id="adminLoginForm" style="max-width:400px">
+<label>Admin Username</label><input id="adminUsername" required>
+<label>Password</label><input id="adminPassword" type="password" required>
+<button type="submit">Admin Login</button>
+</form>
+<p class="small">Demo login: admin / admin123</p>
+</div>
+
+<div id="adminDashboard" class="hidden">
+<h3>Admin Dashboard</h3>
+<button class="gray" onclick="adminLogout()">Logout</button>
+<div class="cards">
+<div class="card"><h3>Total Users</h3><p id="totalUsers">0</p></div>
+<div class="card"><h3>Total Police</h3><p id="totalPolice">0</p></div>
+<div class="card"><h3>Total Cases</h3><p id="totalCases">0</p></div>
+<div class="card"><h3>Total Fine Amount</h3><p id="totalFine">₹0</p></div>
+</div>
+
+<h3>Manage Police Login</h3>
+<form id="addPoliceForm" class="form-grid">
+<div><label>Police ID</label><input id="newPoliceId" required></div>
+<div><label>Password</label><input id="newPolicePassword" required></div>
+<div><label>Officer Name</label><input id="newPoliceName" required></div>
+<div style="align-self:end"><button type="submit">Add Police</button></div>
+</form>
+<div class="table-wrap" id="policeList"></div>
+
+<h3 style="margin-top:30px">Daily Traffic Report</h3>
+<div class="table-wrap" id="dailyReport"></div>
+</div>
+</div>
+
+<!-- DEMO -->
+<div id="demo" class="section">
+<h2>Demo Examples</h2>
+<p>Use these sample details to test the application.</p>
+<div class="cards">
+<div class="card">
+<h3>Admin Login</h3>
+<p>Username: admin</p>
+<p>Password: admin123</p>
+</div>
+<div class="card">
+<h3>Police Login</h3>
+<p>Police ID: POL01</p>
+<p>Password: police123</p>
+</div>
+<div class="card">
+<h3>Sample Violation</h3>
+<p>Vehicle: TN01AB1234</p>
+<p>Violation: No Helmet</p>
+<p>Fine: ₹500</p>
+</div>
+</div>
+<div class="notice">First register a user account. Then create a case using the same email and vehicle number to see the challan in the user account.</div>
+<button class="danger" onclick="resetDemo()">Reset All Demo Data</button>
+</div>
+
+</div>
+
+<footer>
+<p>© 2026 Traffic Squad | Penalty Collection & Management System</p>
+<p class="small">College Project Prototype</p>
+</footer>
+
+<script>
+// DATABASE USING LOCAL STORAGE
+function getData(key){return JSON.parse(localStorage.getItem(key)||"[]")}
+function saveData(key,data){localStorage.setItem(key,JSON.stringify(data))}
+function makeId(prefix){return prefix+Date.now().toString().slice(-8)}
+
+let users=getData("ts_users");
+let cases=getData("ts_cases");
+let police=getData("ts_police");
+
+if(!police.some(p=>p.id==="POL01")){
+ police.push({id:"POL01",password:"police123",name:"Demo Officer"});
+ saveData("ts_police",police);
+}
+
+let currentUser=null;
+let currentPolice=null;
+let isAdmin=false;
+
+function show(id){
+ document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+ document.getElementById("hero").style.display=id==="home"?"block":"none";
+ if(id==="admin" && isAdmin)refreshAdmin();
+ if(id==="police" && currentPolice)refreshPolice();
+ if(id==="user" && currentUser)refreshUser();
+}
+
+function safe(value){
+ return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+// USER REGISTRATION
+document.getElementById("registerForm").addEventListener("submit",e=>{
+ e.preventDefault();
+ users=getData("ts_users");
+ const email=document.getElementById("regEmail").value.trim().toLowerCase();
+ if(users.some(u=>u.email===email)){alert("Email already registered. Please login.");return}
+ const user={
+  id:makeId("U"),name:document.getElementById("regName").value,
+  email:email,mobile:document.getElementById("regMobile").value,
+  vehicle:document.getElementById("regVehicle").value.trim().toUpperCase(),
+  password:document.getElementById("regPassword").value
+ };
+ users.push(user);saveData("ts_users",users);
+ alert("Registration successful. Please login.");
+ e.target.reset();
+});
+
+// USER LOGIN
+document.getElementById("userLoginForm").addEventListener("submit",e=>{
+ e.preventDefault();
+ users=getData("ts_users");
+ const email=document.getElementById("loginEmail").value.trim().toLowerCase();
+ const password=document.getElementById("loginPassword").value;
+ currentUser=users.find(u=>u.email===email&&u.password===password);
+ if(!currentUser){alert("Invalid email or password");return}
+ document.getElementById("userAuth").classList.add("hidden");
+ document.getElementById("userDashboard").classList.remove("hidden");
+ refreshUser();
+});
+
+function userLogout(){
+ currentUser=null;
+ document.getElementById("userAuth").classList.remove("hidden");
+ document.getElementById("userDashboard").classList.add("hidden");
+}
+
+function refreshUser(){
+ if(!currentUser)return;
+ cases=getData("ts_cases");
+ const mine=cases.filter(c=>c.email.toLowerCase()===currentUser.email.toLowerCase()||c.vehicle.toUpperCase()===currentUser.vehicle.toUpperCase());
+ document.getElementById("userWelcome").textContent="Welcome, "+currentUser.name;
+ document.getElementById("userChallanCount").textContent=mine.length;
+ document.getElementById("userCaseCount").textContent=mine.length;
+ document.getElementById("userChallans").innerHTML=tableHTML(mine,["id","vehicle","violation","fine","date","status"],true);
+ document.getElementById("userCases").innerHTML=tableHTML(mine,["id","vehicle","violation","location","date","status"],false);
+}
+
+// POLICE LOGIN
+document.getElementById("policeLoginForm").addEventListener("submit",e=>{
+ e.preventDefault();
+ police=getData("ts_police");
+ const id=document.getElementById("policeId").value.trim();
+ const password=document.getElementById("policePassword").value;
+ currentPolice=police.find(p=>p.id===id&&p.password===password);
+ if(!currentPolice){alert("Invalid police login");return}
+ document.getElementById("policeAuth").classList.add("hidden");
+ document.getElementById("policeDashboard").classList.remove("hidden");
+ refreshPolice();
+});
+
+function policeLogout(){
+ currentPolice=null;
+ document.getElementById("policeAuth").classList.remove("hidden");
+ document.getElementById("policeDashboard").classList.add("hidden");
+}
+
+// PHOTO PREVIEW
+document.getElementById("proofPhoto").addEventListener("change",e=>{
+ const file=e.target.files[0];
+ if(!file)return;
+ if(file.size>700000){alert("Please select an image smaller than 700 KB for this demo.");e.target.value="";return}
+ const reader=new FileReader();
+ reader.onload=()=>{
+  document.getElementById("photoPreview").src=reader.result;
+  document.getElementById("photoPreview").classList.remove("hidden");
+ };
+ reader.readAsDataURL(file);
+});
+
+// CREATE CASE
+document.getElementById("caseForm").addEventListener("submit",e=>{
+ e.preventDefault();
+ if(!currentPolice)return;
+ const file=document.getElementById("proofPhoto").files[0];
+ if(!file){alert("Please upload proof photo");return}
+ const reader=new FileReader();
+ reader.onload=()=>{
+  cases=getData("ts_cases");
+  const record={
+   id:makeId("CH"),
+   owner:document.getElementById("ownerName").value,
+   vehicle:document.getElementById("vehicleNumber").value.trim().toUpperCase(),
+   email:document.getElementById("ownerEmail").value.trim().toLowerCase(),
+   mobile:document.getElementById("ownerMobile").value,
+   violation:document.getElementById("violation").value,
+   fine:Number(document.getElementById("fineAmount").value),
+   location:document.getElementById("caseLocation").value,
+   date:document.getElementById("caseDate").value,
+   description:document.getElementById("caseDescription").value,
+   photo:reader.result,
+   status:"Pending",
+   officer:currentPolice.name,
+   created:new Date().toISOString()
+  };
+  cases.push(record);saveData("ts_cases",cases);
+  alert("Case created successfully! Challan ID: "+record.id);
+  e.target.reset();
+  document.getElementById("photoPreview").classList.add("hidden");
+  refreshPolice();
+ };
+ reader.readAsDataURL(file);
+});
+
+function refreshPolice(){
+ if(!currentPolice)return;
+ cases=getData("ts_cases");
+ document.getElementById("policeTotal").textContent=cases.length;
+ document.getElementById("policeNew").textContent=cases.filter(c=>c.status==="Pending").length;
+ document.getElementById("policeCases").innerHTML=tableHTML(cases,["id","owner","vehicle","violation","fine","status"],false,true);
+}
+
+// ADMIN LOGIN
+document.getElementById("adminLoginForm").addEventListener("submit",e=>{
+ e.preventDefault();
+ if(document.getElementById("adminUsername").value==="admin"&&document.getElementById("adminPassword").value==="admin123"){
+  isAdmin=true;
+  document.getElementById("adminAuth").classList.add("hidden");
+  document.getElementById("adminDashboard").classList.remove("hidden");
+  refreshAdmin();
+ }else alert("Invalid admin login");
+});
+
+function adminLogout(){
+ isAdmin=false;
+ document.getElementById("adminAuth").classList.remove("hidden");
+ document.getElementById("adminDashboard").classList.add("hidden");
+}
+
+// ADD POLICE
+document.getElementById("addPoliceForm").addEventListener("submit",e=>{
+ e.preventDefault();
+ police=getData("ts_police");
+ const id=document.getElementById("newPoliceId").value.trim();
+ if(police.some(p=>p.id===id)){alert("Police ID already exists");return}
+ police.push({
+  id:id,
+  password:document.getElementById("newPolicePassword").value,
+  name:document.getElementById("newPoliceName").value
+ });
+ saveData("ts_police",police);
+ e.target.reset();
+ alert("Police account created");
+ refreshAdmin();
+});
+
+function refreshAdmin(){
+ if(!isAdmin)return;
+ users=getData("ts_users");cases=getData("ts_cases");police=getData("ts_police");
+ document.getElementById("totalUsers").textContent=users.length;
+ document.getElementById("totalPolice").textContent=police.length;
+ document.getElementById("totalCases").textContent=cases.length;
+ document.getElementById("totalFine").textContent="₹"+cases.reduce((sum,c)=>sum+Number(c.fine),0);
+ document.getElementById("policeList").innerHTML=tableHTML(police,["id","name"],false,false,true);
+ const today=new Date().toISOString().slice(0,10);
+ const daily=cases.filter(c=>c.date===today);
+ document.getElementById("dailyReport").innerHTML=tableHTML(daily,["id","owner","vehicle","violation","fine","date","status"],false);
+}
+
+// TABLE GENERATOR
+function tableHTML(data,fields,receipt=false,policeView=false,policeManage=false){
+ if(!data.length)return "<p class='notice'>No records found.</p>";
+ let html="<table><thead><tr>";
+ fields.forEach(f=>html+="<th>"+safe(f.toUpperCase())+"</th>");
+ if(receipt||policeView||policeManage)html+="<th>ACTION</th>";
+ html+="</tr></thead><tbody>";
+ data.forEach(item=>{
+  html+="<tr>";
+  fields.forEach(f=>{
+   let val=item[f]??"-";
+   if(f==="fine")val="₹"+val;
+   if(f==="status")val='<span class="status '+(item.status==="Pending"?"pending":"")+'">'+safe(val)+'</span>';
+   html+="<td>"+(f==="status"?val:safe(val))+"</td>";
+  });
+  if(receipt)html+='<td><button onclick="viewReceipt(\''+item.id+'\')">Receipt</button></td>';
+  if(policeView)html+='<td><button onclick="updateStatus(\''+item.id+'\')">Update Status</button></td>';
+  if(policeManage)html+='<td><button class="danger" onclick="deletePolice(\''+item.id+'\')">Delete</button></td>';
+  html+="</tr>";
+ });
+ html+="</tbody></table>";
+ return html;
+}
+
+// VIEW RECEIPT
+function viewReceipt(id){
+ const c=getData("ts_cases").find(x=>x.id===id);
+ if(!c)return;
+ document.getElementById("receiptArea").innerHTML=`
+ <div class="receipt" id="printReceipt">
+ <h3>TRAFFIC SQUAD - CHALLAN RECEIPT</h3>
+ <p><b>Challan ID:</b> ${safe(c.id)}</p>
+ <p><b>Owner:</b> ${safe(c.owner)}</p>
+ <p><b>Vehicle:</b> ${safe(c.vehicle)}</p>
+ <p><b>Violation:</b> ${safe(c.violation)}</p>
+ <p><b>Location:</b> ${safe(c.location)}</p>
+ <p><b>Date:</b> ${safe(c.date)}</p>
+ <p><b>Fine Amount:</b> ₹${safe(c.fine)}</p>
+ <p><b>Status:</b> ${safe(c.status)}</p>
+ <p><b>Police Officer:</b> ${safe(c.officer)}</p>
+ ${c.photo?'<img class="photo" src="'+c.photo+'" alt="Violation proof">':''}
+ <p class="small">This is a demo challan receipt, not an official government document.</p>
+ <button onclick="window.print()">Print Receipt</button>
+ </div>`;
+ document.getElementById("receiptArea").scrollIntoView({behavior:"smooth"});
+}
+
+// UPDATE CASE STATUS
+function updateStatus(id){
+ cases=getData("ts_cases");
+ const c=cases.find(x=>x.id===id);
+ if(!c)return;
+ c.status=c.status==="Pending"?"Reviewed":"Pending";
+ saveData("ts_cases",cases);
+ refreshPolice();
+ alert("Case status updated");
+}
+
+// DELETE POLICE
+function deletePolice(id){
+ if(id==="POL01"){alert("Default demo police account cannot be deleted");return}
+ if(!confirm("Delete this police account?"))return;
+ police=getData("ts_police").filter(p=>p.id!==id);
+ saveData("ts_police",police);
+ refreshAdmin();
+}
+
+// RESET DEMO
+function resetDemo(){
+ if(!confirm("Delete all users, cases and added police accounts?"))return;
+ ["ts_users","ts_cases"].forEach(k=>localStorage.removeItem(k));
+ localStorage.setItem("ts_police",JSON.stringify([{id:"POL01",password:"police123",name:"Demo Officer"}]));
+ alert("Demo data reset. Refresh the page.");
+ location.reload();
+}
+</script>
+</body>
+</html>
